@@ -25,7 +25,7 @@
   padding: 10px 10px;
   height: 40px;
   box-sizing: border-box;
-  font-weight: 600;
+  font-weight: var(--font-weight-heading);
   text-align: left;
   vertical-align: middle;
   border-bottom: 1px solid rgb(0 0 0 / 20%);

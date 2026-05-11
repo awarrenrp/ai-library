@@ -1,12 +1,8 @@
 @import "./tokens.css";
 
 :root {
-  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-weight-body: 400;
-}
-
-html[data-font-theme="basel"] {
   --font-sans: "Basel Grotesk", Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-weight-body: 400;
 }
 
 *,
@@ -28,6 +24,11 @@ body {
   background: #f9f7f6;
   color: #000;
   -webkit-font-smoothing: antialiased;
+}
+
+strong,
+b {
+  font-weight: var(--font-weight-emphasis);
 }
 
 .visually-hidden {

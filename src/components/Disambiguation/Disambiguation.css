@@ -58,7 +58,7 @@
 .disambiguation__question {
   margin: 0;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: var(--font-weight-heading);
   letter-spacing: -0.02em;
   line-height: 24px;
   color: #000000;

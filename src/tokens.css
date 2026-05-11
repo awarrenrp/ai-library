@@ -1,6 +1,11 @@
 /* Design tokens */
 
 :root {
+  /* UI chrome / labels — Medium (500); avoid Semibold for non-heading text. */
+  --font-weight-emphasis: 500;
+  /* Page & section headings — one step above emphasis (Semibold). */
+  --font-weight-heading: 600;
+
   /* Berry — primary actions (composer entry, send, etc.) */
   --color-primary: #7a005d;
   --color-on-primary: #ffffff;

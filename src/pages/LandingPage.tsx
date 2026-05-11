@@ -1,51 +1,13 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import type { FontThemeId } from "../fontTheme";
-import { getStoredFontTheme, persistFontTheme } from "../fontTheme";
-import "../App.css";
 import "./LandingPage.css";
 
 export function LandingPage() {
-  const [fontTheme, setFontTheme] = useState<FontThemeId>(() => getStoredFontTheme());
-
-  function setPreviewFont(next: FontThemeId) {
-    setFontTheme(next);
-    persistFontTheme(next);
-  }
-
   return (
     <main className="landing">
       <header className="landing-header">
-        <div className="landing-header-row">
-          <div className="landing-header-copy">
-            <p className="landing-eyebrow">Rippling | In partnership with Pebble</p>
-            <h1 className="landing-title">AI components</h1>
-            <p className="landing-lede">Interactive specs for AI surfaces in the product.</p>
-          </div>
-          <div className="landing-font-toolbar" aria-label="Preview typography">
-            <p className="landing-font-toolbar-label" id="landing-font-label">
-              Font
-            </p>
-            <div className="demo-segments" role="group" aria-labelledby="landing-font-label">
-              <button
-                type="button"
-                className="demo-segment"
-                aria-pressed={fontTheme === "inter"}
-                onClick={() => setPreviewFont("inter")}
-              >
-                Inter
-              </button>
-              <button
-                type="button"
-                className="demo-segment"
-                aria-pressed={fontTheme === "basel"}
-                onClick={() => setPreviewFont("basel")}
-              >
-                Basel Grotesk
-              </button>
-            </div>
-          </div>
-        </div>
+        <p className="landing-eyebrow">Rippling | In partnership with Pebble</p>
+        <h1 className="landing-title">AI components</h1>
+        <p className="landing-lede">Interactive specs for AI surfaces in the product.</p>
       </header>
 
       <section className="landing-section" aria-labelledby="landing-artifacts-heading">

@@ -12,7 +12,7 @@
 .rna-page-title {
   margin: 0;
   font-size: 32px;
-  font-weight: 600;
+  font-weight: var(--font-weight-heading);
   letter-spacing: -0.02em;
 }
 
@@ -32,7 +32,7 @@
 .rna-section-title {
   margin: 0 0 8px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: var(--font-weight-heading);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #716f6c;
@@ -54,7 +54,7 @@
 .rna-example-title {
   margin: 0 0 8px;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: var(--font-weight-heading);
   letter-spacing: -0.02em;
   color: #000000;
 }

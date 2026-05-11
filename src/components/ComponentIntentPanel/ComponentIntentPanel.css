@@ -11,7 +11,7 @@
 .component-intent-reference__title {
   margin: 0;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: var(--font-weight-heading);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #716f6c;
@@ -40,7 +40,7 @@
 .component-intent-panel__label {
   margin: 0 0 10px;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: var(--font-weight-emphasis);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;

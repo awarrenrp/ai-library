@@ -210,7 +210,7 @@
 .external-file-artifact-title {
   margin: 0 0 2px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: var(--font-weight-heading);
   line-height: 19px;
   letter-spacing: -0.01em;
   color: #1e4aa9;
