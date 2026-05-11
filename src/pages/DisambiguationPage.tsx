@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
-import { DisambiguationInChatDemo } from "../components/Disambiguation";
+import { Disambiguation, DisambiguationInChatDemo } from "../components/Disambiguation";
 import type { DisambiguationInputType, DisambiguationOption } from "../components/Disambiguation";
 import "../App.css";
 
@@ -58,6 +58,10 @@ const DEMO_OPTIONS: DisambiguationOption[] = [
 export function DisambiguationPage() {
   const [inputType, setInputType] = useState<DisambiguationInputType>("radio");
   const [showStep, setShowStep] = useState(true);
+
+  const subtitle =
+    inputType === "radio" ? "Select one to continue" : "Select any that apply";
+  const step = showStep ? { current: 1, total: 2 } : undefined;
 
   return (
     <main className="demo-wrap">
@@ -135,16 +139,57 @@ export function DisambiguationPage() {
         </div>
       </div>
 
-      <div className="demo-stage" role="region" aria-label="Disambiguation in context">
-        <DisambiguationInChatDemo
-          key={`${inputType}-${showStep}`}
-          question={DEMO_QUESTION}
-          subtitle={inputType === "radio" ? "Select one to continue" : "Select any that apply"}
-          step={showStep ? { current: 1, total: 2 } : undefined}
-          inputType={inputType}
-          options={DEMO_OPTIONS}
-        />
-      </div>
+      <section style={{ marginBottom: 40 }}>
+        <h2
+          style={{
+            margin: "0 0 8px",
+            fontSize: 18,
+            fontWeight: "var(--font-weight-heading)",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          Component preview
+        </h2>
+        <p style={{ margin: "0 0 16px", maxWidth: 640, fontSize: 14, lineHeight: 1.5, color: "#716f6c" }}>
+          Isolated popover. The toolbar above updates this preview and the example below together.
+        </p>
+        <div className="demo-stage" role="region" aria-label="Disambiguation component preview">
+          <Disambiguation
+            key={`preview-${inputType}-${showStep}`}
+            question={DEMO_QUESTION}
+            subtitle={subtitle}
+            step={step}
+            inputType={inputType}
+            options={DEMO_OPTIONS}
+          />
+        </div>
+      </section>
+
+      <section>
+        <h2
+          style={{
+            margin: "0 0 8px",
+            fontSize: 18,
+            fontWeight: "var(--font-weight-heading)",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          Example in chat
+        </h2>
+        <p style={{ margin: "0 0 16px", maxWidth: 640, fontSize: 14, lineHeight: 1.5, color: "#716f6c" }}>
+          Same props in a side chat with composer and sheet. Use &quot;Show example&quot; to open the flow.
+        </p>
+        <div className="demo-stage" role="region" aria-label="Disambiguation in context">
+          <DisambiguationInChatDemo
+            key={`${inputType}-${showStep}`}
+            question={DEMO_QUESTION}
+            subtitle={subtitle}
+            step={step}
+            inputType={inputType}
+            options={DEMO_OPTIONS}
+          />
+        </div>
+      </section>
     </main>
   );
 }
