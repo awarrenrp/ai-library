@@ -21,12 +21,15 @@ const DISAMBIGUATION_DESIGN_INTENT = (
       <p className="component-intent-panel__dos-donts-label">Dos</p>
       <ul className="component-intent-panel__dos-list">
         <li>Place on top of the composer.</li>
+        <li>Use disambig to clarify intent.</li>
       </ul>
     </div>
     <div>
       <p className="component-intent-panel__dos-donts-label">Don&apos;ts</p>
       <ul className="component-intent-panel__dont-list">
         <li>Place inside of the chat text.</li>
+        <li>Ask more than 4 questions.</li>
+        <li>Use disambig for long-form content.</li>
       </ul>
     </div>
   </>
