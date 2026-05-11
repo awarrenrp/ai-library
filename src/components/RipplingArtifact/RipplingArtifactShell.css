@@ -1,0 +1,187 @@
+/* Rippling-native artifact shell — AI-components / Chart (Figma 885:16233) */
+
+.rippling-artifact-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+.rippling-artifact {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgb(0 0 0 / 20%);
+  border-radius: 16px;
+  background: #ffffff;
+  overflow: hidden;
+  transition: box-shadow 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rippling-artifact {
+    transition: none;
+  }
+}
+
+.rippling-artifact:hover,
+.rippling-artifact:focus-within {
+  box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
+}
+
+.rippling-artifact:active {
+  box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
+}
+
+.rippling-artifact-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.rippling-artifact-title {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  padding-right: 76px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 24px;
+  color: #000000;
+}
+
+.rippling-artifact-actions {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 2px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rippling-artifact-actions {
+    transition: none;
+  }
+}
+
+.rippling-artifact-wrap:hover .rippling-artifact-actions,
+.rippling-artifact-wrap:focus-within .rippling-artifact-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Ghost icon buttons — no stroke */
+.rippling-artifact-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+  color: #ffffff;
+}
+
+.rippling-artifact-wrap:hover .rippling-artifact-icon-btn,
+.rippling-artifact-wrap:focus-within .rippling-artifact-icon-btn {
+  color: #716f6c;
+}
+
+.rippling-artifact-icon-btn:hover {
+  box-shadow: inset 0 0 0 9999px var(--artifact-overlay-hover);
+  color: #000000;
+}
+
+.rippling-artifact-icon-btn:active {
+  box-shadow: inset 0 0 0 9999px var(--artifact-overlay-pressed);
+}
+
+.rippling-artifact-icon-btn:focus-visible {
+  outline: 2px solid var(--artifact-outline-active);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+.rippling-artifact-wrap:focus-within .rippling-artifact-icon-btn:focus-visible {
+  color: #000000;
+}
+
+.rippling-artifact-body {
+  padding: 12px 16px 16px;
+  box-sizing: border-box;
+}
+
+/*
+ * Row below card — thumbs + timestamp (out of flow so hover doesn’t shift page content)
+ */
+.rippling-artifact-foot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px;
+  min-height: 32px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    visibility 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rippling-artifact-foot {
+    transition: none;
+  }
+}
+
+.rippling-artifact-wrap:hover .rippling-artifact-foot,
+.rippling-artifact-wrap:focus-within .rippling-artifact-foot {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.rippling-artifact-reactions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Footer row icons always use muted stroke when row is visible */
+.rippling-artifact-foot .rippling-artifact-icon-btn {
+  color: #716f6c;
+}
+
+.rippling-artifact-foot .rippling-artifact-icon-btn:hover {
+  color: #000000;
+}
+
+.rippling-artifact-timestamp {
+  flex-shrink: 0;
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: var(--font-weight-body);
+  font-variant-numeric: tabular-nums;
+  color: #716f6c;
+}

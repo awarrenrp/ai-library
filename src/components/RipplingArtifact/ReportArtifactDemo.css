@@ -1,0 +1,78 @@
+/* Report artifact — AI-components / Report (Figma 870:9606) */
+
+.report-artifact-demo {
+  width: 100%;
+  min-width: 0;
+}
+
+.report-artifact-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.report-artifact-table {
+  width: 100%;
+  min-width: 280px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 14px;
+  line-height: 20px;
+  color: #000000;
+}
+
+.report-artifact-th {
+  padding: 10px 10px;
+  height: 40px;
+  box-sizing: border-box;
+  font-weight: 600;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid rgb(0 0 0 / 20%);
+}
+
+.report-artifact-th--numeric {
+  text-align: right;
+}
+
+.report-artifact-td {
+  padding: 12px 10px;
+  min-height: 44px;
+  box-sizing: border-box;
+  font-weight: var(--font-weight-body);
+  vertical-align: middle;
+  border-bottom: 1px solid rgb(0 0 0 / 10%);
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.report-artifact-td--numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: normal;
+}
+
+.report-artifact-table tbody tr:last-child .report-artifact-td {
+  border-bottom: none;
+}
+
+/* Four columns — ID narrow, customer flexible, date, revenue */
+.report-artifact-th:nth-child(1),
+.report-artifact-td:nth-child(1) {
+  width: 14%;
+}
+
+.report-artifact-th:nth-child(2),
+.report-artifact-td:nth-child(2) {
+  width: 38%;
+}
+
+.report-artifact-th:nth-child(3),
+.report-artifact-td:nth-child(3) {
+  width: 24%;
+}
+
+.report-artifact-th:nth-child(4),
+.report-artifact-td:nth-child(4) {
+  width: 24%;
+}

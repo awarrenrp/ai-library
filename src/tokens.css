@@ -1,0 +1,16 @@
+/* Design tokens */
+
+:root {
+  /* Berry — primary actions (composer entry, send, etc.) */
+  --color-primary: #7a005d;
+  --color-on-primary: #ffffff;
+  /** Tint for emphasis surfaces (e.g. artifact body slot placeholder). */
+  --color-primary-variant: #f0d0f5;
+  /* Focus outline — #000 @ 25% */
+  --color-ring: rgb(0 0 0 / 25%);
+
+  /* Artifact surfaces — #000 over white (inset fill / focus ring) */
+  --artifact-overlay-hover: rgb(0 0 0 / 10%);
+  --artifact-overlay-pressed: rgb(0 0 0 / 20%);
+  --artifact-outline-active: #5aa5e7;
+}

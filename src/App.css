@@ -1,0 +1,155 @@
+.demo-wrap {
+  padding: 48px 24px 80px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.demo-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  margin-bottom: 28px;
+  align-items: flex-end;
+}
+
+.demo-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.demo-label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #716f6c;
+}
+
+.demo-segments {
+  display: inline-flex;
+  border: 1px solid rgb(122 0 93 / 22%);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--color-primary-variant, #f0d0f5);
+}
+
+.demo-segment {
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #000000;
+}
+
+.demo-segment:hover {
+  background: rgb(255 255 255 / 45%);
+}
+
+.demo-segment + .demo-segment {
+  border-left: 1px solid rgb(122 0 93 / 22%);
+}
+
+.demo-segment[aria-pressed="true"] {
+  background: #ffffff;
+}
+
+.demo-segment:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  z-index: 1;
+  position: relative;
+}
+
+.demo-stage {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.demo-meta {
+  margin: 16px 0 0;
+  font-size: 13px;
+  color: #716f6c;
+}
+
+/* Composer demo page — version picker (viewport upper right) */
+.composer-page-settings {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+}
+
+.composer-page-settings-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgb(0 0 0 / 12%);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #716f6c;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
+  opacity: 0.9;
+}
+
+.composer-page-settings-btn:hover {
+  background: #fafafa;
+  color: #000000;
+  opacity: 1;
+}
+
+.composer-page-settings-btn:focus-visible {
+  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
+  outline-offset: 2px;
+}
+
+.composer-page-settings-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 148px;
+  padding: 4px;
+  border: 1px solid rgb(0 0 0 / 20%);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
+}
+
+.composer-page-settings-option {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #000000;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 18px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.composer-page-settings-option:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+.composer-page-settings-option--active {
+  background: rgb(0 0 0 / 6%);
+  font-weight: 600;
+}
+
+.composer-page-settings-option:focus-visible {
+  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
+  outline-offset: 0;
+}

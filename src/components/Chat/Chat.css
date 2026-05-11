@@ -1,0 +1,337 @@
+/* Chat — Figma AI-components · Chat blocks (90:16555): Basic chat container + Question container */
+
+.chat {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 420px;
+  max-height: min(72vh, 640px);
+  border: 1px solid rgb(0 0 0 / 12%);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+  overflow: hidden;
+}
+
+/* Animations panel — replay thinking sequence (top-right of chat shell) */
+.chat__panel-replay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid rgb(0 0 0 / 12%);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #716f6c;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 6%);
+}
+
+.chat__panel-replay:hover {
+  background: #fafafa;
+  color: #000000;
+}
+
+.chat__panel-replay:focus-visible {
+  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
+  outline-offset: 2px;
+}
+
+.chat--side-panel {
+  max-width: 400px;
+}
+
+/* Page / “large” column: shell and content track both cap at 712px (composer large width). */
+.chat--page {
+  max-width: 712px;
+  min-height: 480px;
+  max-height: min(80vh, 800px);
+}
+
+.chat__thread {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.chat--page .chat__thread {
+  padding: 20px 16px;
+}
+
+/* Bubbles + composer share the same max width; centered on page layout. */
+.chat__track {
+  width: 100%;
+  max-width: 712px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chat__row {
+  display: flex;
+  width: 100%;
+}
+
+.chat__row--assistant {
+  justify-content: flex-start;
+}
+
+.chat__row--user {
+  justify-content: flex-end;
+}
+
+/* AI — Basic chat container: no fill; instruction text 14 black (node 84:6690 / 90:16553). */
+.chat__block--ai {
+  width: 100%;
+  max-width: 712px;
+}
+
+.chat__block-text--ai {
+  margin: 0;
+  font-size: 14px;
+  font-weight: var(--font-weight-body);
+  line-height: 20px;
+  color: #000000;
+}
+
+/* Self — Question container: fill #F2EEE6, padding 9px 12px (90:16552). */
+.chat__block--self {
+  box-sizing: border-box;
+  max-width: 712px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: #f2eee6;
+}
+
+.chat__block-text--self {
+  margin: 0;
+  font-size: 14px;
+  font-weight: var(--font-weight-body);
+  line-height: 20px;
+  color: #000000;
+}
+
+/* Thinking block — Figma 66:117 (State=Complete - Expanded): vertical stack, 4px gap, 14px muted #716f6c */
+
+.chat__thinking {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 712px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chat__thinking-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  min-height: 24px;
+}
+
+.chat__thinking-title {
+  flex: 1 1 auto;
+  margin: 0;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: var(--font-weight-body);
+  line-height: 20px;
+  color: #716f6c;
+}
+
+.chat__thinking-collapse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #716f6c;
+  cursor: pointer;
+}
+
+.chat__thinking-collapse:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+.chat__thinking-collapse:focus-visible {
+  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
+  outline-offset: 2px;
+}
+
+.chat__thinking-chevron-svg {
+  display: block;
+  transition: transform 0.15s ease;
+}
+
+.chat__thinking-chevron-svg--up {
+  transform: rotate(180deg);
+}
+
+.chat__thinking-icon-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  color: #716f6c;
+}
+
+.chat__thinking-svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.chat__thinking-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chat__thinking--collapsed .chat__thinking-steps {
+  display: none;
+}
+
+.chat__thinking-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 4px;
+  min-height: 24px;
+}
+
+.chat__thinking-row--text-only {
+  padding-left: 0;
+}
+
+.chat__thinking--no-glyphs .chat__thinking-header {
+  gap: 8px;
+}
+
+.chat__thinking-steps--single {
+  min-height: 36px;
+}
+
+.chat__thinking-shimmer-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Two shimmer streaks; total animated band height 8px (3px + 2px gap + 3px) */
+.chat__thinking-shimmer-duo {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 8px;
+  width: 100%;
+}
+
+.chat__thinking-shimmer-line {
+  display: block;
+  flex: 1 1 0;
+  min-height: 0;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    rgb(122 0 93 / 0%),
+    rgb(122 0 93 / 35%),
+    rgb(122 0 93 / 0%)
+  );
+  background-size: 220% 100%;
+  animation: chat-thinking-shimmer 1.1s linear infinite;
+}
+
+.chat__thinking-shimmer-line:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+@keyframes chat-thinking-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.chat__thinking-step-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: var(--font-weight-body);
+  line-height: 20px;
+  color: #716f6c;
+}
+
+.chat__empty {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.chat__empty-title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+
+.chat__empty-desc {
+  margin: 0;
+  max-width: 280px;
+  font-size: 14px;
+  font-weight: var(--font-weight-body);
+  line-height: 1.5;
+  color: #716f6c;
+}
+
+.chat__footer {
+  flex-shrink: 0;
+  padding: 12px;
+  border-top: 1px solid rgb(0 0 0 / 12%);
+  background: #ffffff;
+}
+
+.chat--page .chat__footer {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.chat__footer-inner {
+  width: 100%;
+  max-width: 712px;
+  box-sizing: border-box;
+}

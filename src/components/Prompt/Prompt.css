@@ -1,0 +1,95 @@
+/* Figma: AI-components / Prompt (section node 84:5630) */
+
+.prompt {
+  --prompt-border: rgb(0 0 0 / 20%);
+  --prompt-muted: #716f6c;
+  --prompt-radius: 8px;
+  --prompt-pad: 12px;
+  --prompt-gap-row: 8px;
+  --prompt-gap-text: 2px;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--prompt-gap-row);
+  width: 100%;
+  max-width: 320px;
+  padding: var(--prompt-pad);
+  border-radius: var(--prompt-radius);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  background: #ffffff;
+  border: 1px solid transparent;
+  transition: background-color 0.12s ease;
+}
+
+.prompt--outline {
+  border-color: var(--prompt-border);
+}
+
+.prompt--filled {
+  border-color: transparent;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 6%);
+}
+
+.prompt:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+.prompt:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.prompt-arrow {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  color: var(--color-primary, #7a005d);
+}
+
+.prompt-arrow-svg {
+  display: block;
+}
+
+.prompt-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--prompt-gap-text);
+}
+
+.prompt-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #000000;
+}
+
+.prompt-description {
+  margin: 0;
+  font-size: 12px;
+  font-weight: var(--font-weight-body);
+  line-height: 1.35;
+  color: #000000;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.prompt-subtext {
+  margin: 0;
+  font-size: 12px;
+  font-weight: var(--font-weight-body);
+  line-height: 1.35;
+  color: var(--prompt-muted);
+}

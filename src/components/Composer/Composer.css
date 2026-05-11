@@ -1,0 +1,356 @@
+/* Figma: Type=Text, Width=Large|Medium|Small, State=Default|Filled — AI-components / Composer */
+
+.composer {
+  /* Stroke — #000 @ 20% (solid #000 reads as harsh on white) */
+  --composer-border: rgb(0 0 0 / 20%);
+  --composer-surface: #ffffff;
+  --composer-muted: #716f6c;
+  --composer-send-active: var(--color-primary, #7a005d);
+  /* Focus ring — buttons / toolbar (#000 @ 25%) */
+  --composer-focus-ring: var(--color-ring, rgb(0 0 0 / 25%));
+  /* Shell outline while message field is focused / typing */
+  --composer-typing-focus-ring: #5aa5e7;
+  --composer-radius: 8px;
+  --composer-btn-radius: 6px;
+  --composer-action-gap: 8px;
+
+  /* Width set inline in TSX for reliable layout across browsers */
+  max-width: 100%;
+}
+
+.composer-surface {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 112px;
+  padding: 8px;
+  border: 1px solid var(--composer-border);
+  border-radius: var(--composer-radius);
+  background: var(--composer-surface);
+}
+
+/* Alternate variant — slightly softer shell + grouped toolbar (preview only). */
+.composer--alternate {
+  --composer-radius: 12px;
+}
+
+.composer--alternate .composer-surface {
+  border-color: rgb(0 0 0 / 14%);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 6%);
+}
+
+/* Alternate — Fast + mic: borderless ghost (no outline). */
+.composer--alternate .composer-fast {
+  background: transparent;
+  border: none;
+}
+
+.composer--alternate .composer-fast:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+.composer--alternate .composer-voice {
+  background: transparent;
+  border: none;
+}
+
+.composer--alternate .composer-voice:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+/* Focus accent while typing in the message field */
+.composer-surface:has(.composer-input:focus) {
+  outline: 2px solid var(--composer-typing-focus-ring);
+  outline-offset: 2px;
+}
+
+.composer-field {
+  flex-shrink: 0;
+  min-height: 20px;
+}
+
+.composer-input {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: var(--font-weight-body);
+  line-height: 20px;
+  min-height: 20px;
+  resize: none;
+  outline: none;
+}
+
+.composer-input::placeholder {
+  color: var(--composer-muted);
+}
+
+.composer-input:not(:placeholder-shown) {
+  color: #000000;
+}
+
+.composer-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--composer-action-gap);
+  height: 32px;
+  overflow: visible;
+}
+
+.composer-spacer {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Outline icon buttons — 32×32, radius 6 */
+.composer-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--composer-border);
+  border-radius: var(--composer-btn-radius);
+  background: var(--composer-surface);
+  color: #000000;
+  cursor: pointer;
+}
+
+.composer-icon-btn:hover {
+  background: #fafafa;
+}
+
+.composer-icon-btn:focus-visible {
+  outline: 2px solid var(--composer-focus-ring);
+  outline-offset: 2px;
+}
+
+/* Fast — label + chevron (no icon / badge). */
+.composer-fast {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  height: 32px;
+  padding: 0 10px 0 12px;
+  gap: 4px;
+  border: 1px solid var(--composer-border);
+  border-radius: var(--composer-btn-radius);
+  background: var(--composer-surface);
+  color: #000000;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.composer-fast:hover {
+  background: #fafafa;
+}
+
+.composer-fast:focus-visible {
+  outline: 2px solid var(--composer-focus-ring);
+  outline-offset: 2px;
+}
+
+.composer-fast-label {
+  flex-shrink: 0;
+}
+
+.composer-fast-anchor {
+  position: relative;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.composer-add-anchor {
+  position: relative;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* Add menu — Figma instance 72:4451 (main 72:4361): white panel, #000 stroke 10%, radius 8, header + list */
+.composer-add-menu {
+  position: absolute;
+  z-index: 10;
+  bottom: calc(100% + 6px);
+  left: 0;
+  box-sizing: border-box;
+  min-width: 250px;
+  width: max-content;
+  max-width: min(286px, calc(100vw - 32px));
+  padding: 8px 0;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 8px;
+  background: var(--composer-surface);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
+}
+
+.composer-add-menu__header {
+  padding: 0 12px 8px;
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
+}
+
+.composer-add-menu__section {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--composer-muted);
+}
+
+.composer-add-menu__search {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 32px;
+  margin: 0;
+  padding: 0 10px;
+  border: 1px solid var(--composer-border);
+  border-radius: var(--composer-btn-radius);
+  background: var(--composer-surface);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: var(--font-weight-body);
+  line-height: 20px;
+  color: #000000;
+  outline: none;
+}
+
+.composer-add-menu__search::placeholder {
+  color: var(--composer-muted);
+}
+
+.composer-add-menu__search:focus {
+  outline: 2px solid var(--composer-typing-focus-ring);
+  outline-offset: 0;
+}
+
+.composer-add-menu__list {
+  max-height: min(240px, 40vh);
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.composer-add-menu__row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  color: #000000;
+}
+
+.composer-add-menu__row:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+.composer-add-menu__row:focus-visible {
+  outline: 2px solid var(--composer-focus-ring);
+  outline-offset: -2px;
+}
+
+.composer-add-menu__row-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.composer-add-menu__row-desc {
+  font-size: 13px;
+  font-weight: var(--font-weight-body);
+  line-height: 18px;
+  color: var(--composer-muted);
+}
+
+.composer-mode-menu {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 120px;
+  padding: 4px;
+  border: 1px solid var(--composer-border);
+  border-radius: 8px;
+  background: var(--composer-surface);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
+}
+
+.composer-mode-option {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #000000;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 18px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.composer-mode-option:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+.composer-mode-option--active {
+  background: rgb(0 0 0 / 6%);
+  font-weight: 600;
+}
+
+.composer-mode-option:focus-visible {
+  outline: 2px solid var(--composer-focus-ring);
+  outline-offset: 0;
+}
+
+/* Send — Default: disabled look; Filled: plum fill + white icon */
+.composer-send {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--composer-btn-radius);
+  cursor: pointer;
+}
+
+.composer-send:disabled {
+  background: var(--color-primary, #7a005d);
+  opacity: 0.42;
+  color: #ffffff;
+  cursor: not-allowed;
+}
+
+.composer-send:not(:disabled) {
+  background: var(--composer-send-active);
+  color: #ffffff;
+}
+
+.composer-send:not(:disabled):hover {
+  filter: brightness(1.05);
+}
+
+.composer-send:focus-visible {
+  outline: 2px solid var(--composer-focus-ring);
+  outline-offset: 2px;
+}

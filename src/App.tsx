@@ -1,0 +1,26 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ComposerPage } from "./pages/ComposerPage";
+import { ExternalArtifactsPage } from "./pages/ExternalArtifactsPage";
+import { InChatArtifactsPage } from "./pages/InChatArtifactsPage";
+import { LandingPage } from "./pages/LandingPage";
+import { ChatPage } from "./pages/ChatPage";
+import { DisambiguationPage } from "./pages/DisambiguationPage";
+import { PromptsPage } from "./pages/PromptsPage";
+import { RipplingNativeArtifactsPage } from "./pages/RipplingNativeArtifactsPage";
+
+export function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/composer" element={<ComposerPage />} />
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/in-chat-artifacts" element={<InChatArtifactsPage />} />
+        <Route path="/rippling-native-artifacts" element={<RipplingNativeArtifactsPage />} />
+        <Route path="/external-artifacts" element={<ExternalArtifactsPage />} />
+        <Route path="/prompts" element={<PromptsPage />} />
+        <Route path="/disambiguation" element={<DisambiguationPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
