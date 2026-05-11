@@ -86,6 +86,15 @@ export function LandingPage() {
               <span className="landing-card-cta">Open spec</span>
             </Link>
           </li>
+          <li>
+            <Link to="/links" className="landing-card">
+              <h3 className="landing-card-title">Links</h3>
+              <p className="landing-card-desc">
+                Inline text and citations in the thread, rich external previews, and emphasized actions below the chat.
+              </p>
+              <span className="landing-card-cta">Open spec</span>
+            </Link>
+          </li>
         </ul>
       </section>
     </main>

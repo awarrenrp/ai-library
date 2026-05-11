@@ -29,10 +29,9 @@
 
 .demo-segments {
   display: inline-flex;
-  border: 1px solid rgb(122 0 93 / 22%);
+  border: 1px solid #000000;
   border-radius: 8px;
   overflow: hidden;
-  background: var(--color-primary-variant, #f0d0f5);
 }
 
 .demo-segment {
@@ -41,21 +40,17 @@
   font-weight: 500;
   font-family: inherit;
   border: none;
-  background: transparent;
+  background: #ffffff;
   cursor: pointer;
   color: #000000;
 }
 
-.demo-segment:hover {
-  background: rgb(255 255 255 / 45%);
-}
-
 .demo-segment + .demo-segment {
-  border-left: 1px solid rgb(122 0 93 / 22%);
+  border-left: 1px solid #000000;
 }
 
 .demo-segment[aria-pressed="true"] {
-  background: #ffffff;
+  background: #ede9fe;
 }
 
 .demo-segment:focus-visible {
