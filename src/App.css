@@ -148,3 +148,89 @@
   outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
   outline-offset: 0;
 }
+
+/* Shared: optional code sample blocks on spec pages */
+.demo-code-section {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid rgb(0 0 0 / 12%);
+}
+
+.demo-code-section__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 16px;
+  margin-bottom: 14px;
+}
+
+.demo-code-section__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: var(--font-weight-heading);
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+
+.demo-code-section__lede {
+  margin: 6px 0 0;
+  max-width: 640px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #716f6c;
+}
+
+.demo-code-section__lede code {
+  font-size: 0.92em;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* Single-segment control: matches .demo-segments / .demo-segment toolbar styling */
+.demo-code-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.demo-code-copy-btn__icon {
+  flex-shrink: 0;
+  display: block;
+  color: currentColor;
+}
+
+.demo-code-copy-btn--active {
+  background: #ede9fe;
+}
+
+.demo-code-block {
+  margin: 0;
+  padding: 16px 18px;
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid rgb(0 0 0 / 12%);
+  background: rgb(0 0 0 / 3%);
+  font-size: 13px;
+  line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  color: #000000;
+  tab-size: 2;
+}
+
+.demo-code-block code {
+  font-family: inherit;
+  font-size: inherit;
+  white-space: pre;
+}
+
+/* Syntax-highlighted blocks (prism-react-renderer): black panel + dark theme tokens */
+.demo-code-block--syntax {
+  background-color: #000000 !important;
+  background-image: none;
+  border-color: rgb(255 255 255 / 14%);
+  color: #e8e8e8;
+}
+
+.demo-code-block--syntax ::selection {
+  background: rgb(255 255 255 / 22%);
+}

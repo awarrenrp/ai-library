@@ -213,7 +213,7 @@
   font-weight: var(--font-weight-heading);
   line-height: 19px;
   letter-spacing: -0.01em;
-  color: #1e4aa9;
+  color: var(--color-info, #1e4aa9);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
-import { Disambiguation } from "../components/Disambiguation";
+import { DisambiguationInChatDemo } from "../components/Disambiguation";
 import type { DisambiguationInputType, DisambiguationOption } from "../components/Disambiguation";
 import "../App.css";
 
@@ -11,26 +11,47 @@ const FIGMA_SPEC =
 const DISAMBIGUATION_WHEN =
   "When user input could mean more than one thing and a wrong guess is costly. Rippling AI resolves ambiguity from context and stated assumptions first, then asks a direct clarifying question only when needed—at most two questions, bundled when possible.";
 
-const DISAMBIGUATION_DESIGN_INTENT =
-  "In-thread popover that sits over the composer input to capture additional information from the user. Not meant to sit inside of the chat itself, or above the composer.\n\nDo: place on top of the composer\nDon't: place inside of the chat text";
+const DISAMBIGUATION_DESIGN_INTENT = (
+  <>
+    <p>
+      In-thread popover that sits over the composer input to capture additional information from the user. Not meant to sit
+      inside of the chat itself, or above the composer.
+    </p>
+    <div>
+      <p className="component-intent-panel__dos-donts-label">Dos</p>
+      <ul className="component-intent-panel__dos-list">
+        <li>Place on top of the composer.</li>
+      </ul>
+    </div>
+    <div>
+      <p className="component-intent-panel__dos-donts-label">Don&apos;ts</p>
+      <ul className="component-intent-panel__dont-list">
+        <li>Place inside of the chat text.</li>
+      </ul>
+    </div>
+  </>
+);
+
+const DEMO_QUESTION = "Which Jordan do you want to update?";
 
 const DEMO_OPTIONS: DisambiguationOption[] = [
   {
-    id: "jl",
-    title: "James Lee - Design",
-    description: "UX/UI Designer, New York",
+    id: "jordan-lee",
+    title: "Jordan Lee",
+    description: "Software engineer · San Francisco",
     label: "Engineering",
   },
   {
-    id: "ps",
-    title: "Priya Shah",
-    description: "Product manager, San Francisco",
-    label: "Product",
+    id: "jordan-chen",
+    title: "Jordan Chen",
+    description: "Account executive · Austin",
+    label: "Sales",
   },
   {
-    id: "custom",
-    title: "Something else",
-    description: "Tell Rippling AI in your own words",
+    id: "jordan-patel",
+    title: "Jordan Patel",
+    description: "HR specialist · New York",
+    label: "People",
   },
 ];
 
@@ -114,10 +135,10 @@ export function DisambiguationPage() {
         </div>
       </div>
 
-      <div className="demo-stage" role="region" aria-label="Disambiguation preview">
-        <Disambiguation
+      <div className="demo-stage" role="region" aria-label="Disambiguation in context">
+        <DisambiguationInChatDemo
           key={`${inputType}-${showStep}`}
-          question={inputType === "radio" ? "Rich Single Selection" : "Rich Multi Selection"}
+          question={DEMO_QUESTION}
           subtitle={inputType === "radio" ? "Select one to continue" : "Select any that apply"}
           step={showStep ? { current: 1, total: 2 } : undefined}
           inputType={inputType}

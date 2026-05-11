@@ -1,4 +1,9 @@
 export {
+  IconApproveCheck,
+  IconDeclineLine,
+  IconHelpBook,
+  IconSalesBriefcase,
+  IconSpendCard,
   LinksBelowChatStack,
   LinksChatLine,
   LinksEmphasisButton,

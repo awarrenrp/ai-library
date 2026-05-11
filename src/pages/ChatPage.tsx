@@ -10,7 +10,9 @@ import {
 import type { ChatLayoutVariant, ChatPanelVersion, ChatThreadPreset } from "../components/Chat";
 import { Composer } from "../components/Composer";
 import { IconSettings } from "../components/Composer/icons";
+import { IconCopy } from "../components/Composer/icons";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
+import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
 import "../App.css";
 
 const CHAT_WHEN =
@@ -29,6 +31,68 @@ const THREAD_LABELS: Record<ChatThreadPreset, string> = {
   empty: "Empty",
 };
 
+/** Rippling product wiring for `AIChat` — copy into app code (paths are app-relative). */
+const CHAT_ASSISTANT_EXAMPLE_SOURCE = `import { useState } from 'react';
+import { Button, Layout, Spinner } from '@rippling/pebble';
+import { AIChat } from 'app/products/platform/HubPlatform/modules/ChatAssistant/components/aiChat/AIChat';
+import {
+  AI_CHAT_APP_NAME,
+  AI_CHAT_FLOW_NAME,
+} from 'app/products/platform/HubPlatform/modules/ChatAssistant/constants/configuration';
+
+export function ChatAssistantExample() {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  return (
+    <Layout.VStack gap={16} align="center" justify="center">
+      <Button onClick={() => setIsChatOpen(open => !open)}>
+        {isChatOpen ? 'Close chat' : 'Open chat'}
+      </Button>
+
+      {isChatOpen && (
+        <AIChat.Provider
+          isOpen={isChatOpen}
+          appName={AI_CHAT_APP_NAME}
+          flowName={AI_CHAT_FLOW_NAME}
+          openChat={() => setIsChatOpen(true)}
+          closeChat={() => setIsChatOpen(false)}
+        >
+          <AIChat.Loading>
+            <Spinner />
+          </AIChat.Loading>
+
+          <AIChat.Ready>
+            <AIChat.Window />
+          </AIChat.Ready>
+
+          <AIChat.Error>
+            <div>Something went wrong.</div>
+          </AIChat.Error>
+        </AIChat.Provider>
+      )}
+    </Layout.VStack>
+  );
+}`;
+
+async function copyChatAssistantExample(): Promise<void> {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(CHAT_ASSISTANT_EXAMPLE_SOURCE);
+      return;
+    }
+  } catch {
+    /* fall through */
+  }
+  const ta = document.createElement("textarea");
+  ta.value = CHAT_ASSISTANT_EXAMPLE_SOURCE;
+  ta.style.position = "fixed";
+  ta.style.left = "-9999px";
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand("copy");
+  document.body.removeChild(ta);
+}
+
 export function ChatPage() {
   const pageMenuId = useId();
   const settingsBtnId = `chat-page-settings-btn-${pageMenuId}`;
@@ -37,6 +101,7 @@ export function ChatPage() {
   const [layout, setLayout] = useState<ChatLayoutVariant>("side-panel");
   const [thread, setThread] = useState<ChatThreadPreset>("conversation");
   const [panelVersion, setPanelVersion] = useState<ChatPanelVersion>("default");
+  const [copyAck, setCopyAck] = useState(false);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -170,6 +235,9 @@ export function ChatPage() {
           variant={layout}
           threadPreset={thread}
           panelVersion={panelVersion}
+          ariaLabel="Rippling AI chat"
+          ariaThreadLabel="Conversation messages"
+          ariaComposerLabel="Message composer"
           footer={
             <Composer
               width="fill"
@@ -180,6 +248,37 @@ export function ChatPage() {
           }
         />
       </div>
+
+      <section className="demo-code-section" id="chat-assistant-example" aria-labelledby="chat-assistant-example-heading">
+        <div className="demo-code-section__top">
+          <div>
+            <h2 id="chat-assistant-example-heading" className="demo-code-section__title">
+              Chat assistant — implementation example
+            </h2>
+            <p className="demo-code-section__lede">
+              Wire Pebble <code>AIChat</code> in product; paths below match the Rippling
+              codebase. Copy and adapt for your surface.
+            </p>
+          </div>
+          <div className="demo-segments" role="presentation">
+            <button
+              type="button"
+              className={["demo-segment", "demo-code-copy-btn", copyAck ? "demo-code-copy-btn--active" : ""]
+                .filter(Boolean)
+                .join(" ")}
+              onClick={async () => {
+                await copyChatAssistantExample();
+                setCopyAck(true);
+                window.setTimeout(() => setCopyAck(false), 2000);
+              }}
+            >
+              <IconCopy className="demo-code-copy-btn__icon" />
+              {copyAck ? "Copied" : "Copy code"}
+            </button>
+          </div>
+        </div>
+        <DemoHighlightedCode code={CHAT_ASSISTANT_EXAMPLE_SOURCE} language="tsx" />
+      </section>
     </main>
   );
 }

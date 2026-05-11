@@ -281,7 +281,12 @@ export type ChatProps = {
   children?: ReactNode;
   footer?: ReactNode;
   className?: string;
+  /** Accessible name for the outer chat shell (landmark). */
+  ariaLabel?: string;
+  /** Name for the message history area (`role="log"`). */
   ariaThreadLabel?: string;
+  /** Name for the footer / composer strip when `footer` is set. */
+  ariaComposerLabel?: string;
 };
 
 export function ChatSampleThread({
@@ -295,42 +300,44 @@ export function ChatSampleThread({
 }) {
   return (
     <>
-      <div className="chat__row chat__row--assistant">
-        <div className="chat__block chat__block--ai">
+      <li className="chat__row chat__row--assistant">
+        <article className="chat__block chat__block--ai" aria-label="Assistant message">
           <p className="chat__block-text chat__block-text--ai">
             I can help with that. Do you want a summary of headcount changes last quarter, or a breakdown by department?
           </p>
-        </div>
-      </div>
-      <div className="chat__row chat__row--user">
-        <div className="chat__block chat__block--self">
+        </article>
+      </li>
+      <li className="chat__row chat__row--user">
+        <article className="chat__block chat__block--self" aria-label="Your message">
           <p className="chat__block-text chat__block-text--self">Headcount by department for Q3.</p>
-        </div>
-      </div>
-      <div className="chat__row chat__row--assistant">
+        </article>
+      </li>
+      <li className="chat__row chat__row--assistant">
         <ChatThinkingBlock
           panelVersion={panelVersion}
           replayKey={thinkingReplayKey}
           onAnimatedCompleteChange={onThinkingAnimCompleteChange}
         />
-      </div>
-      <div className="chat__row chat__row--assistant">
-        <div className="chat__block chat__block--ai">
+      </li>
+      <li className="chat__row chat__row--assistant">
+        <article className="chat__block chat__block--ai" aria-label="Assistant message">
           <p className="chat__block-text chat__block-text--ai">
             Pulling the latest org chart and payroll effective dates—one moment.
           </p>
-        </div>
-      </div>
+        </article>
+      </li>
     </>
   );
 }
 
 export function ChatEmptyThread() {
   return (
-    <div className="chat__empty">
-      <p className="chat__empty-title">New conversation</p>
-      <p className="chat__empty-desc">Ask Rippling AI about people, payroll, benefits, and more.</p>
-    </div>
+    <li className="chat__track-empty">
+      <div className="chat__empty" role="status">
+        <p className="chat__empty-title">New conversation</p>
+        <p className="chat__empty-desc">Ask Rippling AI about people, payroll, benefits, and more.</p>
+      </div>
+    </li>
   );
 }
 
@@ -372,7 +379,9 @@ export function Chat({
   children,
   footer,
   className,
-  ariaThreadLabel = "Conversation",
+  ariaLabel = "AI chat",
+  ariaThreadLabel = "Messages",
+  ariaComposerLabel = "Message composer",
 }: ChatProps) {
   const layoutClass = `chat--${variant}`;
   const [thinkingReplayKey, setThinkingReplayKey] = useState(0);
@@ -386,7 +395,7 @@ export function Chat({
   return (
     <section
       className={["chat", layoutClass, className].filter(Boolean).join(" ")}
-      aria-label="Chat"
+      aria-label={ariaLabel}
       data-chat-variant={variant}
       data-chat-panel={panelVersion}
     >
@@ -403,13 +412,24 @@ export function Chat({
           <IconReplay />
         </button>
       ) : null}
-      <div className="chat__thread" role="region" aria-label={ariaThreadLabel}>
-        <div className="chat__track">
-          {children ?? defaultThread(threadPreset, panelVersion, thinkingReplayKey, setThinkingAnimComplete)}
-        </div>
+      <div
+        className="chat__thread"
+        role="log"
+        aria-label={ariaThreadLabel}
+        aria-live="polite"
+        aria-relevant="additions text"
+        tabIndex={0}
+      >
+        {children ? (
+          <div className="chat__track chat__track--custom">{children}</div>
+        ) : (
+          <ol className="chat__track">
+            {defaultThread(threadPreset, panelVersion, thinkingReplayKey, setThinkingAnimComplete)}
+          </ol>
+        )}
       </div>
       {footer ? (
-        <div className="chat__footer">
+        <div className="chat__footer" role="group" aria-label={ariaComposerLabel}>
           <div className="chat__footer-inner">{footer}</div>
         </div>
       ) : null}

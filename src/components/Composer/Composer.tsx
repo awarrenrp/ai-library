@@ -20,6 +20,10 @@ const COMPOSER_ADD_MENU_ITEMS = [
 
 export type ComposerWidth = "large" | "medium" | "small" | "fill";
 
+/** Shell chrome — default border vs edit (focus-style outline + optional context chip). Edit is alternate-only; standard ignores `edit`. */
+export const COMPOSER_SURFACE_STATES = ["default", "edit"] as const;
+export type ComposerSurfaceState = (typeof COMPOSER_SURFACE_STATES)[number];
+
 /** Visual / implementation variants (e.g. demo page switches via page-level settings). */
 export const COMPOSER_VERSIONS = ["standard", "alternate"] as const;
 export type ComposerVersion = (typeof COMPOSER_VERSIONS)[number];
@@ -57,6 +61,10 @@ export type ComposerProps = {
   ariaMessageLabel?: string;
   /** Styling variant (defaults to `standard`). */
   version?: ComposerVersion;
+  /** `edit` uses focus-style shell outline and may show {@link editContextLabel} in a chip (alternate composer only). */
+  surfaceState?: ComposerSurfaceState;
+  /** Shown in the edit chip when `surfaceState` is `edit` (e.g. artifact or thread being edited). */
+  editContextLabel?: string;
 };
 
 export function Composer({
@@ -71,6 +79,8 @@ export function Composer({
   ariaComposerLabel = "AI composer",
   ariaMessageLabel = "Message to Rippling AI",
   version = "standard",
+  surfaceState = "default",
+  editContextLabel,
 }: ComposerProps) {
   const autoId = useId();
   const modeMenuId = useId();
@@ -117,6 +127,8 @@ export function Composer({
 
   const fastBtnLabel = `${mode} mode, ${modeMenuOpen ? "close menu" : "open menu"}`;
 
+  const showEditChrome = version === "alternate" && surfaceState === "edit";
+
   return (
     <section
       className={[
@@ -133,7 +145,19 @@ export function Composer({
         boxSizing: "border-box",
       }}
     >
-      <div className="composer-surface">
+      <div
+        className={[
+          "composer-surface",
+          showEditChrome ? "composer-surface--edit" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {showEditChrome ? (
+          <div className="composer-edit-bar" role="status" aria-live="polite">
+            <span className="composer-edit-chip">{editContextLabel ?? "Editing"}</span>
+          </div>
+        ) : null}
         <div className="composer-field">
           <label htmlFor={inputId} className="visually-hidden">
             {ariaMessageLabel}
