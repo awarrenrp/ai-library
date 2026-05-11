@@ -1,4 +1,23 @@
-/* Design tokens */
+/* Design tokens
+ *
+ * WCAG AA contrast audit — computed against the two surfaces text actually lands on
+ * (#ffffff and --color-surface #f9f7f6). All foreground text tokens below pass AA (≥ 4.5:1)
+ * for normal body text; muted body is the only borderline case.
+ *
+ * Token            | on #fff  | on #f9f7f6 | WCAG (normal text)
+ * -----------------|----------|------------|--------------------
+ * #000000          | 21.0 : 1 | 19.6 : 1   | AAA
+ * #716f6c (muted)  |  5.0 : 1 |  4.7 : 1   | AA (borderline on surface — keep ≥ 14px)
+ * --color-primary  | 10.6 : 1 |  9.9 : 1   | AAA
+ * --color-info     |  8.1 : 1 |  7.5 : 1   | AAA
+ * --color-citation-pdf   #bb3d2a |  5.5 : 1 | 5.1 : 1 | AA
+ * --color-citation-image #512f3e | 11.5 : 1 | 10.7: 1 | AAA
+ *
+ * Decorative accents (icon glyphs, not text) — flagged for awareness:
+ *   #e39d02 (PPT accent) on #ffffff ≈ 2.3 : 1. Used only as the document-icon fill,
+ *   paired with the "PPT" label which uses #716f6c (5:1). The icon is aria-hidden,
+ *   so the contrast requirement is "non-essential graphics" — passes by design.
+ */
 
 :root {
   /* UI chrome / labels — Medium (500); avoid Semibold for non-heading text. */
@@ -19,9 +38,20 @@
   --color-citation-image: #512f3e;
   /* Focus outline — #000 @ 25% */
   --color-ring: rgb(0 0 0 / 25%);
+  /** Neutral surface — docs preview chrome, elevated panels on white. */
+  --color-surface: #f9f7f6;
+
+  /* Elevation — Figma Pebble / drop-shadow scale */
+  /** Medium · Figma drop shadow X:0 Y:4 Blur:6 Spread:-1 #000 @ 15%. Used for hover lift on artifact cards. */
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 15%);
 
   /* Artifact surfaces — #000 over white (inset fill / focus ring) */
   --artifact-overlay-hover: rgb(0 0 0 / 10%);
   --artifact-overlay-pressed: rgb(0 0 0 / 20%);
+  /** Hover variant “shadow only” — card shells (external artifact row, in-chat link widgets). */
+  --artifact-hover-shadow-card: var(--shadow-md);
+  --artifact-hover-shadow-card-active: var(--shadow-md);
+  --artifact-hover-shadow-thumb: var(--shadow-md);
+  --artifact-hover-shadow-thumb-active: var(--shadow-md);
   --artifact-outline-active: #5aa5e7;
 }

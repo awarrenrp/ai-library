@@ -45,6 +45,7 @@ export function PromptsPage() {
 
       <ComponentIntentPanel when={PROMPTS_WHEN} designIntent={PROMPTS_DESIGN_INTENT} />
 
+      <div className="demo-preview-surface" role="region" aria-label="Prompt interactive preview">
       <div className="demo-toolbar" aria-label="Prompt preview controls">
         <div className="demo-group">
           <p className="demo-label" id="label-prompt-surface">
@@ -115,6 +116,7 @@ export function PromptsPage() {
         <strong>{surface === "outline" ? "Outlined" : "Filled"}</strong> · Subtext{" "}
         <strong>{subtextOn ? "On" : "Off"}</strong>
       </p>
+      </div>
     </main>
   );
 }

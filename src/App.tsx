@@ -8,6 +8,7 @@ import { DisambiguationPage } from "./pages/DisambiguationPage";
 import { LinksPage } from "./pages/LinksPage";
 import { PromptsPage } from "./pages/PromptsPage";
 import { RipplingNativeArtifactsPage } from "./pages/RipplingNativeArtifactsPage";
+import { StrongTypePage } from "./pages/StrongTypePage";
 
 export function App() {
   return (
@@ -22,6 +23,7 @@ export function App() {
         <Route path="/prompts" element={<PromptsPage />} />
         <Route path="/disambiguation" element={<DisambiguationPage />} />
         <Route path="/links" element={<LinksPage />} />
+        <Route path="/strong-type" element={<StrongTypePage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -123,7 +123,8 @@ async function copyComposerMessageInputExample(): Promise<void> {
 export function ComposerPage() {
   const pageMenuId = useId();
   const settingsBtnId = `composer-page-settings-btn-${pageMenuId}`;
-  const [width, setWidth] = useState<ComposerWidth>("large");
+  /** Fixed-width tracks only; `"fill"` is for embedded Composers (e.g. chat footers). */
+  const [width, setWidth] = useState<Exclude<ComposerWidth, "fill">>("large");
   const [composerVersion, setComposerVersion] = useState<ComposerVersion>("standard");
   const [variant, setVariant] = useState<"default" | "filled" | "edit">("default");
   const [text, setText] = useState("");
@@ -234,6 +235,7 @@ export function ComposerPage() {
 
       <ComponentIntentPanel when={COMPOSER_WHEN} designIntent={COMPOSER_DESIGN_INTENT} />
 
+      <div className="demo-preview-surface" role="region" aria-label="Composer interactive preview">
       <div className="demo-toolbar" aria-label="Composer preview controls">
         <div className="demo-group">
           <p className="demo-label" id="label-width">
@@ -317,6 +319,7 @@ export function ComposerPage() {
                 : "Default"}
         </strong>
       </p>
+      </div>
 
       <section
         className="demo-code-section"

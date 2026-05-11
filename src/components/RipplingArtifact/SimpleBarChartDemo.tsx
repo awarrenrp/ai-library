@@ -31,9 +31,12 @@ export type SimpleBarChartDemoProps = {
 export function SimpleBarChartDemo({ variant = "bar" }: SimpleBarChartDemoProps) {
   const trackPx = PLOT_H;
 
+  const min = Math.min(...PRIMARY);
+  const max = Math.max(...PRIMARY);
+  const monthRange = `${MONTHS[0]} through ${MONTHS[MONTHS.length - 1]}`;
   const ariaByVariant: Record<ChartDemoVariant, string> = {
-    bar: "Sample bar chart, sales January through August",
-    "stacked-bar": "Sample stacked bar chart, sales January through August",
+    bar: `Sample bar chart, sales ${monthRange}. Y axis 0 to 100, values range ${min} to ${max}.`,
+    "stacked-bar": `Sample stacked bar chart, sales ${monthRange}. Y axis 0 to 100, totals range ${min} to ${max}; five-segment purple ramp from base to top.`,
   };
 
   return (

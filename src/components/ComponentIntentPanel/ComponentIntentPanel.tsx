@@ -39,11 +39,11 @@ export function ComponentIntentPanel({
         aria-label="When and design intent"
       >
         <div className="component-intent-panel__col">
-          <h3 className="component-intent-panel__label">When</h3>
+          <h2 className="component-intent-panel__label">When</h2>
           <div className="component-intent-panel__body">{when}</div>
         </div>
         <div className="component-intent-panel__col">
-          <h3 className="component-intent-panel__label">Design intent</h3>
+          <h2 className="component-intent-panel__label">Design intent</h2>
           <div className="component-intent-panel__body">{intent}</div>
         </div>
       </div>

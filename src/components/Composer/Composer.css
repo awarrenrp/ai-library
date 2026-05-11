@@ -40,16 +40,7 @@
   box-shadow: 0 1px 2px rgb(0 0 0 / 6%);
 }
 
-/* Alternate — Fast + mic: borderless ghost (no outline). */
-.composer--alternate .composer-fast {
-  background: transparent;
-  border: none;
-}
-
-.composer--alternate .composer-fast:hover {
-  background: rgb(0 0 0 / 5%);
-}
-
+/* Alternate — mic: borderless ghost (no outline). The Fast dropdown is replaced by the intent switcher. */
 .composer--alternate .composer-voice {
   background: transparent;
   border: none;
@@ -59,37 +50,171 @@
   background: rgb(0 0 0 / 5%);
 }
 
-/* Focus accent while typing in the message field */
-.composer-surface:has(.composer-input:focus) {
+/*
+ * Intent switcher — Ask | Agent | Plan (alternate variant only).
+ * Replaces the Fast dropdown in the toolbar; lives at toolbar baseline (32px).
+ */
+.composer-intent {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: 32px;
+  padding: 2px;
+  border: 1px solid var(--composer-border);
+  border-radius: 999px;
+  background: var(--composer-surface);
+}
+
+.composer-intent-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 12px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #000000;
+  cursor: pointer;
+}
+
+.composer-intent-option:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+.composer-intent-option--active {
+  background: #000000;
+  color: #ffffff;
+}
+
+.composer-intent-option--active:hover {
+  background: #000000;
+  filter: brightness(1.05);
+}
+
+.composer-intent-option:focus-visible {
+  outline: 2px solid var(--composer-focus-ring);
+  outline-offset: 2px;
+}
+
+/*
+ * Speed switcher (alternate) — XS Fast | Pro pill sitting under the surface.
+ * Height ~22px, font 11px, tight letter-spacing-free pill. Visible on focus too.
+ */
+.composer-speed-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.composer-speed {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: 22px;
+  padding: 2px;
+  border: 1px solid rgb(0 0 0 / 12%);
+  border-radius: 999px;
+  background: var(--composer-surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+}
+
+.composer-speed-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 100%;
+  padding: 0 8px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 14px;
+  letter-spacing: 0.02em;
+  color: var(--composer-muted);
+  cursor: pointer;
+}
+
+.composer-speed-option:hover {
+  color: #000000;
+}
+
+.composer-speed-option--active {
+  background: #000000;
+  color: #ffffff;
+}
+
+.composer-speed-option--active:hover {
+  color: #ffffff;
+  filter: brightness(1.05);
+}
+
+.composer-speed-option:focus-visible {
+  outline: 2px solid var(--composer-focus-ring);
+  outline-offset: 2px;
+}
+
+/*
+ * Focus accent while typing — outer outline on default surface only.
+ * Edit surface uses a single blue border (replaces gray) — see .composer-surface--edit.
+ */
+.composer-surface:has(.composer-input:focus):not(.composer-surface--edit) {
   outline: 2px solid var(--composer-typing-focus-ring);
   outline-offset: 2px;
 }
 
-/* Edit surface — same chrome as typing focus; stays on without field focus */
+/*
+ * Edit surface — Figma alternate composer: gray shell stroke becomes the blue focus stroke
+ * (no second outline sitting outside the border).
+ */
 .composer-surface--edit {
-  outline: 2px solid var(--composer-typing-focus-ring);
-  outline-offset: 2px;
+  padding: 7px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--composer-typing-focus-ring);
 }
 
 .composer-edit-bar {
   flex-shrink: 0;
-  margin-bottom: 2px;
+  margin-bottom: 6px;
 }
 
+/* Chip — Regular · AI-components · 865:10482 */
 .composer-edit-chip {
   display: inline-flex;
+  flex-direction: row;
   align-items: center;
+  gap: 6px;
   box-sizing: border-box;
   max-width: 100%;
-  padding: 5px 10px;
-  border-radius: 9999px;
-  border: 1px solid rgb(90 165 231 / 35%);
-  background: rgb(90 165 231 / 10%);
-  font-size: 12px;
-  font-weight: var(--font-weight-emphasis);
-  line-height: 16px;
+  min-height: 32px;
+  padding: 6px 10px 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgb(0 0 0 / 10%);
+  background: rgb(185 219 243);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
   letter-spacing: -0.01em;
   color: #000000;
+}
+
+.composer-edit-chip__icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(0 0 0 / 72%);
+}
+
+.composer-edit-chip__label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

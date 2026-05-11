@@ -111,15 +111,17 @@ export function ExternalFileArtifact({
         {!compact ? (
           <div className="external-file-artifact-thumb">
             <div className="external-file-artifact-thumb-surface">
-              <div className="external-file-artifact-thumb-head">
-                <span className="external-file-artifact-icon-wrap">
-                  <IconDocumentVector color={meta.accent} size={16} />
-                </span>
-                <span className="external-file-artifact-ext">{meta.ext}</span>
-              </div>
-              <div className="external-file-artifact-bars" aria-hidden>
-                <span className="external-file-artifact-bar" />
-                <span className="external-file-artifact-bar" />
+              <div className="external-file-artifact-thumb-surface-inner">
+                <div className="external-file-artifact-thumb-head">
+                  <span className="external-file-artifact-icon-wrap">
+                    <IconDocumentVector color={meta.accent} size={16} />
+                  </span>
+                  <span className="external-file-artifact-ext">{meta.ext}</span>
+                </div>
+                <div className="external-file-artifact-bars" aria-hidden>
+                  <span className="external-file-artifact-bar" />
+                  <span className="external-file-artifact-bar" />
+                </div>
               </div>
             </div>
           </div>

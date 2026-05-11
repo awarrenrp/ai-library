@@ -43,6 +43,21 @@ export function IconMic(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** Bars — Chip · Regular · AI-components · 865:10482 (leading visual). */
+export function IconComposerChipLead(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width={16} height={16} viewBox="0 0 16 16" fill="none" aria-hidden {...props}>
+      <path
+        d="M4 13V9M8 13V5M12 13v-4"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function IconArrowUp(props: SVGProps<SVGSVGElement>) {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden {...props}>

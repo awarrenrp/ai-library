@@ -1,0 +1,112 @@
+/*
+ * StrongType — heavyweight label / pill.
+ *
+ * Contrast table (label text vs fill, computed):
+ *   primary    #ffffff on #7a005d  → 10.6 : 1   (AAA)
+ *   info       #ffffff on #1e4aa9  →  8.1 : 1   (AAA)
+ *   neutral    #ffffff on #000000  → 21.0 : 1   (AAA)
+ *   critical   #ffffff on #bb3d2a  →  5.5 : 1   (AA)
+ *   positive   #ffffff on #166534  →  7.3 : 1   (AAA)
+ *   progress   #ffffff on #92400e  →  7.5 : 1   (AAA)   — amber-800, distinct from red critical and green positive
+ *
+ * Outlined variants render the tone color as foreground on white; the foregrounds above
+ * sit on top of #ffffff with the same ratios.
+ */
+
+.strong-type {
+  --strong-type-fill: #000000;
+  --strong-type-on-fill: #ffffff;
+  --strong-type-outline: rgb(0 0 0 / 45%);
+  --strong-type-radius: 999px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  border-radius: var(--strong-type-radius);
+  font-family: inherit;
+  font-weight: var(--font-weight-heading);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+}
+
+button.strong-type {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  font-weight: var(--font-weight-heading);
+}
+
+button.strong-type:focus-visible {
+  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
+  outline-offset: 2px;
+}
+
+.strong-type__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.strong-type__icon svg {
+  display: block;
+  width: 1em;
+  height: 1em;
+}
+
+.strong-type__label {
+  line-height: 1;
+}
+
+/* Sizes — heights chosen so the pill sits cleanly against a 24px text baseline. */
+.strong-type--sm {
+  height: 20px;
+  padding: 0 8px;
+  font-size: 11px;
+}
+
+.strong-type--md {
+  height: 24px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+/* Filled — strong fill, white label. */
+.strong-type--filled {
+  background: var(--strong-type-fill);
+  color: var(--strong-type-on-fill);
+}
+
+/* Outlined — transparent body, tone-colored ring + label. */
+.strong-type--outlined {
+  background: transparent;
+  color: var(--strong-type-fill);
+  box-shadow: inset 0 0 0 1.5px var(--strong-type-fill);
+}
+
+/* Tones — keep `--strong-type-fill` as the single source of truth for both variants. */
+.strong-type--neutral {
+  --strong-type-fill: #000000;
+}
+
+.strong-type--primary {
+  --strong-type-fill: var(--color-primary, #7a005d);
+}
+
+.strong-type--info {
+  --strong-type-fill: var(--color-info, #1e4aa9);
+}
+
+.strong-type--critical {
+  --strong-type-fill: #bb3d2a;
+}
+
+.strong-type--positive {
+  --strong-type-fill: #166534;
+}
+
+.strong-type--progress {
+  --strong-type-fill: #92400e;
+}

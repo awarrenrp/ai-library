@@ -1,0 +1,230 @@
+/* Links · side chat in-context preview (shell mirrors Disambiguation in-chat demo) */
+
+.links-ic-demo {
+  width: 100%;
+}
+
+.links-ic-demo__intro {
+  margin: 0 0 16px;
+  max-width: 640px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #716f6c;
+}
+
+.links-ic-demo__trigger {
+  margin-bottom: 16px;
+}
+
+.links-ic-demo__trigger--outline {
+  padding: 8px 14px;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  color: #000000;
+  cursor: pointer;
+}
+
+.links-ic-demo__trigger--outline:hover {
+  background: rgb(0 0 0 / 4%);
+}
+
+.links-ic-demo__trigger--outline:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.links-ic-demo__surface {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  width: calc(100% + 48px);
+  margin-left: -24px;
+  margin-right: -24px;
+  min-height: 640px;
+  height: min(85vh, 880px);
+  background: rgb(0 0 0 / 4%);
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+.links-ic-demo__app {
+  grid-area: 1 / 1;
+  position: relative;
+  z-index: 0;
+  box-sizing: border-box;
+  align-self: stretch;
+  min-height: 0;
+  padding: 28px 32px;
+  padding-right: min(440px, 46vw);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.links-ic-demo__app-label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: var(--font-weight-emphasis);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #716f6c;
+}
+
+.links-ic-demo__app-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #716f6c;
+  max-width: 420px;
+}
+
+.links-ic-demo__chat-wrap {
+  grid-area: 1 / 1;
+  justify-self: end;
+  align-self: stretch;
+  width: min(440px, 100%);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  transform: translateX(100%);
+  transition: transform 0.42s cubic-bezier(0.33, 1, 0.68, 1);
+  will-change: transform;
+  z-index: 2;
+}
+
+.links-ic-demo__chat-wrap--open {
+  transform: translateX(0);
+}
+
+.links-ic-demo__chat {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  border-left: 1px solid rgb(0 0 0 / 10%);
+  background: #ffffff;
+  box-shadow: -6px 0 32px rgb(0 0 0 / 8%);
+}
+
+.links-ic-demo__chat-head {
+  flex-shrink: 0;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgb(0 0 0 / 10%);
+  font-size: 14px;
+  font-weight: var(--font-weight-heading);
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+
+.links-ic-demo__thread {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.links-ic-demo__bubble {
+  margin: 0;
+  max-width: 92%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #000000;
+}
+
+.links-ic-demo__bubble--user {
+  align-self: flex-end;
+  background: #f2eee6;
+}
+
+.links-ic-demo__assistant-turn {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  max-width: 100%;
+}
+
+.links-ic-demo__assistant-msg {
+  margin: 0;
+  max-width: 100%;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #000000;
+}
+
+/* Inline file citation (same row as prose — no “PDF” label block). */
+.links-ic-demo__inline-embed {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: min(100%, 260px);
+  margin: 0 2px;
+}
+
+.links-ic-demo__inline-embed .links-file-row {
+  width: 100%;
+  max-width: 100%;
+}
+
+.links-ic-demo__block-embed {
+  display: block;
+  margin-top: 10px;
+  max-width: 100%;
+}
+
+.links-ic-demo__block-embed .links-handoff,
+.links-ic-demo__block-embed .links-rich-card,
+.links-ic-demo__block-embed .links-below-stack {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.links-ic-demo__block-embed--actions {
+  margin-top: 12px;
+}
+
+.links-ic-demo__footer {
+  flex-shrink: 0;
+  padding: 12px 14px 14px;
+  background: #ffffff;
+  border-top: 1px solid rgb(0 0 0 / 12%);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.links-ic-demo__footer .composer {
+  align-self: stretch;
+}
+
+@media (max-width: 720px) {
+  .links-ic-demo__surface {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .links-ic-demo__app {
+    padding-right: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .links-ic-demo__chat-wrap {
+    transition: none;
+  }
+}

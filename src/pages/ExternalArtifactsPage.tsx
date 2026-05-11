@@ -1,10 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  ArtifactHoverPageSettings,
+  type ArtifactHoverVariant,
+} from "../components/ArtifactHoverPageSettings";
 import { WIDTH_PX } from "../components/Composer";
 import type { ComposerWidth } from "../components/Composer";
+
+/** Outer demo width — fixed-width tracks only; `"fill"` isn’t valid for the outer preview shell. */
+type DemoOuterWidth = Exclude<ComposerWidth, "fill">;
+import { IconCopy } from "../components/Composer/icons";
 import type { ExternalFileKind } from "../components/ExternalArtifact";
 import { ExternalFileArtifact } from "../components/ExternalArtifact";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
+import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
+import EXTERNAL_ARTIFACT_EXAMPLE_SOURCE from "../examples/ExternalArtifactExample.tsx?raw";
+import { copyText } from "../utils/copyText";
 import "../App.css";
 
 const FILE_KINDS = ["ppt", "pdf", "xls", "doc"] as const satisfies readonly ExternalFileKind[];
@@ -17,11 +28,17 @@ const FILE_LABEL: Record<ExternalFileKind, string> = {
 };
 
 export function ExternalArtifactsPage() {
-  const [width, setWidth] = useState<ComposerWidth>("large");
+  const [hoverVariant, setHoverVariant] = useState<ArtifactHoverVariant>("shadow");
+  const [width, setWidth] = useState<DemoOuterWidth>("large");
   const [kind, setKind] = useState<ExternalFileKind>("ppt");
+  const [copyAck, setCopyAck] = useState(false);
+
+  /** Preview shell is 8px narrower than composer track so the file-type tag isn’t flush to the chrome edge. */
+  const outerPx = WIDTH_PX[width] - 8;
 
   return (
-    <main className="demo-wrap">
+    <main className="demo-wrap" data-artifact-hover-style={hoverVariant}>
+      <ArtifactHoverPageSettings variant={hoverVariant} onVariantChange={setHoverVariant} />
       <nav style={{ marginBottom: 24 }}>
         <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
           ← AI components
@@ -41,6 +58,11 @@ export function ExternalArtifactsPage() {
 
       <ComponentIntentPanel />
 
+      <div
+        className="demo-preview-surface demo-preview-surface--no-toolbar-divider"
+        role="region"
+        aria-label="External artifact interactive preview"
+      >
       <div className="demo-toolbar" aria-label="External artifact preview controls">
         <div className="demo-group">
           <p className="demo-label" id="ea-label-width">
@@ -86,7 +108,7 @@ export function ExternalArtifactsPage() {
       <div className="demo-stage" role="region" aria-label="External artifact preview">
         <div
           style={{
-            width: WIDTH_PX[width],
+            width: outerPx,
             maxWidth: "100%",
             boxSizing: "border-box",
           }}
@@ -96,8 +118,45 @@ export function ExternalArtifactsPage() {
       </div>
 
       <p className="demo-meta" aria-live="polite">
-        Outer width <strong>{WIDTH_PX[width]}px</strong> · <strong>{FILE_LABEL[kind]}</strong>
+        Outer width <strong>{outerPx}px</strong> · <strong>{FILE_LABEL[kind]}</strong>
       </p>
+      </div>
+
+      <section
+        className="demo-code-section"
+        id="external-artifact-example"
+        aria-labelledby="external-artifact-example-heading"
+      >
+        <div className="demo-code-section__top">
+          <div>
+            <h2 id="external-artifact-example-heading" className="demo-code-section__title">
+              External artifact — implementation example
+            </h2>
+            <p className="demo-code-section__lede">
+              Render <code>ExternalFileArtifact</code> in product as an assistant attachment row, or
+              as a compact citation under a thread message. Paths below match the Rippling chat
+              module.
+            </p>
+          </div>
+          <div className="demo-segments" role="presentation">
+            <button
+              type="button"
+              className={["demo-segment", "demo-code-copy-btn", copyAck ? "demo-code-copy-btn--active" : ""]
+                .filter(Boolean)
+                .join(" ")}
+              onClick={async () => {
+                await copyText(EXTERNAL_ARTIFACT_EXAMPLE_SOURCE);
+                setCopyAck(true);
+                window.setTimeout(() => setCopyAck(false), 2000);
+              }}
+            >
+              <IconCopy className="demo-code-copy-btn__icon" />
+              {copyAck ? "Copied" : "Copy code"}
+            </button>
+          </div>
+        </div>
+        <DemoHighlightedCode code={EXTERNAL_ARTIFACT_EXAMPLE_SOURCE} language="tsx" />
+      </section>
     </main>
   );
 }

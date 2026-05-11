@@ -1,0 +1,137 @@
+.strong-type-page__section-title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: var(--font-weight-heading);
+  letter-spacing: -0.02em;
+}
+
+.strong-type-page__section-lede {
+  margin: 0 0 16px;
+  max-width: 640px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #716f6c;
+}
+
+.strong-type-page__section-lede code {
+  font-size: 0.92em;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* Matrix: tone (row) × variant (col) — keeps the visual + the rationale side by side. */
+.strong-type-page__matrix {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.strong-type-page__matrix-row {
+  display: grid;
+  grid-template-columns: 140px repeat(2, minmax(100px, 1fr)) minmax(220px, 2fr);
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
+}
+
+.strong-type-page__matrix-row:last-child {
+  border-bottom: none;
+}
+
+.strong-type-page__matrix-row--head {
+  background: rgb(0 0 0 / 3%);
+}
+
+.strong-type-page__matrix-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #000;
+  min-width: 0;
+}
+
+.strong-type-page__matrix-cell--head {
+  font-size: 11px;
+  font-weight: var(--font-weight-emphasis);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #716f6c;
+}
+
+.strong-type-page__matrix-cell--tone {
+  font-weight: var(--font-weight-emphasis);
+}
+
+.strong-type-page__matrix-cell--desc {
+  font-size: 13px;
+  color: #716f6c;
+  line-height: 1.45;
+}
+
+/* Sizes block */
+.strong-type-page__sizes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.strong-type-page__size-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.strong-type-page__size-label {
+  font-size: 11px;
+  font-weight: var(--font-weight-emphasis);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #716f6c;
+  margin-right: auto;
+}
+
+/* In-context demo: render the example component on a faux chat surface. */
+.strong-type-page__chat-stage {
+  padding: 18px 20px;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 12px;
+  background: #ffffff;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #000;
+}
+
+.strong-type-page__chat-stage p {
+  margin: 0;
+}
+
+.strong-type-page__chat-stage p + p {
+  margin-top: 10px;
+}
+
+@media (max-width: 720px) {
+  .strong-type-page__matrix-row {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 10px;
+  }
+
+  .strong-type-page__matrix-row--head {
+    display: none;
+  }
+
+  .strong-type-page__matrix-cell--tone {
+    grid-column: 1 / -1;
+  }
+
+  .strong-type-page__matrix-cell--desc {
+    grid-column: 1 / -1;
+  }
+}

@@ -12,6 +12,7 @@ import {
   LinksFileBlock,
   LinksFileCitationRow,
   LinksHandoffCard,
+  LinksInChatDemo,
   LinksRichArticleCard,
   LinksSourcesChip,
   LinksTextLink,
@@ -96,129 +97,141 @@ export function LinksPage() {
       </nav>
 
       <section className="links-spec-section" aria-labelledby="links-inline-heading" id="links-inline">
-        <h2 id="links-inline-heading">In the message</h2>
-        <p>
-          Inline destinations are either <strong style={{ fontWeight: "var(--font-weight-heading)", color: "#000000" }}>linked text</strong>{" "}
-          (body style—plum, underlined) or <strong style={{ fontWeight: "var(--font-weight-heading)", color: "#000000" }}>chips</strong>{" "}
-          such as sources counts and compact file citation rows.
-        </p>
+        <div className="links-spec-surface">
+          <h2 id="links-inline-heading">In the message</h2>
+          <p>
+            Inline destinations are either <strong style={{ fontWeight: "var(--font-weight-heading)", color: "#000000" }}>linked text</strong>{" "}
+            (body style—plum, underlined) or <strong style={{ fontWeight: "var(--font-weight-heading)", color: "#000000" }}>chips</strong>{" "}
+            such as sources counts and compact file citation rows.
+          </p>
 
-        <div className="links-spec-stage">
-          <div className="links-spec-example">
-            <LinksChatLine>
-              You can review accruals any time in the{" "}
-              <LinksTextLink href="#">Time Off dashboard</LinksTextLink> before approving requests. For benchmarks, see the{" "}
-              <LinksTextLink href="#" variant="external">
-                Industry HR report (PDF)
-              </LinksTextLink>
-              .
-            </LinksChatLine>
-          </div>
+          <div className="links-spec-stage">
+            <div className="links-spec-example">
+              <LinksChatLine>
+                You can review accruals any time in the{" "}
+                <LinksTextLink href="#">Time Off dashboard</LinksTextLink> before approving requests. For benchmarks, see the{" "}
+                <LinksTextLink href="#" variant="external">
+                  Industry HR report (PDF)
+                </LinksTextLink>
+                .
+              </LinksChatLine>
+            </div>
 
-          <div className="links-spec-example">
-            <h3 className="links-spec-subhead" style={{ marginTop: 0 }}>
-              Source / citation (in context)
-            </h3>
-            <p className="links-spec-example-desc">
-              Bundle provenance in-thread: a compact sources chip plus file rows that match attachment conventions (icon,
-              truncated name, size).
-            </p>
-            <LinksSourcesChip count={2} />
-            <LinksFileBlock kind="PDF">
-              <LinksFileCitationRow name="Magnificent_Blue_W....pdf" size="446.6 KB" variant="document" />
-            </LinksFileBlock>
-          <LinksFileBlock kind="Image">
-            <LinksFileCitationRow name="Magnificent_Blue_W....png" size="446.6 KB" variant="image" />
-          </LinksFileBlock>
+            <div className="links-spec-example">
+              <h3 className="links-spec-subhead" style={{ marginTop: 0 }}>
+                Source / citation (in context)
+              </h3>
+              <p className="links-spec-example-desc">
+                Bundle provenance in-thread: a compact sources chip plus file rows that match attachment conventions (icon,
+                truncated name, size).
+              </p>
+              <LinksSourcesChip count={2} />
+              <LinksFileBlock kind="PDF">
+                <LinksFileCitationRow name="Magnificent_Blue_W....pdf" size="446.6 KB" variant="document" />
+              </LinksFileBlock>
+              <LinksFileBlock kind="Image">
+                <LinksFileCitationRow name="Magnificent_Blue_W....png" size="446.6 KB" variant="image" />
+              </LinksFileBlock>
+            </div>
           </div>
         </div>
       </section>
 
       <section className="links-spec-section" aria-labelledby="links-below-heading" id="links-below">
-        <h2 id="links-below-heading">Below the chat</h2>
-        <p>
-          Patterns that sit under the scrollable thread—not mixed into body copy—when the next step should feel deliberate:
-          handing off to a human agent, or leaving Rippling for the open web with an{" "}
-          <strong style={{ fontWeight: "var(--font-weight-heading)", color: "#000000" }}>external link</strong> preview
-          card (source, date, headline, snippet, thumbnail).
-        </p>
+        <div className="links-spec-surface">
+          <h2 id="links-below-heading">Below the chat</h2>
+          <p>
+            Patterns that sit under the scrollable thread—not mixed into body copy—when the next step should feel deliberate:
+            handing off to a human agent, or leaving Rippling for the open web with an{" "}
+            <strong style={{ fontWeight: "var(--font-weight-heading)", color: "#000000" }}>external link</strong> preview
+            card (source, date, headline, snippet, thumbnail).
+          </p>
 
-        <div className="links-spec-stage">
-          <div className="links-spec-example" id="links-below-handoff">
-            <p className="links-spec-example-title">Agent handoff</p>
-            <p className="links-spec-example-desc">Support shell with info-style primary action.</p>
-            <LinksHandoffCard
-              title="This needs a support agent"
-              body="Okay, I'm transferring you to Naomi, a payroll specialist. I'll share this conversation so you won't need to repeat yourself."
-              actionLabel="Chat with an Agent"
-            />
-          </div>
+          <div className="links-spec-stage">
+            <div className="links-spec-example" id="links-below-handoff">
+              <p className="links-spec-example-title">Agent handoff</p>
+              <p className="links-spec-example-desc">Support shell with info-style primary action.</p>
+              <LinksHandoffCard
+                title="This needs a support agent"
+                body="Okay, I'm transferring you to Naomi, a payroll specialist. I'll share this conversation so you won't need to repeat yourself."
+                actionLabel="Chat with an Agent"
+              />
+            </div>
 
-          <div className="links-spec-example" id="links-below-external">
-            <p className="links-spec-example-title">External link</p>
-            <p className="links-spec-example-desc">
-              Rich preview before navigating away: publication initial on the source badge; generic thumb illustration when no
-              image URL is wired.
-            </p>
-            <LinksRichArticleCard
-              sourceName="TechCrunch"
-              sourceInitial="T"
-              dateLine="April 4th, 2025"
-              title="Blue whales, the largest animals to have ever existed on Earth"
-              snippet="Blue whales, the largest animals to have ever existed on Earth, are awe-inspiring creatures that continue to captivate scientists and nature enthusiasts alike…."
-            />
+            <div className="links-spec-example" id="links-below-external">
+              <p className="links-spec-example-title">External link</p>
+              <p className="links-spec-example-desc">
+                Rich preview before navigating away: publication initial on the source badge; generic thumb illustration when no
+                image URL is wired.
+              </p>
+              <LinksRichArticleCard
+                sourceName="TechCrunch"
+                sourceInitial="T"
+                dateLine="April 4th, 2025"
+                title="Blue whales, the largest animals to have ever existed on Earth"
+                snippet="Blue whales, the largest animals to have ever existed on Earth, are awe-inspiring creatures that continue to captivate scientists and nature enthusiasts alike…."
+              />
+            </div>
           </div>
         </div>
       </section>
 
       <section className="links-spec-section" aria-labelledby="links-rippling-heading" id="links-rippling">
-        <h2 id="links-rippling-heading">Rippling links</h2>
-        <p>
-          In-product destinations surfaced as emphasized actions—bulk workflows, Help Center, sales, and dedicated product
-          entry. Pair stacks with a short instruction line when the destination needs framing.
-        </p>
+        <div className="links-spec-surface">
+          <h2 id="links-rippling-heading">Rippling links</h2>
+          <p>
+            In-product destinations surfaced as emphasized actions—bulk workflows, Help Center, sales, and dedicated product
+            entry. Pair stacks with a short instruction line when the destination needs framing.
+          </p>
 
-        <div className="links-spec-stage">
-          <div className="links-spec-example" id="links-rippling-bulk">
-            <p className="links-spec-example-title">Bulk actions</p>
-            <p className="links-spec-example-desc">Primary workflow CTAs with optional count badges.</p>
-            <LinksBelowChatStack instruction="Time Off dashboard">
-              <LinksEmphasisButton variant="primary" icon={<IconApproveCheck />}>
-                Approve all requests
-              </LinksEmphasisButton>
-              <LinksEmphasisButton variant="secondary" icon={<IconDeclineLine />}>
-                Decline all requests
-              </LinksEmphasisButton>
-            </LinksBelowChatStack>
-          </div>
+          <div className="links-spec-stage">
+            <div className="links-spec-example" id="links-rippling-bulk">
+              <p className="links-spec-example-title">Bulk actions</p>
+              <p className="links-spec-example-desc">Primary workflow CTAs with optional count badges.</p>
+              <LinksBelowChatStack instruction="Time Off dashboard">
+                <LinksEmphasisButton variant="primary" icon={<IconApproveCheck />}>
+                  Approve all requests
+                </LinksEmphasisButton>
+                <LinksEmphasisButton variant="secondary" icon={<IconDeclineLine />}>
+                  Decline all requests
+                </LinksEmphasisButton>
+              </LinksBelowChatStack>
+            </div>
 
-          <div className="links-spec-example" id="links-rippling-help">
-            <p className="links-spec-example-title">Help &amp; resources</p>
-            <p className="links-spec-example-desc">Secondary actions with destination-specific icons.</p>
-            <LinksBelowChatStack instruction="Questions? Or check out Rippling Spend">
-              <LinksEmphasisButton variant="secondary" icon={<IconHelpBook />}>
-                Help Center
-              </LinksEmphasisButton>
-            </LinksBelowChatStack>
-          </div>
+            <div className="links-spec-example" id="links-rippling-help">
+              <p className="links-spec-example-title">Help &amp; resources</p>
+              <p className="links-spec-example-desc">Secondary actions with destination-specific icons.</p>
+              <LinksBelowChatStack instruction="Questions? Or check out Rippling Spend">
+                <LinksEmphasisButton variant="secondary" icon={<IconHelpBook />}>
+                  Help Center
+                </LinksEmphasisButton>
+              </LinksBelowChatStack>
+            </div>
 
-          <div className="links-spec-example" id="links-rippling-sales">
-            <p className="links-spec-example-title">Sales</p>
-            <LinksBelowChatStack instruction="Questions? Connect with your Account Manager">
-              <LinksEmphasisButton variant="secondary" icon={<IconSalesBriefcase />}>
-                Talk to sales
-              </LinksEmphasisButton>
-            </LinksBelowChatStack>
-          </div>
+            <div className="links-spec-example" id="links-rippling-sales">
+              <p className="links-spec-example-title">Sales</p>
+              <LinksBelowChatStack instruction="Questions? Connect with your Account Manager">
+                <LinksEmphasisButton variant="secondary" icon={<IconSalesBriefcase />}>
+                  Talk to sales
+                </LinksEmphasisButton>
+              </LinksBelowChatStack>
+            </div>
 
-          <div className="links-spec-example" id="links-rippling-product">
-            <p className="links-spec-example-title">Product entry</p>
-            <LinksBelowChatStack instruction="Questions? Connect with your Account Manager">
-              <LinksEmphasisButton variant="secondary" icon={<IconSpendCard />}>
-                View Rippling Spend
-              </LinksEmphasisButton>
-            </LinksBelowChatStack>
+            <div className="links-spec-example" id="links-rippling-product">
+              <p className="links-spec-example-title">Product entry</p>
+              <LinksBelowChatStack instruction="Questions? Connect with your Account Manager">
+                <LinksEmphasisButton variant="secondary" icon={<IconSpendCard />}>
+                  View Rippling Spend
+                </LinksEmphasisButton>
+              </LinksBelowChatStack>
+            </div>
           </div>
+        </div>
+      </section>
+
+      <section className="links-spec-section" id="links-in-context" aria-label="Links in side chat">
+        <div className="links-spec-surface">
+          <LinksInChatDemo />
         </div>
       </section>
     </main>

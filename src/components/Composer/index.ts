@@ -1,5 +1,7 @@
 export {
   Composer,
+  COMPOSER_INTENTS,
+  COMPOSER_INTENT_LABELS,
   COMPOSER_MODES,
   COMPOSER_SURFACE_STATES,
   COMPOSER_VERSIONS,
@@ -7,6 +9,7 @@ export {
   WIDTH_PX,
 } from "./Composer";
 export type {
+  ComposerIntent,
   ComposerMode,
   ComposerProps,
   ComposerSurfaceState,

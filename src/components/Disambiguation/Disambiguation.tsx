@@ -3,6 +3,8 @@ import "./Disambiguation.css";
 
 export type DisambiguationInputType = "radio" | "checkbox";
 
+export type DisambiguationVariant = "default" | "design-system";
+
 export type DisambiguationOption = {
   id: string;
   title: string;
@@ -11,6 +13,29 @@ export type DisambiguationOption = {
   label?: string;
 };
 
+function IconHelpCircle(props: { className?: string }) {
+  return (
+    <svg
+      className={props.className}
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
+      <circle cx="8" cy="8" r="7.25" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M6.35 6.2c0-.77.63-1.4 1.4-1.4h.5c.77 0 1.4.63 1.4 1.4 0 .58-.36 1.09-.9 1.29l-.35.12c-.44.15-.75.56-.75 1.04V9"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <circle cx="8" cy="11.25" r="0.75" fill="currentColor" />
+    </svg>
+  );
+}
+
 export type DisambiguationProps = {
   /** Main question line (e.g. “Rich Single Selection”). */
   question: string;
@@ -18,6 +43,8 @@ export type DisambiguationProps = {
   /** “1 of 2 questions” + dots when set. */
   step?: { current: number; total: number };
   inputType?: DisambiguationInputType;
+  /** Visual treatment; `"design-system"` matches AI-components Figma (Disambiguation frame). */
+  variant?: DisambiguationVariant;
   options: DisambiguationOption[];
   className?: string;
   /** Accessible label for the option list (defaults to `question`). */
@@ -29,6 +56,7 @@ export function Disambiguation({
   subtitle,
   step,
   inputType = "radio",
+  variant = "default",
   options,
   className,
   optionsLabel,
@@ -49,10 +77,17 @@ export function Disambiguation({
   }
 
   const isSelected = (id: string) => selected.includes(id);
+  const isDesignSystem = variant === "design-system";
 
   return (
     <section
-      className={["disambiguation", className].filter(Boolean).join(" ")}
+      className={[
+        "disambiguation",
+        isDesignSystem ? "disambiguation--design-system" : "",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       aria-labelledby={headingId}
     >
       {step ? (
@@ -123,22 +158,69 @@ export function Disambiguation({
                 </span>
               )}
             </span>
-            <span className="disambiguation__textblock">
-              <span className="disambiguation__title">{opt.title}</span>
+            <span className="disambiguation__option-body">
+              <span className="disambiguation__option-top">
+                <span className="disambiguation__title">{opt.title}</span>
+                {opt.label ? (
+                  <span
+                    className={[
+                      "disambiguation__pill",
+                      isDesignSystem ? "disambiguation__pill--design-system" : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                  >
+                    {opt.label}
+                  </span>
+                ) : null}
+                {isDesignSystem ? (
+                  <span className="disambiguation__row-tip" aria-hidden>
+                    <IconHelpCircle />
+                  </span>
+                ) : null}
+              </span>
               {opt.description ? (
                 <span className="disambiguation__description">{opt.description}</span>
               ) : null}
             </span>
-            {opt.label ? <span className="disambiguation__pill">{opt.label}</span> : null}
           </button>
         ))}
       </div>
+
+      {isDesignSystem ? (
+        <div className="disambiguation__ds-field">
+          <div className="disambiguation__ds-field-label-row">
+            <span className="disambiguation__ds-label">Other context</span>
+            <span className="disambiguation__ds-required" aria-hidden>
+              *
+            </span>
+            <button type="button" className="disambiguation__ds-help" aria-label="Help for other context">
+              <IconHelpCircle />
+            </button>
+          </div>
+          <div
+            className="disambiguation__ds-input"
+            role="textbox"
+            aria-readonly
+            tabIndex={0}
+            aria-label="Something else or context"
+          >
+            <span className="disambiguation__ds-input-placeholder">Something else or @ for context...</span>
+          </div>
+          <p className="disambiguation__ds-helper">Optional — add detail if none of the options fit.</p>
+        </div>
+      ) : null}
 
       <footer className="disambiguation__footer">
         <button type="button" className="disambiguation__btn disambiguation__btn--ghost">
           Cancel
         </button>
         <div className="disambiguation__footer-right">
+          {isDesignSystem ? (
+            <button type="button" className="disambiguation__btn disambiguation__btn--outline">
+              Skip for now
+            </button>
+          ) : null}
           <button type="button" className="disambiguation__btn disambiguation__btn--primary">
             Continue
           </button>

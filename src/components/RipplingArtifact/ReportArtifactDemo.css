@@ -1,10 +1,18 @@
-/* Report artifact — AI-components / Report (Figma 870:9606) */
+/* Report artifact — AI-components / Report card · Figma 250:9964 */
 
 .report-artifact-demo {
-  width: 100%;
+  box-sizing: border-box;
+  width: calc(100% + 32px);
   min-width: 0;
+  margin: -12px -16px -16px;
 }
 
+.report-artifact-demo--standalone {
+  width: 100%;
+  margin: 0;
+}
+
+/* —— Table —— */
 .report-artifact-table-wrap {
   width: 100%;
   overflow-x: auto;
@@ -13,7 +21,7 @@
 
 .report-artifact-table {
   width: 100%;
-  min-width: 280px;
+  min-width: 320px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 14px;
@@ -22,57 +30,206 @@
 }
 
 .report-artifact-th {
-  padding: 10px 10px;
-  height: 40px;
+  padding: 1px 8px 1px 12px;
+  height: 34px;
   box-sizing: border-box;
-  font-weight: var(--font-weight-heading);
   text-align: left;
   vertical-align: middle;
-  border-bottom: 1px solid rgb(0 0 0 / 20%);
+  font-weight: var(--font-weight-heading);
+  background: var(--color-surface);
+  border-bottom: 1px solid rgb(0 0 0 / 10%);
 }
 
 .report-artifact-th--numeric {
   text-align: right;
 }
 
+.report-artifact-th--numeric .report-th-simple {
+  justify-content: flex-end;
+}
+
+.report-th-rich {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.report-th-required {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: var(--font-weight-body);
+  line-height: 16px;
+  color: #bc2c00;
+}
+
+.report-th-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.report-th-title {
+  font-size: 14px;
+  font-weight: var(--font-weight-heading);
+  line-height: 20px;
+  color: #716f6c;
+}
+
+.report-th-sub {
+  font-size: 11px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 14px;
+  color: #716f6c;
+}
+
+.report-th-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #716f6c;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.report-th-icon-btn:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+.report-th-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #716f6c;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.report-th-chevron:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+.report-th-simple {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 20px;
+}
+
+.report-th-simple .report-th-title {
+  margin: 0;
+}
+
 .report-artifact-td {
-  padding: 12px 10px;
-  min-height: 44px;
+  padding: 0 12px 1px;
+  min-height: 33px;
   box-sizing: border-box;
   font-weight: var(--font-weight-body);
+  font-size: 14px;
+  line-height: 20px;
   vertical-align: middle;
+  background: #ffffff;
   border-bottom: 1px solid rgb(0 0 0 / 10%);
   overflow-wrap: break-word;
-  word-break: normal;
 }
 
 .report-artifact-td--numeric {
   text-align: right;
   font-variant-numeric: tabular-nums;
-  overflow-wrap: normal;
 }
 
 .report-artifact-table tbody tr:last-child .report-artifact-td {
   border-bottom: none;
 }
 
-/* Four columns — ID narrow, customer flexible, date, revenue */
+/* Column widths — person column flexible */
 .report-artifact-th:nth-child(1),
 .report-artifact-td:nth-child(1) {
-  width: 14%;
+  width: 42%;
 }
 
 .report-artifact-th:nth-child(2),
 .report-artifact-td:nth-child(2) {
-  width: 38%;
+  width: 20%;
 }
 
 .report-artifact-th:nth-child(3),
 .report-artifact-td:nth-child(3) {
-  width: 24%;
+  width: 20%;
 }
 
 .report-artifact-th:nth-child(4),
 .report-artifact-td:nth-child(4) {
-  width: 24%;
+  width: 18%;
+}
+
+/* Person cell */
+.report-person-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  min-height: 33px;
+  box-sizing: border-box;
+}
+
+.report-artifact-avatar {
+  position: relative;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  display: grid;
+  place-items: center;
+}
+
+.report-artifact-avatar__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 10%);
+  pointer-events: none;
+}
+
+.report-artifact-avatar__label {
+  position: relative;
+  font-size: 11px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 13px;
+  color: #05142e;
+}
+
+.report-person-cell__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.report-person-cell__name {
+  font-size: 12px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 16px;
+  color: #000000;
+}
+
+.report-person-cell__sub {
+  font-size: 12px;
+  font-weight: var(--font-weight-body);
+  line-height: 16px;
+  color: #716f6c;
 }

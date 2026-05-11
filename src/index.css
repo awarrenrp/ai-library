@@ -18,10 +18,14 @@ body,
   min-height: 100%;
 }
 
+html {
+  background: #ffffff;
+}
+
 body {
   font-family: var(--font-sans);
   font-weight: var(--font-weight-body);
-  background: #f9f7f6;
+  background: #ffffff;
   color: #000;
   -webkit-font-smoothing: antialiased;
 }

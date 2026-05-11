@@ -95,6 +95,15 @@ export function LandingPage() {
               <span className="landing-card-cta">Open spec</span>
             </Link>
           </li>
+          <li>
+            <Link to="/strong-type" className="landing-card">
+              <h3 className="landing-card-title">Strong type</h3>
+              <p className="landing-card-desc">
+                Heavyweight inline pill for AI surfaces—scope, capability, and state labels (AI, Beta, Live, Confidential).
+              </p>
+              <span className="landing-card-cta">Open spec</span>
+            </Link>
+          </li>
         </ul>
       </section>
     </main>

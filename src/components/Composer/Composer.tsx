@@ -8,7 +8,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import "./Composer.css";
-import { IconArrowUp, IconChevronDown, IconMic, IconPlus } from "./icons";
+import { IconArrowUp, IconChevronDown, IconComposerChipLead, IconMic, IconPlus } from "./icons";
 
 /** Figma Add menu (72:4451) — demo rows until wiring to real attach flows. */
 const COMPOSER_ADD_MENU_ITEMS = [
@@ -44,6 +44,18 @@ export const WIDTH_PX: Record<Exclude<ComposerWidth, "fill">, number> = {
 export const COMPOSER_MODES = ["Pro", "Fast"] as const;
 export type ComposerMode = (typeof COMPOSER_MODES)[number];
 
+/**
+ * Composer intents shown as a segmented switcher on the **alternate** variant.
+ * Replaces the legacy Fast dropdown when `version="alternate"`.
+ */
+export const COMPOSER_INTENTS = ["ask", "agent", "plan"] as const;
+export type ComposerIntent = (typeof COMPOSER_INTENTS)[number];
+export const COMPOSER_INTENT_LABELS: Record<ComposerIntent, string> = {
+  ask: "Ask",
+  agent: "Agent",
+  plan: "Plan",
+};
+
 export type ComposerProps = {
   /** Matches Figma `Width=` variants (fixed outer width). */
   width?: ComposerWidth;
@@ -51,8 +63,10 @@ export type ComposerProps = {
   defaultValue?: string;
   onChange?: (value: string) => void;
   placeholder?: string;
-  /** Initial mode for the split control (defaults to `Fast`). */
+  /** Initial speed mode for the split control / `alternate` speed switcher (defaults to `Fast`). */
   defaultMode?: ComposerMode;
+  /** Initial intent for the `alternate` switcher (defaults to `ask`). Ignored on the `standard` variant. */
+  defaultIntent?: ComposerIntent;
   className?: string;
   inputId?: string;
   /** Accessible name for the composer region landmark. */
@@ -61,7 +75,7 @@ export type ComposerProps = {
   ariaMessageLabel?: string;
   /** Styling variant (defaults to `standard`). */
   version?: ComposerVersion;
-  /** `edit` uses focus-style shell outline and may show {@link editContextLabel} in a chip (alternate composer only). */
+  /** `edit` uses blue shell border (replaces gray; no duplicate outline) and Chip Regular · 865:10482. */
   surfaceState?: ComposerSurfaceState;
   /** Shown in the edit chip when `surfaceState` is `edit` (e.g. artifact or thread being edited). */
   editContextLabel?: string;
@@ -74,6 +88,7 @@ export function Composer({
   onChange,
   placeholder = "Ask, make, or searching anything...",
   defaultMode = "Fast",
+  defaultIntent = "ask",
   className,
   inputId: inputIdProp,
   ariaComposerLabel = "AI composer",
@@ -90,10 +105,12 @@ export function Composer({
   const [uncontrolled, setUncontrolled] = useState(defaultValue);
   const value = isControlled ? valueProp : uncontrolled;
   const [mode, setMode] = useState<ComposerMode>(defaultMode);
+  const [intent, setIntent] = useState<ComposerIntent>(defaultIntent);
   const [modeMenuOpen, setModeMenuOpen] = useState(false);
   const [addMenuOpen, setAddMenuOpen] = useState(false);
   const fastAnchorRef = useRef<HTMLDivElement>(null);
   const addAnchorRef = useRef<HTMLDivElement>(null);
+  const isAlternate = version === "alternate";
 
   const setValue = (next: string) => {
     onChange?.(next);
@@ -153,11 +170,17 @@ export function Composer({
           .filter(Boolean)
           .join(" ")}
       >
-        {showEditChrome ? (
-          <div className="composer-edit-bar" role="status" aria-live="polite">
-            <span className="composer-edit-chip">{editContextLabel ?? "Editing"}</span>
-          </div>
-        ) : null}
+        {/* Stable status node so SRs reliably announce the edit-chip transition (audit: composer/role-status). */}
+        <div className="composer-edit-bar" role="status" aria-live="polite" aria-atomic="true" hidden={!showEditChrome}>
+          {showEditChrome ? (
+            <span className="composer-edit-chip">
+              <span className="composer-edit-chip__icon" aria-hidden>
+                <IconComposerChipLead />
+              </span>
+              <span className="composer-edit-chip__label">{editContextLabel ?? "Editing"}</span>
+            </span>
+          ) : null}
+        </div>
         <div className="composer-field">
           <label htmlFor={inputId} className="visually-hidden">
             {ariaMessageLabel}
@@ -226,47 +249,72 @@ export function Composer({
             ) : null}
           </div>
 
-          <div className="composer-fast-anchor" ref={fastAnchorRef}>
-            <button
-              type="button"
-              className="composer-fast"
-              aria-label={fastBtnLabel}
-              aria-expanded={modeMenuOpen}
-              aria-haspopup="menu"
-              aria-controls={modeMenuOpen ? modeMenuId : undefined}
-              onClick={() => {
-                setModeMenuOpen((o) => !o);
-                setAddMenuOpen(false);
-              }}
+          {isAlternate ? (
+            <div
+              className="composer-intent"
+              role="group"
+              aria-label="Composer intent"
             >
-              <span className="composer-fast-label">{mode}</span>
-              <IconChevronDown />
-            </button>
-            {modeMenuOpen && (
-              <div id={modeMenuId} className="composer-mode-menu" role="menu" aria-label="Response mode">
-                {COMPOSER_MODES.map((m) => (
+              {COMPOSER_INTENTS.map((id) => {
+                const active = intent === id;
+                return (
                   <button
-                    key={m}
+                    key={id}
                     type="button"
-                    role="menuitemradio"
-                    aria-checked={mode === m}
-                    className={[
-                      "composer-mode-option",
-                      mode === m ? "composer-mode-option--active" : "",
-                    ]
+                    className={["composer-intent-option", active ? "composer-intent-option--active" : ""]
                       .filter(Boolean)
                       .join(" ")}
-                    onClick={() => {
-                      setMode(m);
-                      setModeMenuOpen(false);
-                    }}
+                    aria-pressed={active}
+                    onClick={() => setIntent(id)}
                   >
-                    {m}
+                    {COMPOSER_INTENT_LABELS[id]}
                   </button>
-                ))}
-              </div>
-            )}
-          </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="composer-fast-anchor" ref={fastAnchorRef}>
+              <button
+                type="button"
+                className="composer-fast"
+                aria-label={fastBtnLabel}
+                aria-expanded={modeMenuOpen}
+                aria-haspopup="menu"
+                aria-controls={modeMenuOpen ? modeMenuId : undefined}
+                onClick={() => {
+                  setModeMenuOpen((o) => !o);
+                  setAddMenuOpen(false);
+                }}
+              >
+                <span className="composer-fast-label">{mode}</span>
+                <IconChevronDown />
+              </button>
+              {modeMenuOpen && (
+                <div id={modeMenuId} className="composer-mode-menu" role="menu" aria-label="Response mode">
+                  {COMPOSER_MODES.map((m) => (
+                    <button
+                      key={m}
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={mode === m}
+                      className={[
+                        "composer-mode-option",
+                        mode === m ? "composer-mode-option--active" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      onClick={() => {
+                        setMode(m);
+                        setModeMenuOpen(false);
+                      }}
+                    >
+                      {m}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="composer-spacer" aria-hidden />
 
@@ -284,6 +332,29 @@ export function Composer({
           </button>
         </div>
       </div>
+
+      {isAlternate ? (
+        <div className="composer-speed-row">
+          <div className="composer-speed" role="group" aria-label="Response speed">
+            {COMPOSER_MODES.map((m) => {
+              const active = mode === m;
+              return (
+                <button
+                  key={m}
+                  type="button"
+                  className={["composer-speed-option", active ? "composer-speed-option--active" : ""]
+                    .filter(Boolean)
+                    .join(" ")}
+                  aria-pressed={active}
+                  onClick={() => setMode(m)}
+                >
+                  {m}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

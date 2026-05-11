@@ -4,6 +4,41 @@
   margin: 0 auto;
 }
 
+/* Toolbar + stage (+ optional meta): grey chrome so controls read as part of the demo */
+.demo-preview-surface {
+  background: var(--color-surface);
+  border: 1px solid rgb(0 0 0 / 9%);
+  border-radius: 12px;
+  padding: 20px 24px 24px;
+  margin-bottom: 32px;
+}
+
+.demo-preview-surface--stack {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.demo-preview-surface .demo-toolbar {
+  margin-bottom: 0;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
+  align-self: stretch;
+}
+
+.demo-preview-surface--no-toolbar-divider .demo-toolbar {
+  border-bottom: none;
+  padding-bottom: 16px;
+}
+
+.demo-preview-surface .demo-meta {
+  margin-top: 0;
+}
+
+.demo-preview-surface--no-toolbar-divider .demo-meta {
+  margin-top: 8px;
+}
+
 .demo-toolbar {
   display: flex;
   flex-wrap: wrap;

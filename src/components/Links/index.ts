@@ -15,3 +15,4 @@ export {
   LinksTextLink,
 } from "./Links";
 export type { FileCitationVariant } from "./Links";
+export { LinksInChatDemo } from "./LinksInChatDemo";

@@ -6,4 +6,5 @@ export {
 } from "./SimpleBarChartDemo";
 export type { ChartDemoVariant, SimpleBarChartDemoProps } from "./SimpleBarChartDemo";
 export { ReportArtifactDemo } from "./ReportArtifactDemo";
+export type { ReportArtifactDemoProps } from "./ReportArtifactDemo";
 export { WorkflowArtifactDemo } from "./WorkflowArtifactDemo";

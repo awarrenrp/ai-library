@@ -40,14 +40,6 @@ function IconDashboard({ size = 12 }: { size?: number }) {
   );
 }
 
-function OpenButton() {
-  return (
-    <button type="button" className="icw-open-btn">
-      Open
-    </button>
-  );
-}
-
 function PreviewChrome({
   icon,
   caption,
@@ -100,64 +92,109 @@ function DashboardMiniPreview() {
 
 const TABLE_HEADERS = ["Order ID", "Customer", "Category", "Order date", "Revenue"] as const;
 
-const TABLE_ROWS: string[][] = [
+/** Body rows — alignment with Figma Table · 883:13314 */
+const TABLE_ROWS: readonly (readonly string[])[] = [
   ["1234", "June Lee", "Electronics", "Jan 23, 2024", "$1,234.00"],
   ["1233", "Mandy Moore", "Electronics", "Jan 23, 2024", "$1,234.00"],
   ["1222", "Customer", "Electronics", "Jan 23, 2024", "$1,234.00"],
+  ["1222", "Customer", "Electronics", "Jan 23, 2024", "$1,234.00"],
+  ["1222", "Customer", "Electronics", "Jan 23, 2024", "$1,234.00"],
+  ["1222", "Customer", "Electronics", "Jan 23, 2024", "$1,234.00"],
 ];
 
-function TableWidget() {
+export type InChatTablePreviewProps = {
+  /**
+   * Accessible name for the table — used for the visually hidden caption.
+   * Defaults to a generic sample label so SR users still hear what the grid contains.
+   */
+  ariaLabel?: string;
+};
+
+/** Full table preview — Figma Table frame 883:13314 (not link-style chrome). */
+export function InChatTablePreview({
+  ariaLabel = "Sample in-chat table widget: orders by customer, category, date, and revenue.",
+}: InChatTablePreviewProps = {}) {
   return (
-    <article className="icw-widget icw-widget--table" aria-label="Orders table preview">
-      <div className="icw-table-wrap">
-        <div className="icw-table">
-          <div className="icw-table-row icw-table-row--head">
-            {TABLE_HEADERS.map((h) => (
-              <div key={h} className="icw-table-cell icw-table-cell--head">
-                {h}
-              </div>
+    <div className="icw-table-preview-wrap">
+      <table className="icw-table-preview">
+        <caption className="visually-hidden">{ariaLabel}</caption>
+        <thead>
+          <tr>
+            {TABLE_HEADERS.map((label) => (
+              <th key={label} scope="col" className="icw-table-preview__th">
+                {label}
+              </th>
             ))}
-          </div>
+          </tr>
+        </thead>
+        <tbody>
           {TABLE_ROWS.map((cells, ri) => (
-            <div key={ri} className="icw-table-row">
-              {cells.map((c, ci) => (
-                <div key={ci} className="icw-table-cell">
-                  {c}
-                </div>
+            <tr key={ri}>
+              {cells.map((cell, ci) => (
+                <td
+                  key={ci}
+                  className={[
+                    "icw-table-preview__td",
+                    ci === TABLE_HEADERS.length - 1 ? "icw-table-preview__td--numeric" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                >
+                  {cell}
+                </td>
               ))}
-            </div>
+            </tr>
           ))}
-        </div>
-      </div>
-    </article>
+        </tbody>
+      </table>
+    </div>
   );
 }
 
 function WidgetGroup({ category, children }: { category: string; children: ReactNode }) {
   return (
-    <div className="icw-widget-group">
-      <p className="icw-category-label">{category}</p>
+    <div className="icw-widget-group" role="group" aria-label={category}>
+      <h3 className="icw-category-label">{category}</h3>
       {children}
     </div>
   );
 }
 
-function LinkStyleWidget({
-  title,
-  previewCaption,
-  previewIcon,
-  previewBody,
-}: {
+export type InChatLinkWidgetProps = {
   title: string;
   previewCaption: string;
   previewIcon: ReactNode;
   previewBody: ReactNode;
-}) {
+  /** Click handler for the "Open" affordance. */
+  onOpen?: () => void;
+  /** Accessible name for the "Open" affordance; defaults to `Open {title}` so SR users hear which destination. */
+  openAriaLabel?: string;
+};
+
+/**
+ * Link-style in-chat widget — title row + preview tile + Open button.
+ * Public surface; backs both the Widget previews on the spec page and product wiring.
+ */
+export function InChatLinkWidget({
+  title,
+  previewCaption,
+  previewIcon,
+  previewBody,
+  onOpen,
+  openAriaLabel,
+}: InChatLinkWidgetProps) {
   return (
-    <article className="icw-widget icw-widget--96">
+    <article className="icw-widget icw-widget--96" aria-label={title}>
       <div className="icw-widget-main">
         <p className="icw-widget-title">{title}</p>
-        <OpenButton />
+        <button
+          type="button"
+          className="icw-open-btn"
+          onClick={onOpen}
+          aria-label={openAriaLabel ?? `Open ${title}`}
+        >
+          Open
+        </button>
       </div>
       <PreviewChrome icon={previewIcon} caption={previewCaption}>
         {previewBody}
@@ -166,11 +203,18 @@ function LinkStyleWidget({
   );
 }
 
+export type InChatTableWidgetProps = InChatTablePreviewProps;
+
+/** Table in-chat widget · Figma 883:13314 — grid only (no link-style title/Open chrome). */
+export function InChatTableWidget(props: InChatTableWidgetProps = {}) {
+  return <InChatTablePreview {...props} />;
+}
+
 export function InChatWidgets() {
   return (
     <section className="icw-showcase" aria-label="In-chat widget examples">
       <WidgetGroup category="Rippling link">
-        <LinkStyleWidget
+        <InChatLinkWidget
           title="View Spend Management"
           previewCaption="Spend"
           previewIcon={<IconCreditCard size={16} />}
@@ -178,7 +222,7 @@ export function InChatWidgets() {
         />
       </WidgetGroup>
       <WidgetGroup category="Document">
-        <LinkStyleWidget
+        <InChatLinkWidget
           title="View Offer Letter"
           previewCaption="Document"
           previewIcon={<IconDocument size={16} />}
@@ -186,7 +230,7 @@ export function InChatWidgets() {
         />
       </WidgetGroup>
       <WidgetGroup category="Dashboard">
-        <LinkStyleWidget
+        <InChatLinkWidget
           title="View New Starter Dashboard"
           previewCaption="Dashboard"
           previewIcon={<IconDashboard />}
@@ -194,7 +238,7 @@ export function InChatWidgets() {
         />
       </WidgetGroup>
       <WidgetGroup category="Table">
-        <TableWidget />
+        <InChatTableWidget />
       </WidgetGroup>
     </section>
   );

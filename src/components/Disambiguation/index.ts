@@ -5,4 +5,5 @@ export type {
   DisambiguationInputType,
   DisambiguationOption,
   DisambiguationProps,
+  DisambiguationVariant,
 } from "./Disambiguation";

@@ -108,6 +108,7 @@ export function LinksRichArticleCard({
   title,
   snippet,
   sourceInitial,
+  showThumbnail = true,
 }: {
   sourceName: string;
   dateLine: string;
@@ -115,10 +116,15 @@ export function LinksRichArticleCard({
   snippet: string;
   /** Single letter or short mark in the favicon slot (defaults to first letter of source name). */
   sourceInitial?: string;
+  /** Omit in narrow side-chat thread; full-page / spec keeps the preview image (Figma AI-components · 427:103820). */
+  showThumbnail?: boolean;
 }) {
   const initial = (sourceInitial ?? sourceName).trim().slice(0, 1).toUpperCase();
   return (
-    <button type="button" className="links-rich-card">
+    <button
+      type="button"
+      className={["links-rich-card", showThumbnail ? "" : "links-rich-card--text-only"].filter(Boolean).join(" ")}
+    >
       <div className="links-rich-body">
         <div className="links-rich-meta">
           <span className="links-rich-meta-source">
@@ -133,16 +139,18 @@ export function LinksRichArticleCard({
         <p className="links-rich-title">{title}</p>
         <p className="links-rich-snippet">{snippet}</p>
       </div>
-      <span className="links-rich-thumb" aria-hidden>
-        <span className="links-rich-thumb-visual">
-          <IconArticleThumb />
-        </span>
-        <span className="links-rich-thumb-open">
-          <span className="links-rich-thumb-open-inner">
-            <IconRichCardOpen />
+      {showThumbnail ? (
+        <span className="links-rich-thumb" aria-hidden>
+          <span className="links-rich-thumb-visual">
+            <IconArticleThumb />
+          </span>
+          <span className="links-rich-thumb-open">
+            <span className="links-rich-thumb-open-inner">
+              <IconRichCardOpen />
+            </span>
           </span>
         </span>
-      </span>
+      ) : null}
     </button>
   );
 }

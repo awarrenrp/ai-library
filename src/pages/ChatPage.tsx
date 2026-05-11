@@ -189,6 +189,7 @@ export function ChatPage() {
 
       <ComponentIntentPanel when={CHAT_WHEN} designIntent={CHAT_DESIGN_INTENT} />
 
+      <div className="demo-preview-surface" role="region" aria-label="Chat interactive preview">
       <div className="demo-toolbar" aria-label="Chat preview controls">
         <div className="demo-group">
           <p className="demo-label" id="label-chat-layout">
@@ -247,6 +248,7 @@ export function ChatPage() {
             />
           }
         />
+      </div>
       </div>
 
       <section className="demo-code-section" id="chat-assistant-example" aria-labelledby="chat-assistant-example-heading">

@@ -7,11 +7,12 @@
   min-width: 0;
 }
 
+/*
+ * Keep overflow visible: overflow-x: auto would force overflow-y to compute to auto and clip
+ * the row’s hover box-shadow (878:7092). Wide layouts rely on the parent track width instead.
+ */
 .external-file-artifact-scroll:not(.external-file-artifact-scroll--fit) {
-  overflow-x: auto;
-  overflow-y: visible;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-gutter: stable;
+  overflow: visible;
 }
 
 .external-file-artifact-scroll--fit {
@@ -44,15 +45,23 @@
   min-height: 63px;
   max-height: 63px;
   padding: 0 16px 0 12px;
-  overflow: hidden;
+  /* overflow visible so hover drop shadows aren’t clipped (878:7092 row). */
 }
 
-.external-file-artifact:hover {
+[data-artifact-hover-style="overlay"] .external-file-artifact:hover {
   box-shadow: inset 0 0 0 9999px var(--artifact-overlay-hover), 0 1px 3px rgb(0 0 0 / 8%);
 }
 
-.external-file-artifact:active {
+[data-artifact-hover-style="overlay"] .external-file-artifact:active {
   box-shadow: inset 0 0 0 9999px var(--artifact-overlay-pressed), 0 1px 3px rgb(0 0 0 / 8%);
+}
+
+[data-artifact-hover-style="shadow"] .external-file-artifact:hover {
+  box-shadow: var(--shadow-md);
+}
+
+[data-artifact-hover-style="shadow"] .external-file-artifact:active {
+  box-shadow: var(--shadow-md);
 }
 
 /* Small rail: one row — icon + title (+ date), Open on the right (no file-type label, no Drive) */
@@ -135,25 +144,43 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 8px;
   width: 100%;
   height: 47px;
   min-height: 47px;
   max-height: 47px;
   padding: 12px 12px 0 12px;
-  overflow: hidden;
+  /* Shadow paints outside the box; clip content via .external-file-artifact-thumb-surface-inner */
   border: 1px solid rgb(0 0 0 / 10%);
   border-radius: 8px 8px 0 0;
   background: #ffffff;
   box-shadow: 0 4px 8px -1px rgb(0 0 0 / 15%);
 }
 
-.external-file-artifact-thumb-surface:hover {
+.external-file-artifact-thumb-surface-inner {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+[data-artifact-hover-style="overlay"] .external-file-artifact-thumb-surface:hover {
   box-shadow: inset 0 0 0 9999px var(--artifact-overlay-hover), 0 4px 8px -1px rgb(0 0 0 / 15%);
 }
 
-.external-file-artifact-thumb-surface:active {
+[data-artifact-hover-style="overlay"] .external-file-artifact-thumb-surface:active {
   box-shadow: inset 0 0 0 9999px var(--artifact-overlay-pressed), 0 4px 8px -1px rgb(0 0 0 / 15%);
+}
+
+[data-artifact-hover-style="shadow"] .external-file-artifact-thumb-surface:hover {
+  box-shadow: var(--shadow-md);
+}
+
+[data-artifact-hover-style="shadow"] .external-file-artifact-thumb-surface:active {
+  box-shadow: var(--shadow-md);
 }
 
 .external-file-artifact-thumb-head {

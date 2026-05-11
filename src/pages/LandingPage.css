@@ -1,7 +1,7 @@
 .landing {
   box-sizing: border-box;
   position: relative;
-  max-width: 880px;
+  max-width: 1040px;
   margin: 0 auto;
   padding: 56px 24px 80px;
 }
@@ -54,32 +54,35 @@
 }
 
 .landing-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+/* Full-width row: title left · description middle · CTA right. */
 .landing-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 22px 22px 20px;
-  border: 1px solid rgb(0 0 0 / 20%);
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  padding: 18px 22px;
+  border: 1px solid rgb(0 0 0 / 12%);
   border-radius: 12px;
   background: #fff;
   text-decoration: none;
   color: inherit;
   transition:
     border-color 0.15s ease,
-    box-shadow 0.15s ease;
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
 }
 
 .landing-card:hover {
   border-color: rgb(0 0 0 / 28%);
-  box-shadow: 0 4px 24px rgb(0 0 0 / 6%);
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgb(0 0 0 / 15%));
 }
 
 .landing-card:focus-visible {
@@ -88,30 +91,55 @@
 }
 
 .landing-card-title {
-  margin: 0 0 10px;
-  font-size: 20px;
+  margin: 0;
+  font-size: 18px;
   font-weight: var(--font-weight-heading);
   letter-spacing: -0.02em;
   color: #000;
 }
 
 .landing-card-desc {
-  margin: 0 0 auto;
-  padding-bottom: 18px;
-  font-size: 15px;
+  margin: 0;
+  font-size: 14px;
   font-weight: var(--font-weight-body);
   line-height: 1.5;
   color: #716f6c;
-  flex: 1;
 }
 
 .landing-card-cta {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 14px;
   font-weight: var(--font-weight-emphasis);
   color: var(--color-primary, #7a005d);
+  white-space: nowrap;
+}
+
+.landing-card-cta::after {
+  content: "→";
+  display: inline-block;
+  transition: transform 0.15s ease;
 }
 
 .landing-card:hover .landing-card-cta {
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.landing-card:hover .landing-card-cta::after {
+  transform: translateX(2px);
+}
+
+@media (max-width: 640px) {
+  .landing-card {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 16px 18px;
+  }
+
+  .landing-card-cta {
+    justify-self: start;
+  }
 }

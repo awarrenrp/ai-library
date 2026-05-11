@@ -67,6 +67,7 @@ export function RipplingNativeArtifactsPage() {
           <p className="rna-section-lede rna-example-lede">
             Visualization variants — switch chart type to match AI-components specs.
           </p>
+          <div className="demo-preview-surface demo-preview-surface--stack" role="region" aria-label="Chart interactive preview">
           <div className="demo-toolbar rna-chart-toolbar" aria-label="Chart type">
             <div className="demo-group">
               <p className="demo-label" id="rna-chart-type-label">
@@ -95,17 +96,23 @@ export function RipplingNativeArtifactsPage() {
           <p className="demo-meta rna-chart-meta" aria-live="polite">
             Showing <strong>{CHART_VARIANT_OPTIONS.find((o) => o.id === chartVariant)?.label}</strong>
           </p>
+          </div>
         </div>
 
         <div className="rna-example">
           <h3 id="rna-report-example" className="rna-example-title">
             Report
           </h3>
-          <p className="rna-section-lede rna-example-lede">Tabular report preview — orders sample.</p>
-          <div className="rna-showcase">
-            <RipplingArtifactShell title="Report title">
-              <ReportArtifactDemo />
-            </RipplingArtifactShell>
+          <p className="rna-section-lede rna-example-lede">
+            Report preview — surface column headers and grid cells aligned with production report cards (AI-components Figma
+            250:9964).
+          </p>
+          <div className="demo-preview-surface" role="region" aria-label="Report preview">
+            <div className="rna-showcase">
+              <RipplingArtifactShell title="Report title">
+                <ReportArtifactDemo />
+              </RipplingArtifactShell>
+            </div>
           </div>
         </div>
 
@@ -114,10 +121,12 @@ export function RipplingNativeArtifactsPage() {
             Workflow
           </h3>
           <p className="rna-section-lede rna-example-lede">Workflow preview.</p>
-          <div className="rna-showcase">
-            <RipplingArtifactShell title="Workflow">
-              <WorkflowArtifactDemo />
-            </RipplingArtifactShell>
+          <div className="demo-preview-surface" role="region" aria-label="Workflow preview">
+            <div className="rna-showcase">
+              <RipplingArtifactShell title="Workflow">
+                <WorkflowArtifactDemo />
+              </RipplingArtifactShell>
+            </div>
           </div>
         </div>
       </section>

@@ -1,6 +1,10 @@
 import { useId, useState } from "react";
 import { Disambiguation } from "./Disambiguation";
-import type { DisambiguationInputType, DisambiguationOption } from "./Disambiguation";
+import type {
+  DisambiguationInputType,
+  DisambiguationOption,
+  DisambiguationVariant,
+} from "./Disambiguation";
 import "./DisambiguationInChatDemo.css";
 
 export type DisambiguationInChatDemoProps = {
@@ -8,6 +12,7 @@ export type DisambiguationInChatDemoProps = {
   subtitle?: string;
   step?: { current: number; total: number };
   inputType: DisambiguationInputType;
+  variant?: DisambiguationVariant;
   options: DisambiguationOption[];
 };
 
@@ -16,10 +21,13 @@ export function DisambiguationInChatDemo({
   subtitle,
   step,
   inputType,
+  variant = "default",
   options,
 }: DisambiguationInChatDemoProps) {
   const [demoOpen, setDemoOpen] = useState(false);
-  const introId = useId();
+  const uid = useId();
+  const introId = `${uid}-intro`;
+  const surfaceId = `${uid}-surface`;
 
   return (
     <div className="disambig-demo">
@@ -34,13 +42,13 @@ export function DisambiguationInChatDemo({
           demoOpen ? "disambig-demo__trigger--outline" : "demo-segment",
         ].join(" ")}
         aria-expanded={demoOpen}
-        aria-controls="disambig-demo-surface"
+        aria-controls={surfaceId}
         onClick={() => setDemoOpen((o) => !o)}
       >
         {demoOpen ? "Hide example" : "Show example"}
       </button>
       <div
-        id="disambig-demo-surface"
+        id={surfaceId}
         className="disambig-demo__surface"
         role="region"
         aria-label="Disambiguation in side chat preview"
@@ -81,12 +89,13 @@ export function DisambiguationInChatDemo({
               >
                 <div className="disambig-demo__sheet-card">
                   <Disambiguation
-                    key={`${inputType}-${step?.current ?? 0}-${question}`}
+                    key={`${inputType}-${step?.current ?? 0}-${question}-${variant}`}
                     className="disambiguation--in-chat"
                     question={question}
                     subtitle={subtitle}
                     step={step}
                     inputType={inputType}
+                    variant={variant}
                     options={options}
                   />
                 </div>
