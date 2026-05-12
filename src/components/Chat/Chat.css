@@ -447,6 +447,12 @@
   box-sizing: border-box;
 }
 
+/* Composer paints above the hat ribbon so the shell border / focus outline stays visible on top. */
+.chat__footer-inner > .composer {
+  position: relative;
+  z-index: 1;
+}
+
 /*
  * Composer hat — Figma `1151:22080` ("Composer" small row stacked above the
  * composer). Reads as a ribbon tucked BEHIND the composer so the composer's
@@ -459,15 +465,18 @@
  *      warm-beige fill peeking through where the composer's corner is
  *      transparent).
  *   2. Square bottom corners — the hat extends flush down to the composer's
- *      top edge with no rounded notch. Combined with a small -2px overlap and
- *      DOM order (composer paints after the hat), the bottom of the hat tucks
- *      cleanly underneath without painting over the composer's border.
+ *      top edge with no rounded notch. Combined with a small -2px overlap,
+ *      DOM order (composer after the hat), and explicit z-index (hat 0,
+ *      composer 1), the bottom of the hat tucks cleanly underneath the
+ *      composer's border even when `will-change` promotes the hat to its own layer.
  *
  * Background: --color-surface (#f9f7f6). Foreground glyph + label: warm taupe
  * (#806d60). The trailing X uses primary so it stays tied to the composer's
  * send affordance.
  */
 .chat__hat {
+  position: relative;
+  z-index: 0;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -483,6 +492,30 @@
   border-radius: 8px 8px 0 0;
   background: var(--color-surface);
   color: #806d60;
+  /* Dismiss exit — clicking the close X drives the `--dismissing` state
+   * which transitions all three of: vertical translation (pull down behind
+   * the composer), opacity fade-out, and a layout collapse so the composer
+   * cleanly rises to fill the gap. 200ms ease-out matches the spec; the
+   * component unmounts on the same timer to drop the node from the tree. */
+  overflow: hidden;
+  transition:
+    transform 200ms ease-out,
+    opacity 200ms ease-out,
+    height 200ms ease-out,
+    padding-top 200ms ease-out,
+    padding-bottom 200ms ease-out,
+    margin-bottom 200ms ease-out;
+  will-change: transform, opacity;
+}
+
+.chat__hat--dismissing {
+  transform: translateY(8px);
+  opacity: 0;
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  pointer-events: none;
 }
 
 .chat__hat-leading {
@@ -612,6 +645,12 @@
   .chat__hat-shimmer {
     animation: none;
     background: rgb(0 0 0 / 12%);
+  }
+  .chat__hat {
+    transition: none;
+  }
+  .chat__hat--dismissing {
+    transform: none;
   }
 }
 

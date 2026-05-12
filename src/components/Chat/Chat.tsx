@@ -548,6 +548,15 @@ export function ChatComposerHat({
   const [stepIndex, setStepIndex] = useState(0);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const phase = isControlled ? phaseProp : internalPhase;
+  // Close-button exit. `dismissing` toggles the CSS exit transition (200ms
+  // ease-out: pull-down + fade + height collapse); once the transition has
+  // finished we drop the node entirely via `mounted` so the composer reclaims
+  // the space cleanly. Both reset on every `replayKey` bump so the next user
+  // interaction re-engages the hat.
+  const HAT_EXIT_MS = 200;
+  const [dismissing, setDismissing] = useState(false);
+  const [mounted, setMounted] = useState(true);
+  const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Restart animation whenever `replayKey` flips. We seed a short pre-roll on
   // `idle` so the first transition feels intentional (mimicking "user typed,
@@ -561,6 +570,33 @@ export function ChatComposerHat({
     const start = window.setTimeout(() => setInternalPhase("thinking"), 600);
     return () => window.clearTimeout(start);
   }, [replayKey, isControlled, autoStart]);
+
+  // Re-engage the hat for the next interaction — every `replayKey` bump (e.g.
+  // user submits another message) cancels any in-flight exit and remounts.
+  useEffect(() => {
+    if (exitTimerRef.current) {
+      clearTimeout(exitTimerRef.current);
+      exitTimerRef.current = null;
+    }
+    setDismissing(false);
+    setMounted(true);
+  }, [replayKey]);
+
+  useEffect(() => {
+    return () => {
+      if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
+    };
+  }, []);
+
+  const handleDismiss = () => {
+    if (dismissing) return;
+    setDismissing(true);
+    onDismiss?.();
+    exitTimerRef.current = window.setTimeout(() => {
+      setMounted(false);
+      exitTimerRef.current = null;
+    }, HAT_EXIT_MS);
+  };
 
   useEffect(() => {
     if (isControlled) return;
@@ -619,10 +655,20 @@ export function ChatComposerHat({
     label = <span className="chat__hat-label">{contextLabel}</span>;
   }
 
+  if (!mounted) return null;
+
   return (
     <div
-      className={["chat__hat", `chat__hat--${phase}`, className].filter(Boolean).join(" ")}
+      className={[
+        "chat__hat",
+        `chat__hat--${phase}`,
+        dismissing ? "chat__hat--dismissing" : "",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-phase={phase}
+      data-dismissing={dismissing || undefined}
       aria-hidden
     >
       <div className="chat__hat-leading">
@@ -636,7 +682,7 @@ export function ChatComposerHat({
         className="chat__hat-close"
         tabIndex={-1}
         aria-label="Dismiss context"
-        onClick={onDismiss}
+        onClick={handleDismiss}
       >
         <IconHatClose />
       </button>

@@ -205,6 +205,12 @@
   box-sizing: border-box;
 }
 
+/* Match Chat.css — hat stays under the composer outline. */
+.chat-demo__footer-inner > .composer {
+  position: relative;
+  z-index: 1;
+}
+
 /* —— Phase / try-it controls ———————————————————————————— */
 .chat-demo__phase-controls {
   display: flex;

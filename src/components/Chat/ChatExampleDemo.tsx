@@ -29,6 +29,7 @@ import {
 } from "./Chat";
 import type { ChatHatPhase, ChatPanelVersion } from "./Chat";
 import { Composer } from "../Composer";
+import { IconArrowUpMini } from "../Composer/icons";
 import "./ChatExampleDemo.css";
 
 export type ChatExampleDemoMode = "side-chat" | "full-screen";
@@ -259,6 +260,9 @@ export function ChatExampleDemo({
                   ariaMessageLabel="Message to Rippling AI"
                   placeholder={placeholder}
                   onSubmit={handleSubmit}
+                  {...(isAnimated
+                    ? { sendIcon: <IconArrowUpMini />, controls: "intent" as const }
+                    : {})}
                 />
               </div>
             </div>

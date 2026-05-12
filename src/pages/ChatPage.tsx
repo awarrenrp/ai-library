@@ -267,6 +267,9 @@ export function ChatPage() {
               ariaComposerLabel="Chat composer"
               ariaMessageLabel="Message to Rippling AI"
               placeholder="Ask Rippling AI anything…"
+              {...(panelVersion === "animated"
+                ? { sendIcon: <IconArrowUpMini />, controls: "intent" as const }
+                : {})}
             />
           }
         />
