@@ -9,17 +9,23 @@ import { copyText } from "../utils/copyText";
 import "../App.css";
 import "./StrongTypePage.css";
 
-const STRONG_TYPE_WHEN =
-  "When the user types `/` (commands) or `@` (mentions) in the composer. Strong typing converts free-form input into a structured pick from a curated set of actions, people, or knowledge sources \u2014 so the model gets an unambiguous reference instead of a guess.";
+const STRONG_TYPE_WHEN = [
+  <>
+    User types <code>/</code> in the composer to invoke a command or scope.
+  </>,
+  <>
+    User types <code>@</code> to mention a person or team.
+  </>,
+  "Free-form input needs to convert into a structured pick the model can resolve.",
+];
 
-const STRONG_TYPE_DESIGN_INTENT = (
-  <p>
-    A floating menu anchored above the composer. Opens as soon as a trigger character is typed at
-    the start of a fresh token, filters live as the user keeps typing, and commits with{" "}
-    <code>Enter</code> or a click. The menu never steals focus &mdash; the composer keeps it the
-    whole time, so typing remains the source of truth.
-  </p>
-);
+const STRONG_TYPE_DESIGN_INTENT = [
+  "Floating menu anchored above the composer; opens on a trigger character at token start.",
+  "Filters live as the user keeps typing; never steals focus from the composer.",
+  <>
+    Commit with <code>Enter</code> or a click; dismiss with <code>Esc</code>.
+  </>,
+];
 
 const STRONG_TYPE_DOS = [
   <>
@@ -65,6 +71,9 @@ export function StrongTypePage() {
         dos={STRONG_TYPE_DOS}
         donts={STRONG_TYPE_DONTS}
       />
+
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Specs</h2>
 
       <div
         className="demo-preview-surface demo-preview-surface--stack"

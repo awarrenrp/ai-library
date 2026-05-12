@@ -36,6 +36,22 @@
   /** Inline file citations (Figma Links · PDF / image rows). */
   --color-citation-pdf: #bb3d2a;
   --color-citation-image: #512f3e;
+  /**
+   * Success / error container surfaces — light pastels for non-critical
+   * affordance backgrounds (e.g. Dos / Don'ts blocks). Both pass AA for
+   * black body text (≥14:1) and pair with the matching `on-*` colors below
+   * for emphasized labels and accent glyphs.
+   *
+   * Contrast:
+   *   #000000 on #BAE5D9  → 14.5 : 1  (AAA)
+   *   #000000 on #F9DAD1  → 16.8 : 1  (AAA)
+   *   #0f5132 on #BAE5D9  →  6.5 : 1  (AAA normal)
+   *   #842029 on #F9DAD1  →  7.0 : 1  (AAA normal)
+   */
+  --color-success-container: #bae5d9;
+  --color-on-success-container: #0f5132;
+  --color-error-container: #f9dad1;
+  --color-on-error-container: #842029;
   /* Focus outline — #000 @ 25% */
   --color-ring: rgb(0 0 0 / 25%);
   /**
@@ -46,6 +62,14 @@
   --color-focus-input: #5aa5e7;
   /** Neutral surface — docs preview chrome, elevated panels on white. */
   --color-surface: #f9f7f6;
+  /**
+   * Dim surface — warm beige used as the "dim" tier in our surface elevation
+   * scale. Sits beneath `--color-surface` (which sits beneath white panels)
+   * so layered demo chrome reads as: dim section → surface app → white chat.
+   *
+   * Contrast: black text on #e1d8d2 → 14.2 : 1 (AAA).
+   */
+  --color-surface-dim: #e1d8d2;
 
   /* Elevation — Figma Pebble / drop-shadow scale */
   /** Medium · Figma drop shadow X:0 Y:4 Blur:6 Spread:-1 #000 @ 15%. Used for hover lift on artifact cards. */

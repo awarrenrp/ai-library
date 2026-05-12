@@ -1,40 +1,11 @@
-/* In-chat widget · side panel preview (shell aligns with Links in-context demo) */
+/*
+ * In-chat widget — in-context demo. Two modes via `data-mode` on the root:
+ *   - `side-chat`: app surface left, 440px chat panel pinned to the right.
+ *   - `full-screen`: chat fills the viewport; app surface mock hidden.
+ */
 
 .ica-demo {
   width: 100%;
-}
-
-.ica-demo__intro {
-  margin: 0 0 16px;
-  max-width: 640px;
-  font-size: 15px;
-  line-height: 1.55;
-  color: #716f6c;
-}
-
-.ica-demo__trigger {
-  margin-bottom: 16px;
-}
-
-.ica-demo__trigger--outline {
-  padding: 8px 14px;
-  border: 1px solid #000000;
-  border-radius: 8px;
-  background: #ffffff;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: inherit;
-  color: #000000;
-  cursor: pointer;
-}
-
-.ica-demo__trigger--outline:hover {
-  background: rgb(0 0 0 / 4%);
-}
-
-.ica-demo__trigger--outline:focus-visible {
-  outline: 2px solid var(--color-ring);
-  outline-offset: 2px;
 }
 
 .ica-demo__surface {
@@ -42,17 +13,15 @@
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
-  width: calc(100% + 48px);
-  margin-left: -24px;
-  margin-right: -24px;
+  width: 100%;
   min-height: 560px;
   height: min(82vh, 840px);
-  background: rgb(0 0 0 / 4%);
-  overflow-x: hidden;
-  overflow-y: visible;
+  background: var(--color-surface);
+  overflow: hidden;
 }
 
-.ica-demo__app {
+/* —— Side chat ——————————————————————————————————————————— */
+.ica-demo[data-mode="side-chat"] .ica-demo__app {
   grid-area: 1 / 1;
   position: relative;
   z-index: 0;
@@ -60,7 +29,7 @@
   align-self: stretch;
   min-height: 0;
   padding: 28px 32px;
-  padding-right: min(440px, 46vw);
+  padding-right: min(460px, 48vw);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -83,7 +52,7 @@
   max-width: 420px;
 }
 
-.ica-demo__chat-wrap {
+.ica-demo[data-mode="side-chat"] .ica-demo__chat-wrap {
   grid-area: 1 / 1;
   justify-self: end;
   align-self: stretch;
@@ -91,16 +60,53 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
-  transform: translateX(100%);
-  transition: transform 0.42s cubic-bezier(0.33, 1, 0.68, 1);
-  will-change: transform;
   z-index: 2;
 }
 
-.ica-demo__chat-wrap--open {
-  transform: translateX(0);
+.ica-demo[data-mode="side-chat"] .ica-demo__chat {
+  border-left: 1px solid rgb(0 0 0 / 10%);
+  box-shadow: -6px 0 32px rgb(0 0 0 / 8%);
 }
 
+/* —— Full screen ————————————————————————————————————————— */
+.ica-demo[data-mode="full-screen"] .ica-demo__app {
+  display: none;
+}
+
+.ica-demo[data-mode="full-screen"] .ica-demo__chat-wrap {
+  grid-area: 1 / 1;
+  justify-self: stretch;
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.ica-demo[data-mode="full-screen"] .ica-demo__chat {
+  border-left: none;
+  box-shadow: none;
+}
+
+/*
+ * Full-screen mode mirrors the canonical Chat page content track:
+ * thread + composer cap at 712px (same value used by `ChatPage` and the
+ * `Composer` `large` width). Keeps the message column and composer in
+ * lockstep across the Chat, Composer, and In-chat widget pages.
+ */
+.ica-demo[data-mode="full-screen"] .ica-demo__thread,
+.ica-demo[data-mode="full-screen"] .ica-demo__footer {
+  max-width: 712px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ica-demo[data-mode="full-screen"] .ica-demo__widget-slot {
+  max-width: 100%;
+}
+
+/* —— Shared chat chrome ——————————————————————————————————— */
 .ica-demo__chat {
   box-sizing: border-box;
   display: flex;
@@ -108,19 +114,15 @@
   flex: 1 1 auto;
   min-height: 0;
   height: 100%;
-  border-left: 1px solid rgb(0 0 0 / 10%);
   background: #ffffff;
-  box-shadow: -6px 0 32px rgb(0 0 0 / 8%);
 }
 
+/* Chat head — wraps the shared `ChatToolbar` so the demo mirrors the real
+ * Chat panel chrome. The toolbar provides its own padding; we only add the
+ * bottom hairline that separates the head from the thread. */
 .ica-demo__chat-head {
   flex-shrink: 0;
-  padding: 14px 18px;
   border-bottom: 1px solid rgb(0 0 0 / 10%);
-  font-size: 14px;
-  font-weight: var(--font-weight-heading);
-  letter-spacing: -0.02em;
-  color: #000000;
 }
 
 .ica-demo__thread {
@@ -131,6 +133,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  box-sizing: border-box;
 }
 
 .ica-demo__bubble {
@@ -156,16 +159,29 @@
   color: #000000;
 }
 
+/*
+ * The slot itself is unconstrained — it spans the assistant message column so
+ * widgets can render at their natural design width. Link widgets self-cap at
+ * 416px (Figma spec, see `.icw-widget`); the Table widget has no internal cap
+ * and stretches to fill the chat (712px in full-screen, 440px in side-chat).
+ */
 .ica-demo__widget-slot {
   margin-top: 12px;
-  max-width: min(416px, 100%);
+  width: 100%;
+}
+
+/* Used when one assistant turn stacks multiple link-style widgets. */
+.ica-demo__widget-slot--stack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
 }
 
 .ica-demo__footer {
   flex-shrink: 0;
   padding: 12px 14px 14px;
   background: #ffffff;
-  border-top: 1px solid rgb(0 0 0 / 12%);
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -179,19 +195,7 @@
 }
 
 @media (max-width: 720px) {
-  .ica-demo__surface {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .ica-demo__app {
+  .ica-demo[data-mode="side-chat"] .ica-demo__app {
     padding-right: 28px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ica-demo__chat-wrap {
-    transition: none;
   }
 }

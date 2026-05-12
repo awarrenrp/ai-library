@@ -1,8 +1,12 @@
-import { useId, useState } from "react";
+import { useId } from "react";
+import { ChatToolbar } from "../Chat";
 import { Composer } from "../Composer";
 import {
   IconApproveCheck,
   IconDeclineLine,
+  IconHelpBook,
+  IconSalesBriefcase,
+  IconSpendCard,
   LinksBelowChatStack,
   LinksEmphasisButton,
   LinksFileCitationRow,
@@ -11,57 +15,50 @@ import {
 } from "./Links";
 import "./LinksInChatDemo.css";
 
+export type LinksInChatDemoMode = "side-chat" | "full-screen";
+
+export type LinksInChatDemoProps = {
+  mode?: LinksInChatDemoMode;
+};
+
 /**
- * Side chat preview — prose wraps the same link surfaces documented on this page (file citation row,
- * handoff card, web preview card, Rippling emphasis actions). Footer uses the shared Composer component (`width="fill"`).
+ * Side chat / full-screen preview — the same conversation content rendered in
+ * two surface modes. The mode is controlled by the parent (spec page) so the
+ * surrounding "In context" toggle drives the layout.
  */
-export function LinksInChatDemo() {
-  const [demoOpen, setDemoOpen] = useState(true);
+export function LinksInChatDemo({ mode = "side-chat" }: LinksInChatDemoProps) {
   const uid = useId();
-  const introId = `${uid}-intro`;
   const surfaceId = `${uid}-surface`;
 
   return (
-    <div className="links-ic-demo">
-      <p id={introId} className="links-ic-demo__intro">
-        Bracketed examples in the spec map to these primitives—not body underline links: inline file citation, agent handoff
-        shell, external article preview, and Rippling emphasis buttons. Assistant copy sits flush in the thread; the footer uses
-        the same Composer as the Composer and Chat demos.
-      </p>
-      <button
-        type="button"
-        className={[
-          "links-ic-demo__trigger",
-          demoOpen ? "links-ic-demo__trigger--outline" : "demo-segment",
-        ].join(" ")}
-        aria-expanded={demoOpen}
-        aria-controls={surfaceId}
-        onClick={() => setDemoOpen((o) => !o)}
-      >
-        {demoOpen ? "Hide example" : "Show example"}
-      </button>
+    <div className="links-ic-demo" data-mode={mode}>
       <div
         id={surfaceId}
         className="links-ic-demo__surface"
         role="region"
-        aria-label="Links in side chat preview"
-        aria-describedby={introId}
+        aria-label={
+          mode === "full-screen"
+            ? "Links in full-screen AI workspace"
+            : "Links in side chat preview"
+        }
       >
-        <div className="links-ic-demo__app">
+        <div className="links-ic-demo__app" aria-hidden={mode === "full-screen"}>
           <p className="links-ic-demo__app-label">App surface</p>
           <p className="links-ic-demo__app-body">
-            Rippling AI opens from the right. Inline citations and cards mirror the standalone sections below on this page;
-            the Composer stays pinned under the thread.
+            Rippling AI opens from the right. Inline citations and cards mirror the standalone
+            sections above; the Composer stays pinned under the thread.
           </p>
         </div>
-        <div
-          className={["links-ic-demo__chat-wrap", demoOpen ? "links-ic-demo__chat-wrap--open" : ""]
-            .filter(Boolean)
-            .join(" ")}
-          aria-hidden={!demoOpen}
-        >
+        <div className="links-ic-demo__chat-wrap">
           <div className="links-ic-demo__chat">
-            <div className="links-ic-demo__chat-head">Rippling AI</div>
+            <ChatToolbar
+              className="links-ic-demo__chat-head"
+              title="Rippling AI"
+              onMenuClick={() => {}}
+              onAddCommentClick={() => {}}
+              onExpandClick={() => {}}
+              onCloseClick={() => {}}
+            />
             <div className="links-ic-demo__thread">
               <p className="links-ic-demo__bubble links-ic-demo__bubble--user">
                 How should I handle Q4 time-off approvals before payroll lock?
@@ -110,6 +107,44 @@ export function LinksInChatDemo() {
                       </LinksEmphasisButton>
                       <LinksEmphasisButton variant="secondary" icon={<IconDeclineLine />}>
                         Reject all
+                      </LinksEmphasisButton>
+                    </LinksBelowChatStack>
+                  </span>
+                </div>
+              </div>
+              <p className="links-ic-demo__bubble links-ic-demo__bubble--user">
+                Anything else I should know about Rippling Spend before rolling it out?
+              </p>
+              <div className="links-ic-demo__assistant-turn">
+                <div className="links-ic-demo__assistant-msg">
+                  Start with the Help Center—the guides cover policy setup, approvals, and card issuance.
+                  <br />
+                  <span className="links-ic-demo__block-embed">
+                    <LinksBelowChatStack instruction="Questions? Or check out Rippling Spend">
+                      <LinksEmphasisButton variant="secondary" icon={<IconHelpBook />}>
+                        Help Center
+                      </LinksEmphasisButton>
+                    </LinksBelowChatStack>
+                  </span>
+                </div>
+                <div className="links-ic-demo__assistant-msg">
+                  If you&apos;d like to talk through plans, pricing, or rollout timing, your Account Manager can help.
+                  <br />
+                  <span className="links-ic-demo__block-embed">
+                    <LinksBelowChatStack instruction="Questions? Connect with your Account Manager">
+                      <LinksEmphasisButton variant="secondary" icon={<IconSalesBriefcase />}>
+                        Talk to sales
+                      </LinksEmphasisButton>
+                    </LinksBelowChatStack>
+                  </span>
+                </div>
+                <div className="links-ic-demo__assistant-msg">
+                  Ready to set things up? Jump straight into Spend to configure your first policy.
+                  <br />
+                  <span className="links-ic-demo__block-embed">
+                    <LinksBelowChatStack instruction="Open Rippling Spend">
+                      <LinksEmphasisButton variant="secondary" icon={<IconSpendCard />}>
+                        View Rippling Spend
                       </LinksEmphasisButton>
                     </LinksBelowChatStack>
                   </span>

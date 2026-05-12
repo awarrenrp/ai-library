@@ -18,14 +18,16 @@ import "./ArtifactTrayPage.css";
 const FIGMA_URL =
   "https://www.figma.com/design/Dvcv5Yj50PM2WuJhPj1qUH/AI-components?node-id=1076-18510";
 
-const ARTIFACT_TRAY_WHEN =
-  "A list of artifacts that have been generated within a single conversation, visible when the chat has created artifacts.";
+const ARTIFACT_TRAY_WHEN = [
+  "The current conversation has produced one or more AI artifacts.",
+  "The user needs to recall those artifacts without leaving chat.",
+];
 
-const ARTIFACT_TRAY_DESIGN_INTENT = (
-  <p>
-    Consistent place on full screen and accessible by user initiation on side chat.
-  </p>
-);
+const ARTIFACT_TRAY_DESIGN_INTENT = [
+  "Pinned to the right rail in full screen — always findable.",
+  "Hidden by default in side chat — opened on user initiation from the more menu.",
+  "Stays compact so the conversation remains the focus.",
+];
 
 const ARTIFACT_TRAY_DOS = [
   "Show the artifact tray when there is more than one AI-generated artifact.",
@@ -104,6 +106,9 @@ export function ArtifactTrayPage() {
         donts={ARTIFACT_TRAY_DONTS}
       />
 
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Specs</h2>
+
       <div
         className="demo-preview-surface demo-preview-surface--no-toolbar-divider"
         role="region"
@@ -160,16 +165,19 @@ export function ArtifactTrayPage() {
         </p>
       </div>
 
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Examples</h2>
+
       <section
-        className="artifact-tray-context"
+        className="in-context-stage demo-fullbleed"
         aria-labelledby="artifact-tray-context-heading"
       >
-        <div className="artifact-tray-context__head">
-          <div>
-            <h2 id="artifact-tray-context-heading" className="artifact-tray-context__title">
+        <div className="in-context-stage__head">
+          <div className="in-context-stage__copy">
+            <h2 id="artifact-tray-context-heading" className="in-context-stage__title">
               In context
             </h2>
-            <p className="artifact-tray-context__lede">
+            <p className="in-context-stage__lede">
               The tray is accessible by user initiation in side chat and sits in a consistent place
               on full screen. Toggle between modes to compare placement.
             </p>
@@ -198,10 +206,6 @@ export function ArtifactTrayPage() {
           </div>
         </div>
         <ArtifactTrayDemo mode={contextMode} />
-        <p className="demo-meta" aria-live="polite">
-          Mode{" "}
-          <strong>{contextMode === "side-chat" ? "Side chat" : "Full screen"}</strong>
-        </p>
       </section>
 
       <section

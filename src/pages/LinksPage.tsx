@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import {
@@ -13,6 +14,7 @@ import {
   LinksFileCitationRow,
   LinksHandoffCard,
   LinksInChatDemo,
+  type LinksInChatDemoMode,
   LinksRichArticleCard,
   LinksSourcesChip,
   LinksTextLink,
@@ -22,17 +24,16 @@ import "../App.css";
 const FIGMA_SPEC =
   "https://www.figma.com/design/Dvcv5Yj50PM2WuJhPj1qUH/AI-components?node-id=427-103840";
 
-const LINKS_WHEN =
-  "Rippling AI chat supports three kinds of destinations: links inside the assistant message (linked text or citation chips), emphasized patterns directly below the chat (agent handoff and external web previews), and Rippling-specific actions that route into product, help, sales, or approvals.";
+const LINKS_WHEN = [
+  "The answer needs a destination — citation, next step, or external reference.",
+  "The destination is one of: inline link, below-chat pattern, or Rippling product route.",
+];
 
-const LINKS_DESIGN_INTENT = (
-  <p>
-    There are a few patterns for links that we provide: links within the message, below the chat,
-    and Rippling links. We split them so lightweight navigation can stay inside the answer,
-    thread-adjacent moments get their own surface, and in-product next steps stay unmistakable as
-    CTAs.
-  </p>
-);
+const LINKS_DESIGN_INTENT = [
+  "Inline links stay lightweight and live inside the answer.",
+  "Below-chat patterns give thread-adjacent moments (handoff, external preview) their own surface.",
+  "Rippling links read as unmistakable CTAs into the product.",
+];
 
 const LINKS_DOS = [
   "Only one primary CTA, with the fewest number of buttons as possible. If we want to provide additional links, we can use regular text links.",
@@ -41,6 +42,7 @@ const LINKS_DOS = [
 const LINKS_DONTS = ["Crowd responses with multiple paths. We don\u2019t want to confuse users."];
 
 export function LinksPage() {
+  const [contextMode, setContextMode] = useState<LinksInChatDemoMode>("side-chat");
   return (
     <main className="demo-wrap">
       <nav style={{ marginBottom: 24 }}>
@@ -75,6 +77,9 @@ export function LinksPage() {
         dos={LINKS_DOS}
         donts={LINKS_DONTS}
       />
+
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Specs</h2>
 
       <nav className="links-spec-toc" aria-label="On this page">
         <p className="links-spec-toc-label">On this page</p>
@@ -224,10 +229,44 @@ export function LinksPage() {
         </div>
       </section>
 
-      <section className="links-spec-section" id="links-in-context" aria-label="Links in side chat">
-        <div className="links-spec-surface">
-          <LinksInChatDemo />
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Examples</h2>
+
+      <section
+        className="in-context-stage demo-fullbleed"
+        id="links-in-context"
+        aria-labelledby="links-in-context-heading"
+      >
+        <div className="in-context-stage__head">
+          <div className="in-context-stage__copy">
+            <h2 id="links-in-context-heading" className="in-context-stage__title">
+              In context
+            </h2>
+            <p className="in-context-stage__lede">
+              Same conversation, two surface modes. Toggle to compare how the link patterns sit in a
+              side panel versus a full-screen workspace.
+            </p>
+          </div>
+          <div className="demo-segments" role="group" aria-label="Links surface mode">
+            <button
+              type="button"
+              className="demo-segment"
+              aria-pressed={contextMode === "side-chat"}
+              onClick={() => setContextMode("side-chat")}
+            >
+              Side chat
+            </button>
+            <button
+              type="button"
+              className="demo-segment"
+              aria-pressed={contextMode === "full-screen"}
+              onClick={() => setContextMode("full-screen")}
+            >
+              Full screen
+            </button>
+          </div>
         </div>
+        <LinksInChatDemo mode={contextMode} />
       </section>
     </main>
   );

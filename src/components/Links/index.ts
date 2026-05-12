@@ -16,3 +16,4 @@ export {
 } from "./Links";
 export type { FileCitationVariant } from "./Links";
 export { LinksInChatDemo } from "./LinksInChatDemo";
+export type { LinksInChatDemoMode, LinksInChatDemoProps } from "./LinksInChatDemo";

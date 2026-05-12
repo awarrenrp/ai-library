@@ -385,7 +385,11 @@ function IconReplay() {
  * Each glyph is 24×24 with a 16×~16 vector inside; paths copied verbatim and
  * normalized to a 0..24 viewBox.
  */
-function IconHamburger() {
+/** Hamburger / menu glyph used in the toolbar's start cluster. Exported so
+ * embedded experiences (in-context demos, custom panels) can compose a chat
+ * header that matches the Chat panel component 1:1.
+ */
+export function ChatToolbarMenuIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
@@ -396,7 +400,8 @@ function IconHamburger() {
   );
 }
 
-function IconAddComment() {
+/** Add comment glyph (speech bubble + plus) used in the toolbar's end cluster. */
+export function ChatToolbarAddCommentIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
@@ -411,7 +416,8 @@ function IconAddComment() {
   );
 }
 
-function IconExpand() {
+/** Expand glyph (four-corner arrows) used in the toolbar's end cluster. */
+export function ChatToolbarExpandIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
@@ -434,7 +440,8 @@ function IconExpand() {
   );
 }
 
-function IconClose() {
+/** Close glyph (filled X) used in the toolbar's end cluster. */
+export function ChatToolbarCloseIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
@@ -444,6 +451,12 @@ function IconClose() {
     </svg>
   );
 }
+
+/* Internal aliases — keep the in-file usages stable. */
+const IconHamburger = ChatToolbarMenuIcon;
+const IconAddComment = ChatToolbarAddCommentIcon;
+const IconExpand = ChatToolbarExpandIcon;
+const IconClose = ChatToolbarCloseIcon;
 
 export type ChatToolbarProps = {
   title?: string;

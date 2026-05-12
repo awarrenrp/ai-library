@@ -20,6 +20,17 @@ import "../App.css";
 
 const FILE_KINDS = ["ppt", "pdf", "xls", "doc"] as const satisfies readonly ExternalFileKind[];
 
+const EXTERNAL_ARTIFACT_WHEN = [
+  "The chat references content that lives outside Rippling — partner doc, embed, external app.",
+  "The user needs to recognize the source before deep-linking out.",
+];
+
+const EXTERNAL_ARTIFACT_DESIGN_INTENT = [
+  "File-type tag plus title sits at the row's leading edge for instant recognition.",
+  "Hover state mirrors other artifact rows so external sources feel native to the thread.",
+  "Click opens or deep-links to the source — Rippling stays the launching surface.",
+];
+
 const FILE_LABEL: Record<ExternalFileKind, string> = {
   ppt: "PowerPoint",
   pdf: "PDF",
@@ -56,7 +67,13 @@ export function ExternalArtifactsPage() {
         </p>
       </header>
 
-      <ComponentIntentPanel />
+      <ComponentIntentPanel
+        when={EXTERNAL_ARTIFACT_WHEN}
+        designIntent={EXTERNAL_ARTIFACT_DESIGN_INTENT}
+      />
+
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Specs</h2>
 
       <div
         className="demo-preview-surface demo-preview-surface--no-toolbar-divider"

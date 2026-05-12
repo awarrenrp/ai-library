@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { Disambiguation, DisambiguationInChatDemo } from "../components/Disambiguation";
 import type {
+  DisambiguationInChatDemoMode,
   DisambiguationInputType,
   DisambiguationOption,
   DisambiguationVariant,
@@ -23,15 +24,17 @@ const VARIANT_LABELS: Record<DisambiguationVariant, string> = {
   "design-system": "Design system",
 };
 
-const DISAMBIGUATION_WHEN =
-  "When user input could mean more than one thing and a wrong guess is costly. Rippling AI resolves ambiguity from context and stated assumptions first, then asks a direct clarifying question only when needed—at most two questions, bundled when possible.";
+const DISAMBIGUATION_WHEN = [
+  "User input could mean more than one thing and a wrong guess is costly.",
+  "Context and stated assumptions can't resolve the ambiguity on their own.",
+  "Resolution needs at most two bundled clarifying questions.",
+];
 
-const DISAMBIGUATION_DESIGN_INTENT = (
-  <p>
-    In-thread popover that sits over the composer input to capture additional information from the
-    user. Not meant to sit inside of the chat itself, or above the composer.
-  </p>
-);
+const DISAMBIGUATION_DESIGN_INTENT = [
+  "In-thread popover anchored over the composer, never inside the thread itself.",
+  "Captures structured input (radio or checkbox) instead of free text.",
+  "Dismisses cleanly so the conversation continues with the user's pick.",
+];
 
 const DISAMBIGUATION_DOS = [
   "Place on top of the composer.",
@@ -76,6 +79,7 @@ export function DisambiguationPage() {
   const [variant, setVariant] = useState<DisambiguationVariant>("default");
   const [inputType, setInputType] = useState<DisambiguationInputType>("radio");
   const [showStep, setShowStep] = useState(true);
+  const [contextMode, setContextMode] = useState<DisambiguationInChatDemoMode>("side-chat");
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -159,7 +163,24 @@ export function DisambiguationPage() {
           Clarifying UI when the model needs structured input to proceed—single or multi-select rows with optional
           metadata, bundled into at most two questions.
         </p>
-        <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 14, lineHeight: 1.5, color: "#716f6c" }}>
+        <p style={{ margin: "16px 0 8px", maxWidth: 640, fontSize: 15, lineHeight: 1.55, color: "#716f6c" }}>
+          There are a few different types of disambiguation:
+        </p>
+        <ul className="disambig-types">
+          <li>
+            <strong>Lexical ambiguity</strong> — a word with multiple meanings.
+          </li>
+          <li>
+            <strong>Intent ambiguity</strong> — unclear goal.
+          </li>
+          <li>
+            <strong>Scope ambiguity</strong> — unclear how much to do.
+          </li>
+          <li>
+            <strong>Reference ambiguity</strong> — unclear what &ldquo;it&rdquo; refers to.
+          </li>
+        </ul>
+        <p style={{ margin: "16px 0 0", maxWidth: 640, fontSize: 14, lineHeight: 1.5, color: "#716f6c" }}>
           <a href={FIGMA_SPEC} target="_blank" rel="noreferrer" style={{ color: "#7a005d" }}>
             Figma · AI-components (Disambiguation overview)
           </a>
@@ -176,6 +197,9 @@ export function DisambiguationPage() {
         dos={DISAMBIGUATION_DOS}
         donts={DISAMBIGUATION_DONTS}
       />
+
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Specs</h2>
 
       <div
         className="demo-preview-surface demo-preview-surface--stack"
@@ -259,33 +283,56 @@ export function DisambiguationPage() {
           </div>
         </section>
 
-        <section>
-          <h2
-            style={{
-              margin: "0 0 8px",
-              fontSize: 18,
-              fontWeight: "var(--font-weight-heading)",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            Example in chat
-          </h2>
-          <p style={{ margin: "0 0 16px", maxWidth: 640, fontSize: 14, lineHeight: 1.5, color: "#716f6c" }}>
-            Same props in a side chat with composer and sheet. Use &quot;Show example&quot; to open the flow.
-          </p>
-          <div className="demo-stage" role="region" aria-label="Disambiguation in context">
-            <DisambiguationInChatDemo
-              key={`${inputType}-${showStep}-${variant}`}
-              question={DEMO_QUESTION}
-              subtitle={subtitle}
-              step={step}
-              inputType={inputType}
-              variant={variant}
-              options={DEMO_OPTIONS}
-            />
-          </div>
-        </section>
       </div>
+
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Examples</h2>
+
+      <section
+        className="in-context-stage demo-fullbleed"
+        id="disambig-in-context"
+        aria-labelledby="disambig-in-context-heading"
+      >
+        <div className="in-context-stage__head">
+          <div className="in-context-stage__copy">
+            <h2 id="disambig-in-context-heading" className="in-context-stage__title">
+              Example in chat
+            </h2>
+            <p className="in-context-stage__lede">
+              Same props, two surface modes. The disambiguation sheet rises over the composer in
+              both — toggle to compare side panel against a full-screen workspace.
+            </p>
+          </div>
+          <div className="demo-segments" role="group" aria-label="Disambiguation surface mode">
+            <button
+              type="button"
+              className="demo-segment"
+              aria-pressed={contextMode === "side-chat"}
+              onClick={() => setContextMode("side-chat")}
+            >
+              Side chat
+            </button>
+            <button
+              type="button"
+              className="demo-segment"
+              aria-pressed={contextMode === "full-screen"}
+              onClick={() => setContextMode("full-screen")}
+            >
+              Full screen
+            </button>
+          </div>
+        </div>
+        <DisambiguationInChatDemo
+          key={`${inputType}-${showStep}-${variant}-${contextMode}`}
+          question={DEMO_QUESTION}
+          subtitle={subtitle}
+          step={step}
+          inputType={inputType}
+          variant={variant}
+          options={DEMO_OPTIONS}
+          mode={contextMode}
+        />
+      </section>
     </main>
   );
 }

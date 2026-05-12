@@ -3,6 +3,9 @@ export {
   InChatTablePreview,
   InChatTableWidget,
   InChatWidgets,
+  NewStarterDashboardWidget,
+  OfferLetterDocumentWidget,
+  SpendLinkWidget,
 } from "./InChatWidgets";
 export type {
   InChatLinkWidgetProps,
@@ -10,3 +13,7 @@ export type {
   InChatTableWidgetProps,
 } from "./InChatWidgets";
 export { InChatWidgetDemo } from "./InChatWidgetDemo";
+export type {
+  InChatWidgetDemoMode,
+  InChatWidgetDemoProps,
+} from "./InChatWidgetDemo";

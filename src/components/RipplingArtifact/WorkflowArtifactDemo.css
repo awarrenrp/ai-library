@@ -44,6 +44,20 @@
   gap: 2px;
 }
 
+/*
+ * Selected node — Figma "Editing individual node on canvas" 810:15346.
+ * Adds a Rippling-purple ring with a light tint so the user sees which
+ * block they're editing, mirroring how the canvas highlights the focused
+ * node when the side AI panel is guiding an edit.
+ */
+.workflow-artifact-demo-block[data-selected] {
+  margin: -6px -10px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgb(122 0 93 / 6%);
+  box-shadow: 0 0 0 1.5px #7a005d;
+}
+
 .workflow-artifact-demo-eyebrow {
   margin: 0;
   font-size: 11px;
@@ -56,7 +70,7 @@
   margin: 0;
   font-size: 14px;
   line-height: 19px;
-  font-weight: var(--font-weight-heading);
+  font-weight: var(--font-weight-emphasis);
   letter-spacing: -0.01em;
   color: #1a1a1a;
 }

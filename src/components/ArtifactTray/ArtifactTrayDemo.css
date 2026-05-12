@@ -10,7 +10,7 @@
 .artifact-tray-demo {
   box-sizing: border-box;
   width: 100%;
-  background: rgb(0 0 0 / 4%);
+  background: var(--color-surface);
 }
 
 /* —— Side chat ——————————————————————————————————————————— */
@@ -76,51 +76,21 @@
   overflow: hidden;
 }
 
+/*
+ * Chat head — uses the shared `.chat__toolbar` chrome from the Chat panel
+ * component, so the side-chat demo header is 1:1 with product. We only add
+ * the bottom hairline that separates the toolbar from the thread.
+ */
 .artifact-tray-demo__chat-head {
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 10px 12px 10px 18px;
   border-bottom: 1px solid rgb(0 0 0 / 10%);
 }
 
-.artifact-tray-demo__chat-title {
-  font-size: 14px;
-  font-weight: var(--font-weight-heading);
-  letter-spacing: -0.02em;
-  color: #000000;
-}
-
-/* More (⋯) ghost button — matches the chat-toolbar 32×32 / icon 20×20 spec. */
+/* Positioning anchor for the More menu — the button itself uses the shared
+ * `.chat__toolbar-btn` styles, so no extra button styling is needed. */
 .artifact-tray-demo__more-anchor {
   position: relative;
   display: inline-flex;
-}
-
-.artifact-tray-demo__more-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 6px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: #000000;
-  cursor: pointer;
-  transition: background-color 120ms ease;
-}
-
-.artifact-tray-demo__more-btn:hover {
-  background: rgb(0 0 0 / 6%);
-}
-
-.artifact-tray-demo__more-btn:focus-visible {
-  outline: 2px solid var(--color-focus-input, #5aa5e7);
-  outline-offset: 2px;
 }
 
 .artifact-tray-demo__more-menu {
@@ -273,14 +243,10 @@
   border-right: 1px solid rgb(0 0 0 / 8%);
 }
 
+/* Full-screen chat head — same shared `.chat__toolbar` chrome as side chat. */
 .artifact-tray-demo__fs-chat-head {
   flex-shrink: 0;
-  padding: 14px 18px;
   border-bottom: 1px solid rgb(0 0 0 / 10%);
-  font-size: 14px;
-  font-weight: var(--font-weight-heading);
-  letter-spacing: -0.02em;
-  color: #000000;
 }
 
 .artifact-tray-demo__fs-thread {

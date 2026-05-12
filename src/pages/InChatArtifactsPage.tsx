@@ -7,7 +7,11 @@ import {
 import { IconCopy } from "../components/Composer/icons";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
-import { InChatWidgetDemo, InChatWidgets } from "../components/InChatWidget";
+import {
+  InChatWidgetDemo,
+  type InChatWidgetDemoMode,
+  InChatWidgets,
+} from "../components/InChatWidget";
 import IN_CHAT_WIDGET_EXAMPLE_SOURCE from "../examples/InChatWidgetExample.tsx?raw";
 import { copyText } from "../utils/copyText";
 import "../App.css";
@@ -22,6 +26,7 @@ const FIGMA_TABLE_PREVIEW =
 export function InChatArtifactsPage() {
   const [hoverVariant, setHoverVariant] = useState<ArtifactHoverVariant>("shadow");
   const [copyAck, setCopyAck] = useState(false);
+  const [contextMode, setContextMode] = useState<InChatWidgetDemoMode>("side-chat");
 
   return (
     <main className="demo-wrap" data-artifact-hover-style={hoverVariant}>
@@ -55,9 +60,19 @@ export function InChatArtifactsPage() {
       </header>
 
       <ComponentIntentPanel
-        when="A lightweight structured output inside the conversation. It may stay inline or become an entry point into a larger artifact."
-        designIntent="Link to in-product output, with structural preview."
+        when={[
+          "The assistant returns a structured output that belongs in the thread.",
+          "The output may stay inline or expand into a larger artifact in product.",
+        ]}
+        designIntent={[
+          "Preview the shape of the structured output without leaving the thread.",
+          "Provide an entry point to the full artifact in product.",
+          "Keep widgets compact so the conversation stays the primary read.",
+        ]}
       />
+
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Specs</h2>
 
       <nav className="links-spec-toc" aria-label="On this page">
         <p className="links-spec-toc-label">On this page</p>
@@ -96,10 +111,45 @@ export function InChatArtifactsPage() {
         <InChatWidgets />
       </section>
 
-      <section className="links-spec-section" id="ic-artifacts-context" aria-label="In-chat widget in side chat">
-        <div className="links-spec-surface">
-          <InChatWidgetDemo />
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Examples</h2>
+
+      <section
+        className="in-context-stage demo-fullbleed"
+        id="ic-artifacts-context"
+        aria-labelledby="ic-artifacts-context-heading"
+      >
+        <div className="in-context-stage__head">
+          <div className="in-context-stage__copy">
+            <h2 id="ic-artifacts-context-heading" className="in-context-stage__title">
+              In context
+            </h2>
+            <p className="in-context-stage__lede">
+              Every widget category embedded inside an assistant conversation — table, Rippling
+              link, document, and dashboard — rendered as a side panel or a full-screen workspace.
+              Toggle to compare placements.
+            </p>
+          </div>
+          <div className="demo-segments" role="group" aria-label="In-chat widget surface mode">
+            <button
+              type="button"
+              className="demo-segment"
+              aria-pressed={contextMode === "side-chat"}
+              onClick={() => setContextMode("side-chat")}
+            >
+              Side chat
+            </button>
+            <button
+              type="button"
+              className="demo-segment"
+              aria-pressed={contextMode === "full-screen"}
+              onClick={() => setContextMode("full-screen")}
+            >
+              Full screen
+            </button>
+          </div>
         </div>
+        <InChatWidgetDemo mode={contextMode} />
       </section>
 
       <section

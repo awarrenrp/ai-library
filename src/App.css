@@ -4,6 +4,130 @@
   margin: 0 auto;
 }
 
+/*
+ * Page sections — the page narrative is "Usage → Specs → Examples". Every
+ * page renders these three eyebrow headings (or as many as apply) in the
+ * shared style below. `--lead` drops the divider for the first section.
+ */
+.page-section__divider {
+  margin: 36px 0 14px;
+  border: none;
+  border-top: 1px solid rgb(0 0 0 / 12%);
+}
+
+.page-section__title {
+  margin: 0 0 16px;
+  font-size: 13px;
+  font-weight: var(--font-weight-heading);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #716f6c;
+}
+
+.page-section__title--lead {
+  margin-top: 0;
+}
+
+/*
+ * Disambiguation types list — short reference of ambiguity flavors shown in
+ * the Disambiguation page header (lexical / intent / scope / reference).
+ * Sits beneath the page lede in the muted body color so it reads as
+ * extension of the definition, not a competing block.
+ */
+.disambig-types {
+  margin: 0 0 8px;
+  padding-left: 20px;
+  max-width: 640px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #716f6c;
+}
+
+.disambig-types > li + li {
+  margin-top: 4px;
+}
+
+.disambig-types strong {
+  font-weight: var(--font-weight-emphasis);
+  color: #000000;
+}
+
+/*
+ * Full-bleed utility — lets a child break out of `.demo-wrap`'s 960px column
+ * and stretch to the viewport width while preserving the surrounding prose
+ * column. Use on in-context / side-chat demo wrappers so the example feels
+ * like a real product surface. Pairs well with `.in-context-stage` controls
+ * on top.
+ */
+.demo-fullbleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+/*
+ * In-context stage — shared container that hosts the side-chat / full-screen
+ * mode toggle above a full-bleed demo surface. Sits on the standard
+ * `--color-surface` tier so the section reads as a continuous extension of
+ * the page chrome rather than its own beige band. Framed top + bottom with a
+ * 40%-black hairline.
+ */
+.in-context-stage {
+  margin-top: 32px;
+  margin-bottom: 32px;
+  padding-top: 32px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border-top: 1px solid rgb(0 0 0 / 40%);
+  border-bottom: 1px solid rgb(0 0 0 / 40%);
+}
+
+.in-context-stage__head {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+/*
+ * Inner hairline — full-bleed divider between the head (title + lede +
+ * toggle) and the dark demo surface, so the section reads as a clearly
+ * partitioned card top → head → surface → bottom.
+ */
+.in-context-stage > :last-child {
+  border-top: 1px solid rgb(0 0 0 / 40%);
+}
+
+.in-context-stage__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.in-context-stage__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: var(--font-weight-heading);
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+
+.in-context-stage__lede {
+  margin: 0;
+  max-width: 560px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #716f6c;
+}
+
+
 /* Toolbar + stage (+ optional meta): grey chrome so controls read as part of the demo */
 .demo-preview-surface {
   background: var(--color-surface);

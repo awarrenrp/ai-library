@@ -51,10 +51,127 @@
   min-width: 0;
   padding-right: 76px;
   font-size: 16px;
-  font-weight: var(--font-weight-heading);
+  font-weight: var(--font-weight-emphasis);
   letter-spacing: -0.02em;
   line-height: 24px;
   color: #000000;
+}
+
+/*
+ * Edit mode — Figma "Edit mode" section 1129:19972.
+ *
+ * In edit mode the title row keeps the artifact title but drops the hover
+ * actions in favor of a persistent Cancel + Save toolbar on the right and a
+ * pill chip immediately after the title. The card also gains a subtle accent
+ * border so editable surfaces are legible at a glance — matches the dashed
+ * outline behavior in Figma `Editing individual node on canvas`.
+ */
+.rippling-artifact-wrap[data-editing] .rippling-artifact {
+  border-color: rgb(0 0 0 / 28%);
+  box-shadow: 0 0 0 3px rgb(122 0 93 / 8%);
+}
+
+.rippling-artifact-wrap[data-editing] .rippling-artifact-title {
+  flex: 0 1 auto;
+  padding-right: 0;
+}
+
+/*
+ * "Editing" chip — Figma `Chip - Regular` 757:10345. Light blue container
+ * (#b9dbf3) with dark navy text (#05142e), 12px pencil glyph, 6px corner
+ * radius. Sits between the title and the toolbar with an `auto` margin so
+ * the toolbar pins to the trailing edge regardless of title length.
+ */
+.rippling-artifact-edit-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+  margin-right: auto;
+  padding: 2px 8px;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 6px;
+  background: #b9dbf3;
+  color: #05142e;
+  font-size: 13px;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.rippling-artifact-edit-chip__label {
+  font-weight: var(--font-weight-body);
+}
+
+/* Toolbar replaces `.rippling-artifact-actions` in edit mode — always visible. */
+.rippling-artifact-edit-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/*
+ * Cancel / Save buttons — Figma `Button` 757:10356 (Cancel, white outline) and
+ * 757:10357 (Save, Rippling purple fill #7a005d). 32h, 12px horizontal padding,
+ * 6px corner radius, 14/20 Medium label.
+ */
+.rippling-artifact-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 20px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.rippling-artifact-edit-btn--cancel {
+  border: 1px solid rgb(0 0 0 / 20%);
+  background: #ffffff;
+  color: #000000;
+}
+
+.rippling-artifact-edit-btn--cancel:hover {
+  background: rgb(0 0 0 / 4%);
+}
+
+.rippling-artifact-edit-btn--save {
+  border: 1px solid transparent;
+  background: #7a005d;
+  color: #ffffff;
+}
+
+.rippling-artifact-edit-btn--save:hover {
+  background: #66004d;
+}
+
+.rippling-artifact-edit-btn:focus-visible {
+  outline: 2px solid var(--artifact-outline-active);
+  outline-offset: 2px;
+}
+
+/*
+ * Selection outline — Figma `Editing report in chat` 757:10334 →
+ * `Editing individual node on canvas` 810:15346. When `selected` is true on
+ * the shell, the default neutral border is replaced by the
+ * `--artifact-outline-active` focus token so the user can see which artifact
+ * the composer is editing. Independent of `editing` so a caller can
+ * highlight a not-yet-committed selection target.
+ */
+.rippling-artifact-wrap[data-selected] .rippling-artifact {
+  border-color: var(--artifact-outline-active);
+  box-shadow: 0 0 0 1px var(--artifact-outline-active);
+}
+
+.rippling-artifact-wrap[data-selected][data-editing] .rippling-artifact {
+  /* Editing already adds an accent border; selected takes precedence. */
+  border-color: var(--artifact-outline-active);
+  box-shadow: 0 0 0 1px var(--artifact-outline-active);
 }
 
 .rippling-artifact-actions {
@@ -134,6 +251,68 @@
   overflow: hidden;
 }
 
+/* In the `with-actions` variant the action bar owns the card's bottom edge,
+ * so the body's bottom rounding drops to 0 and the bar takes over. */
+.rippling-artifact-wrap[data-variant="with-actions"] .rippling-artifact-body {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/*
+ * Action bar — only present when `variant === "with-actions"`. Pinned to the
+ * bottom of the card, hidden at rest, revealed on hover or keyboard focus so
+ * the artifact reads as a clean preview until the user engages. The bar
+ * carries the bottom rounding so it matches the card silhouette.
+ *
+ * Collapse/expand animates `max-height`, `opacity`, and `padding` together so
+ * the body content doesn't jump when the bar enters; the bar's own
+ * `overflow: hidden` clips the inner content during the transition.
+ */
+.rippling-artifact-action-bar {
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 0;
+  padding: 0 12px;
+  background: rgb(0 0 0 / 4%);
+  border-top: 1px solid transparent;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  transition:
+    max-height 0.18s ease,
+    opacity 0.15s ease,
+    padding 0.15s ease,
+    border-top-color 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rippling-artifact-action-bar {
+    transition: none;
+  }
+}
+
+.rippling-artifact-wrap:hover .rippling-artifact-action-bar,
+.rippling-artifact-wrap:focus-within .rippling-artifact-action-bar {
+  max-height: 56px;
+  padding: 8px 12px;
+  border-top-color: rgb(0 0 0 / 10%);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.rippling-artifact-action-bar__inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  /* Right-align the action cluster by default — most product artifacts put
+   * primary/secondary CTAs at the trailing edge. Override per-instance if
+   * the consumer wants leading or centered actions. */
+  justify-content: flex-end;
+}
+
 /*
  * Row below card — thumbs + timestamp (out of flow so hover doesn’t shift page content)
  */
@@ -197,10 +376,12 @@
 }
 
 /*
- * Hover More menu — opens beneath the … button in the header.
- * Three fixed rows (View detail / Edit page / Download) plus an optional custom
- * JSX slot below a divider. The slot uses the same padding as `.rippling-artifact-body`
- * so consumers can drop in matching UI without re-spacing.
+ * Hover More menu — opens beneath the … button in the header. Matches the
+ * Figma `AI-components / Dropdown` 848:9499 spec: 250px wide, 8px vertical
+ * padding, two grouped sections (Download / Duplicate / Edit | Pin / View
+ * SQL) separated by an 8-px-padded hairline. An optional `moreMenuSlot`
+ * appends a third group below another separator, padded to match the
+ * artifact body so drop-in JSX inherits the same rhythm.
  */
 .rippling-artifact-more-anchor {
   position: relative;
@@ -212,19 +393,34 @@
   z-index: 10;
   top: calc(100% + 6px);
   right: 0;
-  min-width: 220px;
-  padding: 4px 0;
+  width: 250px;
+  padding: 8px 0;
   border: 1px solid rgb(0 0 0 / 10%);
   border-radius: 8px;
   background: #ffffff;
-  box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
+  /* Figma drop shadow — offset y=4, radius=6, spread=-1, color #000 @ 15%. */
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 15%);
 }
 
+.rippling-artifact-more-menu__group {
+  display: flex;
+  flex-direction: column;
+}
+
+/*
+ * Row — Figma "Dropdown Cell - Default" spec: 28h, 4px 12px padding, 8px gap
+ * between left icon and label. Label is Basel Grotesk Regular 14 / 20 on
+ * black. Hover paints a faint overlay; focus-visible uses the shared
+ * artifact outline token so it matches the icon buttons and body controls.
+ */
 .rippling-artifact-more-menu__item {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   width: 100%;
+  min-height: 28px;
   margin: 0;
-  padding: 8px 12px;
+  padding: 4px 12px;
   border: none;
   background: transparent;
   color: #000000;
@@ -234,6 +430,7 @@
   line-height: 20px;
   text-align: left;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .rippling-artifact-more-menu__item:hover {
@@ -245,8 +442,23 @@
   outline-offset: -2px;
 }
 
-.rippling-artifact-more-menu__divider {
-  margin: 4px 0;
+.rippling-artifact-more-menu__item-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: currentcolor;
+}
+
+/*
+ * Separator — Figma "Dropdown Cell - Separator" is a 16-px-tall cell holding
+ * a centered hairline (8 above + line + 8 below). We model that with an
+ * `<hr>` at 1px stroke and 8px vertical margin so the rhythm matches.
+ */
+.rippling-artifact-more-menu__separator {
+  margin: 8px 0;
   border: 0;
   border-top: 1px solid rgb(0 0 0 / 10%);
 }

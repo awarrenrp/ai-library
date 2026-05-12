@@ -237,7 +237,7 @@
 .external-file-artifact-title {
   margin: 0 0 2px;
   font-size: 14px;
-  font-weight: var(--font-weight-heading);
+  font-weight: var(--font-weight-emphasis);
   line-height: 19px;
   letter-spacing: -0.01em;
   color: var(--color-info, #1e4aa9);

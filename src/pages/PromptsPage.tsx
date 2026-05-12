@@ -5,11 +5,17 @@ import { Prompt } from "../components/Prompt";
 import type { PromptSurface } from "../components/Prompt";
 import "../App.css";
 
-const PROMPTS_WHEN =
-  "When Rippling surfaces personalized prompts—selectable shortcuts that prefill or steer the user's AI message—the prompt tile is how we preview intent before they send.";
+const PROMPTS_WHEN = [
+  "Rippling surfaces personalized prompts the user can pick instead of typing.",
+  "The tile previews what the prompt will send before the user commits.",
+];
 
-const PROMPTS_DESIGN_INTENT =
-  "Lead with a concise title. When present, the description explains what the personalized prompt does and stays within about two lines so it does not truncate mid-thought. Optional subtext can label persona or audience (for example, role). Use outline when tiles sit on neutral backgrounds; use filled when they should read as emphasized cards. Hover should reaffirm clickability without overpowering the content.";
+const PROMPTS_DESIGN_INTENT = [
+  "Title leads — concise and scannable in a tile row.",
+  "Description (optional) explains the prompt in about two lines; never truncates mid-thought.",
+  "Subtext (optional) labels persona or audience (role, team).",
+  "Outline reads well on neutral surfaces; filled reads as emphasized cards.",
+];
 
 const SAMPLE_DESCRIPTION =
   "Short description of what the personalized prompt does. Keep the text within two lines so it does not truncate awkwardly.";
@@ -44,6 +50,9 @@ export function PromptsPage() {
       </header>
 
       <ComponentIntentPanel when={PROMPTS_WHEN} designIntent={PROMPTS_DESIGN_INTENT} />
+
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Specs</h2>
 
       <div className="demo-preview-surface" role="region" aria-label="Prompt interactive preview">
       <div className="demo-toolbar" aria-label="Prompt preview controls">

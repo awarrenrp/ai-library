@@ -15,11 +15,17 @@ import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
 import "../App.css";
 
-const CHAT_WHEN =
-  "When the user is in a dedicated AI conversation—scrollable turns from the assistant and the user, with a single place to type the next message.";
+const CHAT_WHEN = [
+  "The user is in a dedicated AI conversation with the assistant.",
+  "Scrollable turns from both sides need a single, consistent home.",
+  "One place to type the next message — no dual composers per page.",
+];
 
-const CHAT_DESIGN_INTENT =
-  "The primary wrapper for the composer, the chat panel is the primary wrapper for how customers interact with Rippling AI. Chat can be displayed in 2 different ways: Through the side panel and through a full screen page.";
+const CHAT_DESIGN_INTENT = [
+  "Primary wrapper for the composer and message thread — the canonical AI surface.",
+  "Renders as a side panel that overlays the product, or as a full-screen page.",
+  "Toolbar, thread, and footer composer share consistent spacing across both modes.",
+];
 
 const LAYOUT_LABELS: Record<ChatLayoutVariant, string> = {
   "side-panel": "Side panel",
@@ -188,6 +194,9 @@ export function ChatPage() {
       </header>
 
       <ComponentIntentPanel when={CHAT_WHEN} designIntent={CHAT_DESIGN_INTENT} />
+
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Specs</h2>
 
       <div
         className="demo-preview-surface demo-preview-surface--no-toolbar-divider"

@@ -1,45 +1,72 @@
+/*
+ * "Usage" section wrapper. The `.page-section__title--lead` on the heading
+ * gives it the shared eyebrow style without the divider — Usage is the first
+ * section, so it doesn't need a hairline above.
+ */
 .component-intent-reference {
   margin: 0 0 36px;
 }
 
-.component-intent-reference__divider {
-  margin: 24px 0 14px;
-  border: none;
-  border-top: 1px solid rgb(0 0 0 / 12%);
+.component-intent-reference > .page-section__title--lead {
+  margin: 0 0 16px;
 }
 
-.component-intent-reference__title {
-  margin: 0;
-  font-size: 13px;
-  font-weight: var(--font-weight-heading);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #716f6c;
-}
-
+/*
+ * Base "When / Design intent" block. Renders as two plain columns of bulleted
+ * lists directly under the "Usage" heading — no border, no card background.
+ * Keeping it un-carded preserves visual hierarchy against the colored
+ * Dos / Don'ts card that follows, so the two regions never read as the same
+ * pattern.
+ */
 .component-intent-panel {
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  column-gap: 48px;
   margin: 0;
-  border: 1px solid rgb(0 0 0 / 12%);
-  border-radius: 10px;
-  background: #ffffff;
-  overflow: hidden;
 }
 
-/* Second card sits directly below the When / Design intent block. */
+/* The colored guidelines card sits directly below the bulleted intent block. */
 .component-intent-panel + .component-intent-panel {
-  margin-top: 12px;
+  margin-top: 20px;
 }
 
 .component-intent-panel__col {
   box-sizing: border-box;
+  padding: 0;
+}
+
+/*
+ * Dos / Don'ts colored card — a green "success" surface and a peach "error"
+ * surface drawn from the design tokens (`--color-success-container`,
+ * `--color-error-container`). Re-applies the rounded card chrome that the
+ * base intent block intentionally drops, and zeros the inter-column gap so
+ * the two colored panes meet flush.
+ */
+.component-intent-panel--guidelines {
+  column-gap: 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.component-intent-panel--guidelines .component-intent-panel__col {
   padding: 22px 24px;
 }
 
-.component-intent-panel__col + .component-intent-panel__col {
-  border-left: 1px solid rgb(0 0 0 / 12%);
+.component-intent-panel__col--dos {
+  background: var(--color-success-container);
+}
+
+.component-intent-panel__col--donts {
+  background: var(--color-error-container);
+}
+
+.component-intent-panel__col--dos .component-intent-panel__label {
+  color: var(--color-on-success-container);
+}
+
+.component-intent-panel__col--donts .component-intent-panel__label {
+  color: var(--color-on-error-container);
 }
 
 .component-intent-panel__label {
@@ -75,6 +102,27 @@
   margin-top: 6px;
 }
 
+/*
+ * "When" / "Design intent" bullet list — disc bullets, tighter than the
+ * Dos/Don'ts list (which uses check/cross masks instead of disc markers).
+ */
+.component-intent-panel__body ul.component-intent-panel__intent-list {
+  list-style: disc;
+  padding-left: 1.25em;
+}
+
+.component-intent-panel__body ul.component-intent-panel__intent-list > li {
+  white-space: normal;
+}
+
+.component-intent-panel__body ul.component-intent-panel__intent-list > li::marker {
+  color: #716f6c;
+}
+
+.component-intent-panel__body .component-intent-panel__intent-prose {
+  margin: 0;
+}
+
 .component-intent-panel__body .component-intent-panel__dos-donts-label {
   margin: 0 0 6px;
   font-size: 11px;
@@ -104,7 +152,7 @@
   width: 18px;
   height: 18px;
   margin-top: 3px;
-  background-color: #16a34a;
+  background-color: var(--color-on-success-container);
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23000' d='M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 111.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z'/%3E%3C/svg%3E");
   mask-size: contain;
   mask-repeat: no-repeat;
@@ -121,7 +169,7 @@
   width: 18px;
   height: 18px;
   margin-top: 3px;
-  background-color: #dc2626;
+  background-color: var(--color-on-error-container);
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23000' d='M4.22 4.22a.75.75 0 011.06 0L8 6.94l2.72-2.72a.75.75 0 111.06 1.06L9.06 8l2.72 2.72a.75.75 0 11-1.06 1.06L8 9.06l-2.72 2.72a.75.75 0 01-1.06-1.06L6.94 8 4.22 5.28a.75.75 0 010-1.06z'/%3E%3C/svg%3E");
   mask-size: contain;
   mask-repeat: no-repeat;
@@ -135,10 +183,11 @@
 @media (max-width: 640px) {
   .component-intent-panel {
     grid-template-columns: 1fr;
+    column-gap: 0;
+    row-gap: 20px;
   }
 
-  .component-intent-panel__col + .component-intent-panel__col {
-    border-left: none;
-    border-top: 1px solid rgb(0 0 0 / 12%);
+  .component-intent-panel--guidelines {
+    row-gap: 0;
   }
 }

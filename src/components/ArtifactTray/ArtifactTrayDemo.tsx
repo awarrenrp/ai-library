@@ -18,6 +18,13 @@
  */
 
 import { useEffect, useId, useRef, useState } from "react";
+import {
+  ChatToolbar,
+  ChatToolbarAddCommentIcon,
+  ChatToolbarCloseIcon,
+  ChatToolbarExpandIcon,
+  ChatToolbarMenuIcon,
+} from "../Chat";
 import { Composer } from "../Composer";
 import { ArtifactTray, type ArtifactTrayItem } from "./ArtifactTray";
 import { IconFile, IconMoreHorizontal, IconReport, IconWorkflow } from "../../icons";
@@ -84,46 +91,69 @@ function SideChatDemo() {
       </div>
       <div className="artifact-tray-demo__chat-wrap">
         <div className="artifact-tray-demo__chat">
-          <header className="artifact-tray-demo__chat-head">
-            <span className="artifact-tray-demo__chat-title">Rippling AI</span>
-            <div className="artifact-tray-demo__more-anchor" ref={moreAnchorRef}>
-              <button
-                ref={moreBtnRef}
-                type="button"
-                id={moreBtnId}
-                className="artifact-tray-demo__more-btn"
-                aria-label={menuOpen ? "Close chat options" : "Chat options"}
-                aria-haspopup="menu"
-                aria-expanded={menuOpen}
-                aria-controls={menuOpen ? moreMenuId : undefined}
-                onClick={() => setMenuOpen((open) => !open)}
-              >
-                <IconMoreHorizontal width={20} height={20} />
+          {/* Toolbar — mirrors the Chat panel component (Figma 1076:16368).
+              Hamburger + title on the left; More (with Show artifacts menu),
+              Add comment, Expand, and Close on the right. */}
+          <div
+            role="toolbar"
+            aria-label="Chat actions"
+            className="chat__toolbar artifact-tray-demo__chat-head"
+          >
+            <div className="chat__toolbar-cluster chat__toolbar-cluster--start">
+              <button type="button" className="chat__toolbar-btn" aria-label="Open menu">
+                <ChatToolbarMenuIcon />
               </button>
-              {menuOpen ? (
-                <div
-                  id={moreMenuId}
-                  role="menu"
-                  aria-labelledby={moreBtnId}
-                  className="artifact-tray-demo__more-menu"
-                >
-                  <button
-                    type="button"
-                    role="menuitem"
-                    className="artifact-tray-demo__more-menu-item"
-                    aria-pressed={trayOpen}
-                    onClick={() => {
-                      setTrayOpen((open) => !open);
-                      setMenuOpen(false);
-                      moreBtnRef.current?.focus();
-                    }}
-                  >
-                    {trayOpen ? "Hide artifacts" : "Show artifacts"}
-                  </button>
-                </div>
-              ) : null}
+              <p className="chat__toolbar-title">Rippling AI</p>
             </div>
-          </header>
+            <div className="chat__toolbar-cluster chat__toolbar-cluster--end">
+              <div className="artifact-tray-demo__more-anchor" ref={moreAnchorRef}>
+                <button
+                  ref={moreBtnRef}
+                  type="button"
+                  id={moreBtnId}
+                  className="chat__toolbar-btn"
+                  aria-label={menuOpen ? "Close chat options" : "Chat options"}
+                  aria-haspopup="menu"
+                  aria-expanded={menuOpen}
+                  aria-controls={menuOpen ? moreMenuId : undefined}
+                  onClick={() => setMenuOpen((open) => !open)}
+                >
+                  <IconMoreHorizontal width={20} height={20} />
+                </button>
+                {menuOpen ? (
+                  <div
+                    id={moreMenuId}
+                    role="menu"
+                    aria-labelledby={moreBtnId}
+                    className="artifact-tray-demo__more-menu"
+                  >
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className="artifact-tray-demo__more-menu-item"
+                      aria-pressed={trayOpen}
+                      onClick={() => {
+                        setTrayOpen((open) => !open);
+                        setMenuOpen(false);
+                        moreBtnRef.current?.focus();
+                      }}
+                    >
+                      {trayOpen ? "Hide artifacts" : "Show artifacts"}
+                    </button>
+                  </div>
+                ) : null}
+              </div>
+              <button type="button" className="chat__toolbar-btn" aria-label="Add comment">
+                <ChatToolbarAddCommentIcon />
+              </button>
+              <button type="button" className="chat__toolbar-btn" aria-label="Expand chat">
+                <ChatToolbarExpandIcon />
+              </button>
+              <button type="button" className="chat__toolbar-btn" aria-label="Close chat">
+                <ChatToolbarCloseIcon />
+              </button>
+            </div>
+          </div>
           <div className="artifact-tray-demo__thread-wrap">
             <div className="artifact-tray-demo__thread" aria-hidden={trayOpen}>
               <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
@@ -173,7 +203,14 @@ function FullScreenDemo() {
       aria-label="Artifact tray in full-screen AI workspace"
     >
       <section className="artifact-tray-demo__fs-chat" aria-label="Rippling AI chat">
-        <header className="artifact-tray-demo__fs-chat-head">Rippling AI</header>
+        <ChatToolbar
+          className="artifact-tray-demo__fs-chat-head"
+          title="Rippling AI"
+          onMenuClick={() => {}}
+          onAddCommentClick={() => {}}
+          onExpandClick={() => {}}
+          onCloseClick={() => {}}
+        />
         <div className="artifact-tray-demo__fs-thread">
           <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
             Pull Q3 attendance, draft an in-office policy refresh, and route it through approvals.

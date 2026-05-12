@@ -1,40 +1,14 @@
-/* Side chat + bottom disambig — full-width surface, single disambig card */
+/*
+ * Disambiguation — in-context demo. Two modes via `data-mode` on the root:
+ *   - `side-chat`: app surface left, 440px chat panel pinned to the right.
+ *   - `full-screen`: chat fills the viewport; app surface mock hidden.
+ *
+ * In both modes the disambiguation sheet sits over the composer area at the
+ * bottom of the chat panel, matching how it appears in product.
+ */
 
 .disambig-demo {
   width: 100%;
-}
-
-.disambig-demo__intro {
-  margin: 0 0 16px;
-  max-width: 640px;
-  font-size: 15px;
-  line-height: 1.55;
-  color: #716f6c;
-}
-
-.disambig-demo__trigger {
-  margin-bottom: 16px;
-}
-
-.disambig-demo__trigger--outline {
-  padding: 8px 14px;
-  border: 1px solid #000000;
-  border-radius: 8px;
-  background: #ffffff;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: inherit;
-  color: #000000;
-  cursor: pointer;
-}
-
-.disambig-demo__trigger--outline:hover {
-  background: rgb(0 0 0 / 4%);
-}
-
-.disambig-demo__trigger--outline:focus-visible {
-  outline: 2px solid var(--color-ring);
-  outline-offset: 2px;
 }
 
 .disambig-demo__surface {
@@ -42,18 +16,16 @@
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
-  width: calc(100% + 48px);
-  margin-left: -24px;
-  margin-right: -24px;
+  width: 100%;
   min-height: 720px;
   height: min(88vh, 920px);
-  background: rgb(0 0 0 / 4%);
-  /* Hide off-canvas chat on X only; allow disambig box-shadow to paint on Y */
+  background: var(--color-surface);
   overflow-x: hidden;
   overflow-y: visible;
 }
 
-.disambig-demo__app {
+/* —— Side chat ——————————————————————————————————————————— */
+.disambig-demo[data-mode="side-chat"] .disambig-demo__app {
   grid-area: 1 / 1;
   position: relative;
   z-index: 0;
@@ -61,7 +33,7 @@
   align-self: stretch;
   min-height: 0;
   padding: 28px 32px;
-  padding-right: min(440px, 46vw);
+  padding-right: min(460px, 48vw);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -84,7 +56,7 @@
   max-width: 420px;
 }
 
-.disambig-demo__chat-wrap {
+.disambig-demo[data-mode="side-chat"] .disambig-demo__chat-wrap {
   grid-area: 1 / 1;
   justify-self: end;
   align-self: stretch;
@@ -92,16 +64,43 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
-  transform: translateX(100%);
-  transition: transform 0.42s cubic-bezier(0.33, 1, 0.68, 1);
-  will-change: transform;
   z-index: 2;
 }
 
-.disambig-demo__chat-wrap--open {
-  transform: translateX(0);
+.disambig-demo[data-mode="side-chat"] .disambig-demo__chat {
+  border-left: 1px solid rgb(0 0 0 / 10%);
+  box-shadow: -6px 0 32px rgb(0 0 0 / 8%);
 }
 
+/* —— Full screen ————————————————————————————————————————— */
+.disambig-demo[data-mode="full-screen"] .disambig-demo__app {
+  display: none;
+}
+
+.disambig-demo[data-mode="full-screen"] .disambig-demo__chat-wrap {
+  grid-area: 1 / 1;
+  justify-self: stretch;
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.disambig-demo[data-mode="full-screen"] .disambig-demo__chat {
+  border-left: none;
+  box-shadow: none;
+}
+
+.disambig-demo[data-mode="full-screen"] .disambig-demo__thread,
+.disambig-demo[data-mode="full-screen"] .disambig-demo__footer {
+  max-width: 880px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* —— Shared chat chrome ——————————————————————————————————— */
 .disambig-demo__chat {
   box-sizing: border-box;
   display: flex;
@@ -109,19 +108,15 @@
   flex: 1 1 auto;
   min-height: 0;
   height: 100%;
-  border-left: 1px solid rgb(0 0 0 / 10%);
   background: #ffffff;
-  box-shadow: -6px 0 32px rgb(0 0 0 / 8%);
 }
 
+/* Chat head — wraps the shared `ChatToolbar` so the demo mirrors the real
+ * Chat panel chrome. The toolbar provides its own padding; we only add the
+ * bottom hairline that separates the head from the thread. */
 .disambig-demo__chat-head {
   flex-shrink: 0;
-  padding: 14px 18px;
   border-bottom: 1px solid rgb(0 0 0 / 10%);
-  font-size: 14px;
-  font-weight: var(--font-weight-heading);
-  letter-spacing: -0.02em;
-  color: #000000;
 }
 
 .disambig-demo__thread {
@@ -132,6 +127,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  box-sizing: border-box;
 }
 
 .disambig-demo__bubble {
@@ -161,10 +157,7 @@
   padding: 12px 14px 14px;
   background: #fafafa;
   border-top: 1px solid rgb(0 0 0 / 8%);
-}
-
-.disambig-demo__footer--demo-open .disambig-demo__composer-mock {
-  opacity: 0.4;
+  box-sizing: border-box;
 }
 
 .disambig-demo__composer-mock {
@@ -174,28 +167,34 @@
   font-size: 13px;
   line-height: 1.4;
   color: #716f6c;
+  opacity: 0.4;
 }
 
+/*
+ * Disambig sheet — pinned over the composer area with the same rise-in
+ * animation as in product. We animate from translateY(...) → 0 once on
+ * mount so the demo always reads as "sheet up" without an internal toggle.
+ */
 .disambig-demo__sheet {
   position: absolute;
   left: 12px;
   right: 12px;
   bottom: 12px;
   z-index: 2;
-  /* Let card shadow paint outside the sheet box (overflow:auto was clipping it) */
   overflow: visible;
-  transform: translateY(calc(100% + 24px));
-  transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1) 0.15s;
-  pointer-events: none;
-  will-change: transform;
-}
-
-.disambig-demo__sheet--open {
-  transform: translateY(0);
   pointer-events: auto;
+  animation: disambig-demo-rise 0.42s cubic-bezier(0.33, 1, 0.68, 1) both;
 }
 
-/* Shadow lives here so it isn’t clipped by overflow on .disambiguation--in-chat */
+@keyframes disambig-demo-rise {
+  from {
+    transform: translateY(calc(100% + 24px));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 .disambig-demo__sheet-card {
   border-radius: 16px;
   box-shadow:
@@ -203,7 +202,19 @@
     0 4px 16px rgb(0 0 0 / 8%);
 }
 
-/* One card: scroll inside when tall */
+@media (max-width: 720px) {
+  .disambig-demo[data-mode="side-chat"] .disambig-demo__app {
+    padding-right: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .disambig-demo__sheet {
+    animation-duration: 0ms;
+  }
+}
+
+/* Disambig card — fill its wrapper. */
 .disambiguation.disambiguation--in-chat {
   width: 100%;
   max-width: none;
@@ -213,23 +224,4 @@
   border: 1px solid rgb(0 0 0 / 12%);
   box-shadow: none;
   overflow-y: auto;
-}
-
-@media (max-width: 720px) {
-  .disambig-demo__surface {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .disambig-demo__app {
-    padding-right: 28px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .disambig-demo__chat-wrap,
-  .disambig-demo__sheet {
-    transition: none;
-  }
 }

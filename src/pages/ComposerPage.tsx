@@ -17,16 +17,16 @@ const FILLED_SAMPLE = "Make me a report about sales people in SF";
 const EDIT_SAMPLE =
   "Summarize PTO policy changes for managers. Keep bullets short and mention effective dates.";
 
-const COMPOSER_WHEN =
-  "When a user requests to interact with the AI chat, the composer is the method of using natural language inputs to query more information.";
+const COMPOSER_WHEN = [
+  "The user wants to ask the assistant something using natural language.",
+  "The page needs a single, obvious input for that ask.",
+];
 
-const COMPOSER_DESIGN_INTENT = (
-  <p>
-    The composer should be consistent across Rippling&mdash;one primary input pattern for AI chat,
-    aligned with AI-components. A single composer can exist on each page or surface so the entry
-    point stays obvious.
-  </p>
-);
+const COMPOSER_DESIGN_INTENT = [
+  "One canonical composer pattern across every Rippling AI surface.",
+  "At most one composer per page — duplicates fragment the entry point.",
+  "Width follows the 712px content track so it aligns with the message column.",
+];
 
 const COMPOSER_DOS = [
   "Use one composer per page or surface and match the standard spec for shipped experiences.",
@@ -218,12 +218,6 @@ export function ComposerPage() {
           information—one consistent pattern across Rippling, without pairing an inline composer with a separate side
           panel chat on the same page.
         </p>
-        <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 16, lineHeight: 1.5, color: "#716f6c" }}>
-          Use the controls below for width and default vs filled.{" "}
-          <strong style={{ fontWeight: "var(--font-weight-heading)", color: "#000000" }}>Edit state</strong> (focus shell
-          + edit chip) is part of the alternate composer only—it is not in the shipped standard. Composer version is chosen
-          from the settings control in the upper right of the page.
-        </p>
       </header>
 
       <ComponentIntentPanel
@@ -232,6 +226,9 @@ export function ComposerPage() {
         dos={COMPOSER_DOS}
         donts={COMPOSER_DONTS}
       />
+
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Specs</h2>
 
       <div
         className="demo-preview-surface demo-preview-surface--no-toolbar-divider"

@@ -1,4 +1,5 @@
-import { useId, useState } from "react";
+import { useId } from "react";
+import { ChatToolbar } from "../Chat";
 import { Disambiguation } from "./Disambiguation";
 import type {
   DisambiguationInputType,
@@ -7,6 +8,8 @@ import type {
 } from "./Disambiguation";
 import "./DisambiguationInChatDemo.css";
 
+export type DisambiguationInChatDemoMode = "side-chat" | "full-screen";
+
 export type DisambiguationInChatDemoProps = {
   question: string;
   subtitle?: string;
@@ -14,8 +17,17 @@ export type DisambiguationInChatDemoProps = {
   inputType: DisambiguationInputType;
   variant?: DisambiguationVariant;
   options: DisambiguationOption[];
+  /** Surface mode controlled by the spec page. Defaults to `side-chat`. */
+  mode?: DisambiguationInChatDemoMode;
 };
 
+/**
+ * Side chat / full-screen preview — the disambiguation sheet rises over the
+ * composer area in both modes. Surface chrome differs:
+ *
+ *   - `side-chat`: app surface mock on the left, 440px chat panel right.
+ *   - `full-screen`: chat fills the viewport; app surface mock is hidden.
+ */
 export function DisambiguationInChatDemo({
   question,
   subtitle,
@@ -23,52 +35,40 @@ export function DisambiguationInChatDemo({
   inputType,
   variant = "default",
   options,
+  mode = "side-chat",
 }: DisambiguationInChatDemoProps) {
-  const [demoOpen, setDemoOpen] = useState(false);
   const uid = useId();
-  const introId = `${uid}-intro`;
   const surfaceId = `${uid}-surface`;
 
   return (
-    <div className="disambig-demo">
-      <p id={introId} className="disambig-demo__intro">
-        Side chat enters from the right; when clarification is needed, the disambiguation sheet rises from the bottom and
-        covers the composer area—matching how it sits over the chat input in product.
-      </p>
-      <button
-        type="button"
-        className={[
-          "disambig-demo__trigger",
-          demoOpen ? "disambig-demo__trigger--outline" : "demo-segment",
-        ].join(" ")}
-        aria-expanded={demoOpen}
-        aria-controls={surfaceId}
-        onClick={() => setDemoOpen((o) => !o)}
-      >
-        {demoOpen ? "Hide example" : "Show example"}
-      </button>
+    <div className="disambig-demo" data-mode={mode}>
       <div
         id={surfaceId}
         className="disambig-demo__surface"
         role="region"
-        aria-label="Disambiguation in side chat preview"
-        aria-describedby={introId}
+        aria-label={
+          mode === "full-screen"
+            ? "Disambiguation in full-screen AI workspace"
+            : "Disambiguation in side chat preview"
+        }
       >
-        <div className="disambig-demo__app">
+        <div className="disambig-demo__app" aria-hidden={mode === "full-screen"}>
           <p className="disambig-demo__app-label">App surface</p>
           <p className="disambig-demo__app-body">
-            The main product UI stays on the left. Rippling AI opens as a side panel; clarifying questions appear above the
-            composer without living inside the transcript.
+            The main product UI stays on the left. Rippling AI opens as a side panel; clarifying
+            questions appear above the composer without living inside the transcript.
           </p>
         </div>
-        <div
-          className={["disambig-demo__chat-wrap", demoOpen ? "disambig-demo__chat-wrap--open" : ""]
-            .filter(Boolean)
-            .join(" ")}
-          aria-hidden={!demoOpen}
-        >
+        <div className="disambig-demo__chat-wrap">
           <div className="disambig-demo__chat">
-            <div className="disambig-demo__chat-head">Rippling AI</div>
+            <ChatToolbar
+              className="disambig-demo__chat-head"
+              title="Rippling AI"
+              onMenuClick={() => {}}
+              onAddCommentClick={() => {}}
+              onExpandClick={() => {}}
+              onCloseClick={() => {}}
+            />
             <div className="disambig-demo__thread">
               <p className="disambig-demo__bubble disambig-demo__bubble--ai">
                 I found more than one Jordan. Say which profile you want to change and I&apos;ll pull up their manager
@@ -76,20 +76,12 @@ export function DisambiguationInChatDemo({
               </p>
               <p className="disambig-demo__bubble disambig-demo__bubble--user">Update Jordan&apos;s manager.</p>
             </div>
-            <div
-              className={["disambig-demo__footer", demoOpen ? "disambig-demo__footer--demo-open" : ""]
-                .filter(Boolean)
-                .join(" ")}
-            >
+            <div className="disambig-demo__footer">
               <div className="disambig-demo__composer-mock">Ask Rippling AI anything…</div>
-              <div
-                className={["disambig-demo__sheet", demoOpen ? "disambig-demo__sheet--open" : ""]
-                  .filter(Boolean)
-                  .join(" ")}
-              >
+              <div className="disambig-demo__sheet">
                 <div className="disambig-demo__sheet-card">
                   <Disambiguation
-                    key={`${inputType}-${step?.current ?? 0}-${question}-${variant}`}
+                    key={`${inputType}-${step?.current ?? 0}-${question}-${variant}-${mode}`}
                     className="disambiguation--in-chat"
                     question={question}
                     subtitle={subtitle}

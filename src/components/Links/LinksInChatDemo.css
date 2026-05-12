@@ -1,40 +1,14 @@
-/* Links · side chat in-context preview (shell mirrors Disambiguation in-chat demo) */
+/*
+ * Links — in-context demo. Two modes driven by `data-mode` on the root:
+ *   - `side-chat`: app surface left, 440px chat panel pinned to the right.
+ *   - `full-screen`: chat fills the viewport; app surface mock hidden.
+ *
+ * The actual conversation content is identical between modes — only the
+ * surrounding chrome changes.
+ */
 
 .links-ic-demo {
   width: 100%;
-}
-
-.links-ic-demo__intro {
-  margin: 0 0 16px;
-  max-width: 640px;
-  font-size: 15px;
-  line-height: 1.55;
-  color: #716f6c;
-}
-
-.links-ic-demo__trigger {
-  margin-bottom: 16px;
-}
-
-.links-ic-demo__trigger--outline {
-  padding: 8px 14px;
-  border: 1px solid #000000;
-  border-radius: 8px;
-  background: #ffffff;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: inherit;
-  color: #000000;
-  cursor: pointer;
-}
-
-.links-ic-demo__trigger--outline:hover {
-  background: rgb(0 0 0 / 4%);
-}
-
-.links-ic-demo__trigger--outline:focus-visible {
-  outline: 2px solid var(--color-ring);
-  outline-offset: 2px;
 }
 
 .links-ic-demo__surface {
@@ -42,17 +16,15 @@
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
-  width: calc(100% + 48px);
-  margin-left: -24px;
-  margin-right: -24px;
+  width: 100%;
   min-height: 640px;
   height: min(85vh, 880px);
-  background: rgb(0 0 0 / 4%);
-  overflow-x: hidden;
-  overflow-y: visible;
+  background: var(--color-surface);
+  overflow: hidden;
 }
 
-.links-ic-demo__app {
+/* —— Side chat ——————————————————————————————————————————— */
+.links-ic-demo[data-mode="side-chat"] .links-ic-demo__app {
   grid-area: 1 / 1;
   position: relative;
   z-index: 0;
@@ -60,7 +32,7 @@
   align-self: stretch;
   min-height: 0;
   padding: 28px 32px;
-  padding-right: min(440px, 46vw);
+  padding-right: min(460px, 48vw);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -83,7 +55,7 @@
   max-width: 420px;
 }
 
-.links-ic-demo__chat-wrap {
+.links-ic-demo[data-mode="side-chat"] .links-ic-demo__chat-wrap {
   grid-area: 1 / 1;
   justify-self: end;
   align-self: stretch;
@@ -91,16 +63,45 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
-  transform: translateX(100%);
-  transition: transform 0.42s cubic-bezier(0.33, 1, 0.68, 1);
-  will-change: transform;
   z-index: 2;
 }
 
-.links-ic-demo__chat-wrap--open {
-  transform: translateX(0);
+.links-ic-demo[data-mode="side-chat"] .links-ic-demo__chat {
+  border-left: 1px solid rgb(0 0 0 / 10%);
+  box-shadow: -6px 0 32px rgb(0 0 0 / 8%);
 }
 
+/* —— Full screen ————————————————————————————————————————— */
+.links-ic-demo[data-mode="full-screen"] .links-ic-demo__app {
+  display: none;
+}
+
+.links-ic-demo[data-mode="full-screen"] .links-ic-demo__chat-wrap {
+  grid-area: 1 / 1;
+  justify-self: stretch;
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.links-ic-demo[data-mode="full-screen"] .links-ic-demo__chat {
+  border-left: none;
+  box-shadow: none;
+}
+
+/* Cap thread/composer to a comfortable column inside the chat panel so
+   full-screen mode doesn't stretch messages across the entire viewport. */
+.links-ic-demo[data-mode="full-screen"] .links-ic-demo__thread,
+.links-ic-demo[data-mode="full-screen"] .links-ic-demo__footer {
+  max-width: 880px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* —— Shared chat chrome ——————————————————————————————————— */
 .links-ic-demo__chat {
   box-sizing: border-box;
   display: flex;
@@ -108,19 +109,18 @@
   flex: 1 1 auto;
   min-height: 0;
   height: 100%;
-  border-left: 1px solid rgb(0 0 0 / 10%);
   background: #ffffff;
-  box-shadow: -6px 0 32px rgb(0 0 0 / 8%);
 }
 
+/*
+ * Chat head — wraps the shared `ChatToolbar` so the in-context demo mirrors
+ * the real Chat panel chrome (hamburger + title left, add comment / expand /
+ * close right). The toolbar provides its own padding; we only add the
+ * bottom hairline that separates the head from the thread.
+ */
 .links-ic-demo__chat-head {
   flex-shrink: 0;
-  padding: 14px 18px;
   border-bottom: 1px solid rgb(0 0 0 / 10%);
-  font-size: 14px;
-  font-weight: var(--font-weight-heading);
-  letter-spacing: -0.02em;
-  color: #000000;
 }
 
 .links-ic-demo__thread {
@@ -131,6 +131,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  box-sizing: border-box;
 }
 
 .links-ic-demo__bubble {
@@ -212,19 +213,7 @@
 }
 
 @media (max-width: 720px) {
-  .links-ic-demo__surface {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .links-ic-demo__app {
+  .links-ic-demo[data-mode="side-chat"] .links-ic-demo__app {
     padding-right: 28px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .links-ic-demo__chat-wrap {
-    transition: none;
   }
 }

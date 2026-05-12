@@ -1,0 +1,80 @@
+/*
+ * Chart dashboard preview — used in the Rippling-native artifacts Editing
+ * example. Three tiles laid out in a 2-up grid (the third tile spans both
+ * columns). Each tile is a button so it can be clicked to "select" the chart
+ * during the demo flow.
+ */
+.chart-dashboard-demo {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.chart-dashboard-demo > :nth-child(3) {
+  grid-column: 1 / -1;
+}
+
+.chart-dashboard-demo__tile {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid rgb(0 0 0 / 12%);
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.chart-dashboard-demo__tile:hover {
+  border-color: rgb(0 0 0 / 24%);
+}
+
+/*
+ * Selected tile — Figma `Editing individual node on canvas` 810:15346. The
+ * default border is replaced by the artifact focus token and matched with a
+ * 1px inset shadow for the 2px outline impression at any zoom level.
+ */
+.chart-dashboard-demo__tile[data-selected] {
+  border-color: var(--artifact-outline-active);
+  box-shadow: 0 0 0 1px var(--artifact-outline-active);
+}
+
+.chart-dashboard-demo__tile:focus-visible {
+  outline: 2px solid var(--artifact-outline-active);
+  outline-offset: 2px;
+}
+
+.chart-dashboard-demo__title {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: var(--font-weight-emphasis);
+  letter-spacing: -0.01em;
+  color: #000000;
+}
+
+.chart-dashboard-demo__chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 56px;
+  padding-top: 2px;
+}
+
+.chart-dashboard-demo__bar {
+  flex: 1 1 0;
+  min-width: 0;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(180deg, #ce71bb 0%, #7a005d 100%);
+}
+
+.chart-dashboard-demo__tile[data-selected] .chart-dashboard-demo__bar {
+  /* Brighten the selected tile's bars slightly to reinforce the selection. */
+  background: linear-gradient(180deg, #d68dc6 0%, #7a005d 100%);
+}

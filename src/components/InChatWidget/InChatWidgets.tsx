@@ -210,32 +210,62 @@ export function InChatTableWidget(props: InChatTableWidgetProps = {}) {
   return <InChatTablePreview {...props} />;
 }
 
+/**
+ * Canonical example widgets — one per category. Both the Specs section
+ * (`InChatWidgets`) and the In-context demo (`InChatWidgetDemo`) consume these
+ * so a single edit propagates to both surfaces.
+ */
+export function SpendLinkWidget(props: Pick<InChatLinkWidgetProps, "onOpen" | "openAriaLabel"> = {}) {
+  return (
+    <InChatLinkWidget
+      title="View Spend Management"
+      previewCaption="Spend"
+      previewIcon={<IconCreditCard size={16} />}
+      previewBody={<SkeletonLines bars={2} />}
+      {...props}
+    />
+  );
+}
+
+export function OfferLetterDocumentWidget(
+  props: Pick<InChatLinkWidgetProps, "onOpen" | "openAriaLabel"> = {},
+) {
+  return (
+    <InChatLinkWidget
+      title="View Offer Letter"
+      previewCaption="Document"
+      previewIcon={<IconDocument size={16} />}
+      previewBody={<SkeletonLines bars={2} />}
+      {...props}
+    />
+  );
+}
+
+export function NewStarterDashboardWidget(
+  props: Pick<InChatLinkWidgetProps, "onOpen" | "openAriaLabel"> = {},
+) {
+  return (
+    <InChatLinkWidget
+      title="View New Starter Dashboard"
+      previewCaption="Dashboard"
+      previewIcon={<IconDashboard />}
+      previewBody={<DashboardMiniPreview />}
+      {...props}
+    />
+  );
+}
+
 export function InChatWidgets() {
   return (
     <section className="icw-showcase" aria-label="In-chat widget examples">
       <WidgetGroup category="Rippling link">
-        <InChatLinkWidget
-          title="View Spend Management"
-          previewCaption="Spend"
-          previewIcon={<IconCreditCard size={16} />}
-          previewBody={<SkeletonLines bars={2} />}
-        />
+        <SpendLinkWidget />
       </WidgetGroup>
       <WidgetGroup category="Document">
-        <InChatLinkWidget
-          title="View Offer Letter"
-          previewCaption="Document"
-          previewIcon={<IconDocument size={16} />}
-          previewBody={<SkeletonLines bars={2} />}
-        />
+        <OfferLetterDocumentWidget />
       </WidgetGroup>
       <WidgetGroup category="Dashboard">
-        <InChatLinkWidget
-          title="View New Starter Dashboard"
-          previewCaption="Dashboard"
-          previewIcon={<IconDashboard />}
-          previewBody={<DashboardMiniPreview />}
-        />
+        <NewStarterDashboardWidget />
       </WidgetGroup>
       <WidgetGroup category="Table">
         <InChatTableWidget />
