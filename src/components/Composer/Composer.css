@@ -123,12 +123,15 @@
 }
 
 /*
- * Focus accent while typing — outer outline on default surface only.
- * Edit surface uses a single blue border (replaces gray) — see .composer-surface--edit.
+ * Focus accent while typing — replace the resting gray border with the blue
+ * focus stroke (no second outline sitting outside the border). Same trick the
+ * edit surface uses: bump border 1px → 2px and shrink padding 8px → 7px so the
+ * outer dimensions are unchanged.
  */
 .composer-surface:has(.composer-input:focus):not(.composer-surface--edit) {
-  outline: 2px solid var(--composer-typing-focus-ring);
-  outline-offset: 2px;
+  padding: 7px;
+  border-width: 2px;
+  border-color: var(--composer-typing-focus-ring);
 }
 
 /*
@@ -309,28 +312,13 @@
   bottom: calc(100% + 6px);
   left: 0;
   box-sizing: border-box;
-  min-width: 250px;
-  width: max-content;
-  max-width: min(286px, calc(100vw - 32px));
+  width: 250px;
+  max-width: calc(100vw - 32px);
   padding: 8px 0;
   border: 1px solid rgb(0 0 0 / 10%);
   border-radius: 8px;
   background: var(--composer-surface);
   box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
-}
-
-.composer-add-menu__header {
-  padding: 0 12px 8px;
-  border-bottom: 1px solid rgb(0 0 0 / 8%);
-}
-
-.composer-add-menu__section {
-  margin: 0 0 8px;
-  font-size: 11px;
-  font-weight: var(--font-weight-emphasis);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--composer-muted);
 }
 
 .composer-add-menu__search {
@@ -360,23 +348,48 @@
   outline-offset: 0;
 }
 
+/*
+ * Add menu list — mirrors Figma `Add menu` (72:4451):
+ *   container: 250w, 8 0 padding, 8 corner radius, white, 1px black @ 10% stroke
+ *   cell:      flex row, 8 gap, 4 12 padding, 14px Basel Regular label, 16x16 icon
+ *   sep:       8 0 vertical padding, 1px hairline at 8% black
+ */
 .composer-add-menu__list {
-  max-height: min(240px, 40vh);
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: min(360px, 60vh);
   overflow-y: auto;
-  padding: 4px 0;
+}
+
+.composer-add-menu__group {
+  display: flex;
+  flex-direction: column;
+}
+
+.composer-add-menu__sep {
+  display: block;
+  height: 1px;
+  margin: 8px 0;
+  border: 0;
+  background: rgb(0 0 0 / 8%);
 }
 
 .composer-add-menu__row {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
   width: 100%;
   margin: 0;
-  padding: 10px 12px;
+  padding: 4px 12px;
   border: none;
   background: transparent;
   text-align: left;
+  min-height: 28px;
+  cursor: pointer;
   cursor: pointer;
   color: #000000;
 }
@@ -390,17 +403,34 @@
   outline-offset: -2px;
 }
 
-.composer-add-menu__row-title {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
+.composer-add-menu__row-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: #000000;
 }
 
-.composer-add-menu__row-desc {
-  font-size: 13px;
-  font-weight: var(--font-weight-body);
-  line-height: 18px;
-  color: var(--composer-muted);
+.composer-add-menu__row-label {
+  flex: 1;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: var(--font-weight-body, 400);
+  line-height: 20px;
+  color: #000000;
+}
+
+.composer-add-menu__row-chevron {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 20px;
+  color: #000000;
+  opacity: 0.7;
 }
 
 .composer-mode-menu {

@@ -46,6 +46,7 @@ const DISAMBIGUATION_DONTS = [
   "Place inside of the chat text.",
   "Ask more than 2 questions.",
   "Use disambig for long-form content.",
+  "Use in place of a form. If you're asking a lot of questions, link to a form, or ask the questions directly in the chat.",
 ];
 
 const DEMO_QUESTION = "Which Jordan do you want to update?";
@@ -163,23 +164,26 @@ export function DisambiguationPage() {
           Clarifying UI when the model needs structured input to proceed—single or multi-select rows with optional
           metadata, bundled into at most two questions.
         </p>
-        <p style={{ margin: "16px 0 8px", maxWidth: 640, fontSize: 15, lineHeight: 1.55, color: "#716f6c" }}>
-          There are a few different types of disambiguation:
-        </p>
-        <ul className="disambig-types">
-          <li>
-            <strong>Lexical ambiguity</strong> — a word with multiple meanings.
-          </li>
-          <li>
-            <strong>Intent ambiguity</strong> — unclear goal.
-          </li>
-          <li>
-            <strong>Scope ambiguity</strong> — unclear how much to do.
-          </li>
-          <li>
-            <strong>Reference ambiguity</strong> — unclear what &ldquo;it&rdquo; refers to.
-          </li>
-        </ul>
+        <aside className="disambig-types-box" aria-label="Types of disambiguation">
+          <p className="disambig-types-box__body">
+            Disambiguating is used to clarify user intent. The system will have 4 types of
+            ambiguity that it will need to resolve.
+          </p>
+          <ul className="disambig-types">
+            <li>
+              <strong>Lexical ambiguity</strong> — a word with multiple meanings.
+            </li>
+            <li>
+              <strong>Intent ambiguity</strong> — unclear goal.
+            </li>
+            <li>
+              <strong>Scope ambiguity</strong> — unclear how much to do.
+            </li>
+            <li>
+              <strong>Reference ambiguity</strong> — unclear what &ldquo;it&rdquo; refers to.
+            </li>
+          </ul>
+        </aside>
         <p style={{ margin: "16px 0 0", maxWidth: 640, fontSize: 14, lineHeight: 1.5, color: "#716f6c" }}>
           <a href={FIGMA_SPEC} target="_blank" rel="noreferrer" style={{ color: "#7a005d" }}>
             Figma · AI-components (Disambiguation overview)

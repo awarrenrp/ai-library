@@ -81,7 +81,7 @@ export function LandingPage() {
 
       <section className="landing-section landing-section-spaced" aria-labelledby="landing-specs-heading">
         <h2 id="landing-specs-heading" className="landing-section-title">
-          Component specs
+          Components + Interactions
         </h2>
         {/* Stable specs — alphabetical. */}
         <ul className="landing-cards" role="list">
@@ -113,12 +113,19 @@ export function LandingPage() {
         </ul>
         {/* Visual divider separates shipped specs from the in-progress group below. */}
         <hr className="landing-cards-rule" aria-hidden />
-        {/* In-progress specs — Artifact tray first, Strong type at the very bottom. */}
+        {/* In-progress specs — alphabetical. */}
         <ul className="landing-cards" role="list" aria-label="In progress">
           <LandingCard
             to="/artifact-tray"
             title="Artifact tray"
             description="Persistent tray that surfaces saved artifacts—reports, dashboards, workflows, and pinned outputs—across AI surfaces."
+            icon="🚧"
+            iconLabel="Work in progress"
+          />
+          <LandingCard
+            to="/editing"
+            title="Editing"
+            description="Interaction pattern for refining AI output in place—drafts, artifact bodies, and prior turns—reusing the composer's edit surface."
             icon="🚧"
             iconLabel="Work in progress"
           />

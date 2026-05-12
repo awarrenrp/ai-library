@@ -6,17 +6,51 @@
  * Typography: Inter (variable, loaded in index.html).
  */
 
+import type { ReactNode } from "react";
 import { useEffect, useId, useRef, useState } from "react";
 import "./Composer.css";
-import { IconArrowUp, IconChevronDown, IconComposerChipLead, IconMic, IconPlus } from "./icons";
+import {
+  IconAddAgents,
+  IconAddAttach,
+  IconAddEffort,
+  IconAddGlobe,
+  IconAddPlugins,
+  IconAddSkills,
+  IconArrowUp,
+  IconChevronDown,
+  IconChevronRight,
+  IconComposerChipLead,
+  IconMic,
+  IconPlus,
+} from "./icons";
 
-/** Figma Add menu (72:4451) — demo rows until wiring to real attach flows. */
-const COMPOSER_ADD_MENU_ITEMS = [
-  { id: "file", title: "Attach file", description: "PDF, images, spreadsheets" },
-  { id: "link", title: "Add link", description: "Reference a page or doc by URL" },
-  { id: "artifact", title: "Insert artifact", description: "Report, dashboard, or workflow preview" },
-  { id: "prompt", title: "Use saved prompt", description: "Start from a team template" },
-] as const;
+/**
+ * Figma Add menu (72:4451) — visible rows in source order. Hidden rows from
+ * Figma (Footer, Country flag, Avatar) are intentionally omitted. Items
+ * marked `hasSubmenu` render with a trailing chevron, matching the design.
+ *
+ * Separators are inserted between groups via the `separatorBefore` flag so
+ * the rendering can stay declarative.
+ */
+type ComposerAddMenuItem = {
+  id: string;
+  label: string;
+  /** Render an inline icon to the left of the label (16×16). */
+  icon: ReactNode;
+  /** When true, render a trailing right-chevron to indicate a nested menu. */
+  hasSubmenu?: boolean;
+  /** When true, render a divider row above this item before the cell. */
+  separatorBefore?: boolean;
+};
+
+const COMPOSER_ADD_MENU_ITEMS: readonly ComposerAddMenuItem[] = [
+  { id: "files", label: "Add photos & files", icon: <IconAddAttach /> },
+  { id: "web", label: "Web search", icon: <IconAddGlobe />, separatorBefore: true },
+  { id: "skills", label: "Skills", icon: <IconAddSkills />, hasSubmenu: true },
+  { id: "plugins", label: "Plugins", icon: <IconAddPlugins />, hasSubmenu: true },
+  { id: "agents", label: "Agents", icon: <IconAddAgents />, hasSubmenu: true },
+  { id: "effort", label: "Effort", icon: <IconAddEffort />, hasSubmenu: true, separatorBefore: true },
+];
 
 export type ComposerWidth = "large" | "medium" | "small" | "fill";
 
@@ -62,6 +96,13 @@ export type ComposerProps = {
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
+  /**
+   * Fired when the user submits the message (clicks the send button or presses
+   * Enter without Shift). Receives the trimmed value. After invoking, the
+   * uncontrolled value is cleared automatically; controlled callers should
+   * mirror that behavior in their `onChange` if desired.
+   */
+  onSubmit?: (value: string) => void;
   placeholder?: string;
   /** Initial speed mode for the split control / `alternate` speed switcher (defaults to `Fast`). */
   defaultMode?: ComposerMode;
@@ -79,6 +120,27 @@ export type ComposerProps = {
   surfaceState?: ComposerSurfaceState;
   /** Shown in the edit chip when `surfaceState` is `edit` (e.g. artifact or thread being edited). */
   editContextLabel?: string;
+  /**
+   * Override for the send button glyph. Used by the animated chat composer
+   * to swap in the Pebble Arrow Up Mini icon. Defaults to the standard
+   * stroked `IconArrowUp` defined in this package.
+   */
+  sendIcon?: ReactNode;
+  /**
+   * Picks which dropdown sits in the inline action row:
+   *   - `speed`  — Fast/Pro speed dropdown (default; matches the existing
+   *                Figma `standard` composer).
+   *   - `intent` — Ask/Plan/Agent intent dropdown (the same control the
+   *                `alternate` variant exposes, but available independently
+   *                so the animated chat composer can use it on the standard
+   *                shell). The trigger renders as a ghost (no border)
+   *                button — see `composer-ghost-btn`.
+   *
+   * The `alternate` variant always renders the intent dropdown regardless
+   * of this prop (and additionally surfaces the speed dropdown below the
+   * field), so this prop only affects `version="standard"`.
+   */
+  controls?: "speed" | "intent";
 };
 
 export function Composer({
@@ -86,6 +148,7 @@ export function Composer({
   value: valueProp,
   defaultValue = "",
   onChange,
+  onSubmit,
   placeholder = "Ask, make, or searching anything...",
   defaultMode = "Fast",
   defaultIntent = "ask",
@@ -96,6 +159,8 @@ export function Composer({
   version = "standard",
   surfaceState = "default",
   editContextLabel,
+  sendIcon,
+  controls = "speed",
 }: ComposerProps) {
   const autoId = useId();
   const modeMenuId = useId();
@@ -132,6 +197,16 @@ export function Composer({
 
   const canSend = value.trim().length > 0;
 
+  const submit = () => {
+    if (!canSend) return;
+    const trimmed = value.trim();
+    onSubmit?.(trimmed);
+    // Always reset the local field after submit; controlled callers can
+    // re-set their value if they want to keep it (rare for chat composers).
+    if (!isControlled) setUncontrolled("");
+    else onChange?.("");
+  };
+
   useEffect(() => {
     const anyOpen = modeMenuOpen || intentMenuOpen || speedMenuOpen || addMenuOpen;
     if (!anyOpen) return;
@@ -155,6 +230,11 @@ export function Composer({
   }, [modeMenuOpen, intentMenuOpen, speedMenuOpen, addMenuOpen]);
 
   const fastBtnLabel = `${mode} mode, ${modeMenuOpen ? "close menu" : "open menu"}`;
+
+  // Show the Ask/Plan/Agent intent dropdown when (a) the alternate variant
+  // is active, or (b) the consumer explicitly opted in via `controls`.
+  // Standard variant + `controls="speed"` keeps the legacy Fast/Pro split.
+  const showIntentControl = isAlternate || controls === "intent";
 
   const showEditChrome = version === "alternate" && surfaceState === "edit";
 
@@ -204,6 +284,13 @@ export function Composer({
             placeholder={placeholder}
             value={value}
             onChange={(e) => setValue(e.target.value)}
+            onKeyDown={(e) => {
+              // Enter (without Shift) submits — Shift+Enter inserts a newline.
+              if (e.key === "Enter" && !e.shiftKey && canSend) {
+                e.preventDefault();
+                submit();
+              }
+            }}
           />
         </div>
 
@@ -230,38 +317,37 @@ export function Composer({
             </button>
             {addMenuOpen ? (
               <div id={addMenuId} className="composer-add-menu" role="menu" aria-label="Add to message">
-                <div className="composer-add-menu__header">
-                  <p className="composer-add-menu__section">Add</p>
-                  <label className="composer-add-menu__search-label visually-hidden" htmlFor={`${addMenuId}-search`}>
-                    Search attachments
-                  </label>
-                  <input
-                    id={`${addMenuId}-search`}
-                    type="search"
-                    className="composer-add-menu__search"
-                    placeholder="Search"
-                    autoComplete="off"
-                  />
-                </div>
-                <div className="composer-add-menu__list">
+                <ul className="composer-add-menu__list" role="none">
                   {COMPOSER_ADD_MENU_ITEMS.map((item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      role="menuitem"
-                      className="composer-add-menu__row"
-                      onClick={() => setAddMenuOpen(false)}
-                    >
-                      <span className="composer-add-menu__row-title">{item.title}</span>
-                      <span className="composer-add-menu__row-desc">{item.description}</span>
-                    </button>
+                    <li key={item.id} className="composer-add-menu__group" role="none">
+                      {item.separatorBefore ? (
+                        <hr className="composer-add-menu__sep" role="separator" aria-hidden />
+                      ) : null}
+                      <button
+                        type="button"
+                        role="menuitem"
+                        className="composer-add-menu__row"
+                        aria-haspopup={item.hasSubmenu ? "menu" : undefined}
+                        onClick={() => setAddMenuOpen(false)}
+                      >
+                        <span className="composer-add-menu__row-icon" aria-hidden>
+                          {item.icon}
+                        </span>
+                        <span className="composer-add-menu__row-label">{item.label}</span>
+                        {item.hasSubmenu ? (
+                          <span className="composer-add-menu__row-chevron" aria-hidden>
+                            <IconChevronRight />
+                          </span>
+                        ) : null}
+                      </button>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             ) : null}
           </div>
 
-          {isAlternate ? (
+          {showIntentControl ? (
             <div className="composer-intent-anchor" ref={intentAnchorRef}>
               <button
                 type="button"
@@ -365,8 +451,9 @@ export function Composer({
             className="composer-send"
             disabled={!canSend}
             aria-label={canSend ? "Send message" : "Send message (enter text to enable)"}
+            onClick={submit}
           >
-            <IconArrowUp />
+            {sendIcon ?? <IconArrowUp />}
           </button>
         </div>
       </div>

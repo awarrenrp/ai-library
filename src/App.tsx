@@ -6,6 +6,7 @@ import { InChatArtifactsPage } from "./pages/InChatArtifactsPage";
 import { LandingPage } from "./pages/LandingPage";
 import { ChatPage } from "./pages/ChatPage";
 import { DisambiguationPage } from "./pages/DisambiguationPage";
+import { EditingPage } from "./pages/EditingPage";
 import { LinksPage } from "./pages/LinksPage";
 import { PromptsPage } from "./pages/PromptsPage";
 import { RipplingNativeArtifactsPage } from "./pages/RipplingNativeArtifactsPage";
@@ -24,6 +25,7 @@ export function App() {
         <Route path="/external-artifacts" element={<ExternalArtifactsPage />} />
         <Route path="/prompts" element={<PromptsPage />} />
         <Route path="/disambiguation" element={<DisambiguationPage />} />
+        <Route path="/editing" element={<EditingPage />} />
         <Route path="/links" element={<LinksPage />} />
         <Route path="/strong-type" element={<StrongTypePage />} />
       </Routes>

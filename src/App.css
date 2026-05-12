@@ -29,15 +29,33 @@
 }
 
 /*
- * Disambiguation types list — short reference of ambiguity flavors shown in
+ * Disambiguation types box — short reference of ambiguity flavors shown in
  * the Disambiguation page header (lexical / intent / scope / reference).
- * Sits beneath the page lede in the muted body color so it reads as
- * extension of the definition, not a competing block.
+ * The box framing separates the reference content from the surrounding
+ * prose lede so the two read as distinct: definition (prose) → reference
+ * (boxed) → meta links → Usage section below.
  */
-.disambig-types {
-  margin: 0 0 8px;
-  padding-left: 20px;
+.disambig-types-box {
+  display: block;
+  box-sizing: border-box;
+  margin: 20px 0 0;
+  padding: 16px 18px;
   max-width: 640px;
+  border: 1px solid rgb(0 0 0 / 12%);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.disambig-types-box__body {
+  margin: 0 0 10px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #000000;
+}
+
+.disambig-types {
+  margin: 0;
+  padding-left: 20px;
   font-size: 15px;
   line-height: 1.55;
   color: #716f6c;

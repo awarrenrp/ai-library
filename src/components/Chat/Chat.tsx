@@ -304,6 +304,9 @@ export function ChatSampleThread({
   thinkingReplayKey?: number;
   onThinkingAnimCompleteChange?: (complete: boolean) => void;
 }) {
+  // The animated panel hoists thinking up into the composer hat, so we omit the
+  // inline `ChatThinkingBlock` row in that mode to avoid double-presenting it.
+  const showInlineThinking = panelVersion !== "animated";
   return (
     <>
       <li className="chat__row chat__row--assistant">
@@ -318,13 +321,15 @@ export function ChatSampleThread({
           <p className="chat__block-text chat__block-text--self">Headcount by department for Q3.</p>
         </article>
       </li>
-      <li className="chat__row chat__row--assistant">
-        <ChatThinkingBlock
-          panelVersion={panelVersion}
-          replayKey={thinkingReplayKey}
-          onAnimatedCompleteChange={onThinkingAnimCompleteChange}
-        />
-      </li>
+      {showInlineThinking ? (
+        <li className="chat__row chat__row--assistant">
+          <ChatThinkingBlock
+            panelVersion={panelVersion}
+            replayKey={thinkingReplayKey}
+            onAnimatedCompleteChange={onThinkingAnimCompleteChange}
+          />
+        </li>
+      ) : null}
       <li className="chat__row chat__row--assistant">
         <article className="chat__block chat__block--ai" aria-label="Assistant message">
           <p className="chat__block-text chat__block-text--ai">
@@ -375,6 +380,267 @@ function IconReplay() {
       />
       <path d="M4 16V12h4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
+  );
+}
+
+/*
+ * Composer hat icons — sourced from Figma `AI-components` chat animation states.
+ * Each renders inside a 16×16 box, centered in a 20×20 frame in the hat. Vector
+ * paths copied verbatim from the Figma nodes referenced in the headers below so
+ * the hat's morphing icon stays 1:1 with the source design across all phases.
+ */
+
+/** Boxes / dashboard glyph — 1151:26856 ("Boxes" instance, idle/done state). */
+function IconHatBoxes() {
+  return (
+    <svg className="chat__hat-svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <g transform="translate(1.5 2.167)">
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          fill="currentColor"
+          d="M13 11.667H0V0h13v11.667ZM1 10.667h4v-6H1v6Zm5-2.667v2.667h6V8H6Zm0-1h6V1H6v6ZM1 3.667h4V1H1v2.667Z"
+        />
+      </g>
+    </svg>
+  );
+}
+
+/** Courses / thinking glyph — 1189:31599 ("Courses" instance, thinking states). */
+function IconHatCourses() {
+  return (
+    <svg className="chat__hat-svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <g transform="translate(1.5 1)">
+        <path
+          fill="currentColor"
+          d="M4.715 0c.73 0 1.37.35 1.786.887C6.917.349 7.557 0 8.287 0c1.25 0 2.237 1.024 2.284 2.266.949.295 1.623 1.207 1.623 2.26 0 .277-.047.544-.133.793.573.432.939 1.128.939 1.906 0 .656-.26 1.254-.685 1.684.17.331.266.707.266 1.105 0 1.228-.918 2.266-2.12 2.354-.294.938-1.146 1.633-2.175 1.633-.73 0-1.37-.35-1.786-.887-.416.538-1.056.887-1.786.887-1.03 0-1.881-.694-2.176-1.633C1.337 12.28.42 11.243.42 10.015c0-.398.096-.775.266-1.106-.424-.43-.685-1.027-.685-1.684 0-.778.367-1.475.939-1.906A2.337 2.337 0 0 1 .806 4.525C.806 3.473 1.48 2.561 2.43 2.266 2.477 1.024 3.463 0 4.713 0h.002Zm-1.286 2.359c0 .08.007.157.019.233l.086.535-.54.043c-.647.052-1.187.624-1.187 1.356 0 .271.075.522.202.732l.293.484-.516.232c-.455.204-.785.682-.785 1.252 0 .497.25.925.617 1.16l.471.305-.356.434c-.195.237-.314.547-.314.89 0 .77.594 1.359 1.286 1.359.057 0 .112-.004.165-.011l.51-.072.058.512c.077.69.635 1.198 1.277 1.198.69 0 1.284-.586 1.286-1.354L6 11.559V2.442l.002-.087C6 1.587 5.405 1 4.714 1 4.024 1 3.43 1.589 3.43 2.359Zm6.143 0C9.572 1.59 8.978 1 8.287 1c-.69 0-1.284.587-1.286 1.354L7 2.441v9.117l-.002.088C7 12.413 7.596 13 8.287 13c.643 0 1.2-.508 1.277-1.199l.057-.512.51.072c.054.007.108.011.166.011.69 0 1.286-.589 1.286-1.359 0-.343-.12-.652-.314-.89l-.356-.433.471-.304c.366-.236.617-.664.617-1.161 0-.57-.33-1.048-.785-1.252l-.516-.231.293-.484a1.41 1.41 0 0 0 .203-.732c0-.732-.54-1.304-1.187-1.355l-.541-.043.087-.535c.012-.076.018-.154.018-.233Z"
+        />
+      </g>
+    </svg>
+  );
+}
+
+/** Check Circle glyph — 1194:34141 ("Check Circle" instance, success/done state). */
+function IconHatCheckCircle() {
+  return (
+    <svg className="chat__hat-svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <g transform="translate(1.167 1.167)">
+        <path fill="currentColor" d="m5.333 9.874 5.02-5.02-.707-.708-4.314 4.314L3.686 6.813l-.707.708L5.332 9.874Z" />
+        <path
+          fill="currentColor"
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M6.833 0C3.06 0 0 3.06 0 6.833c0 3.774 3.06 6.834 6.833 6.834 3.775 0 6.834-3.06 6.834-6.834C13.667 3.06 10.608 0 6.833 0ZM1 6.833A5.833 5.833 0 1 1 12.667 6.834 5.833 5.833 0 0 1 1 6.833Z"
+        />
+      </g>
+    </svg>
+  );
+}
+
+/** Close X glyph — V2 Close instance used at the trailing edge of every hat state. */
+function IconHatClose() {
+  return (
+    <svg className="chat__hat-close-svg" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M5 4.293 8.646.646l.708.708L5.707 5l3.647 3.646-.708.708L5 5.707 1.354 9.354l-.708-.708L4.293 5 .646 1.354l.708-.708L5 4.293Z"
+      />
+    </svg>
+  );
+}
+
+/**
+ * Default cycling labels — match Figma `1189:33289` ("Putting together a plan")
+ * plus a trio of complementary phrasings so the cycling state runs through
+ * a believable plan-execution sequence before resolving back to the original
+ * artifact label.
+ */
+const CHAT_HAT_CYCLING_STEPS = [
+  "Putting together a plan",
+  "Pulling the latest org chart",
+  "Reading payroll effective dates",
+  "Drafting the breakdown",
+] as const;
+
+export const CHAT_HAT_PHASES = ["idle", "thinking", "shimmer", "cycling", "done"] as const;
+export type ChatHatPhase = (typeof CHAT_HAT_PHASES)[number];
+
+export const CHAT_HAT_PHASE_LABELS: Record<ChatHatPhase, string> = {
+  idle: "Idle",
+  thinking: "Thinking",
+  shimmer: "Shimmer",
+  cycling: "Cycling",
+  done: "Done",
+};
+
+/**
+ * Per-phase durations (ms). The full cycle resolves in roughly 6.4s and then
+ * pauses on `done` for ~1.6s before melting back to `idle`.
+ */
+const HAT_PHASE_MS: Record<Exclude<ChatHatPhase, "idle">, number> = {
+  thinking: 900,
+  shimmer: 1100,
+  cycling: 0, // computed from CHAT_HAT_CYCLING_STEPS.length × per-step
+  done: 1600,
+};
+const HAT_CYCLING_STEP_MS = 950;
+
+export type ChatComposerHatProps = {
+  /** Resting label shown in `idle` and `done` (e.g. the artifact context chip). */
+  contextLabel?: string;
+  /**
+   * Increment to restart the animation cycle. When `phase` is provided this
+   * prop is ignored (the hat is fully controlled by the parent).
+   */
+  replayKey?: number;
+  /**
+   * Controlled phase override. When set, the hat renders that exact state and
+   * disables the internal cycle timer. Useful for explicit demos / phase
+   * preview controls.
+   */
+  phase?: ChatHatPhase;
+  /**
+   * When `false`, the hat sits in `idle` until `replayKey` is bumped. Defaults
+   * to `true` to preserve the existing auto-start behavior used by the chat
+   * shell's animated panel version.
+   */
+  autoStart?: boolean;
+  /** Fired when the hat returns to `idle` after a completed (uncontrolled) cycle. */
+  onCycleComplete?: () => void;
+  /**
+   * Optional handler for the trailing close X. When provided, clicking it is
+   * up to the parent (e.g. dismiss the context chip). When omitted, the X is
+   * a no-op affordance retained for visual fidelity with Figma.
+   */
+  onDismiss?: () => void;
+  className?: string;
+};
+
+/**
+ * `ChatComposerHat` — a status chip that visually "hats" the composer when the
+ * animated panel version is active. It morphs through five phases (idle →
+ * thinking → shimmer → cycling → done → idle), bringing the assistant's
+ * thinking state directly above the input instead of inline in the thread.
+ *
+ * The hat is decorative for screen readers (the live region in the thread still
+ * announces phase changes via the existing `role="log"` chat thread); keeping
+ * the hat `aria-hidden` avoids double-announcing identical state copy.
+ *
+ * Three usage modes:
+ *   1. Auto-cycle (default): mounts → idle → thinking → … → idle. `replayKey`
+ *      restarts the cycle. Used by the `Chat` shell's animated panel version.
+ *   2. User-triggered: pass `autoStart={false}` and bump `replayKey` on submit
+ *      to gate the cycle behind a real interaction (see `ChatAnimationDemo`).
+ *   3. Fully controlled: pass `phase` for an explicit phase preview (e.g. a
+ *      "show all states" demo) — internal timers are disabled.
+ */
+export function ChatComposerHat({
+  contextLabel = "New hires from Jan – Aug, 2025",
+  replayKey = 0,
+  phase: phaseProp,
+  autoStart = true,
+  onCycleComplete,
+  onDismiss,
+  className,
+}: ChatComposerHatProps) {
+  const isControlled = phaseProp !== undefined;
+  const [internalPhase, setInternalPhase] = useState<ChatHatPhase>("idle");
+  const [stepIndex, setStepIndex] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const phase = isControlled ? phaseProp : internalPhase;
+
+  // Restart animation whenever `replayKey` flips. We seed a short pre-roll on
+  // `idle` so the first transition feels intentional (mimicking "user typed,
+  // now the assistant is thinking…"). Skipped entirely when controlled or when
+  // `autoStart` is false and we're at the initial replayKey of 0.
+  useEffect(() => {
+    if (isControlled) return;
+    setInternalPhase("idle");
+    setStepIndex(0);
+    if (!autoStart && replayKey === 0) return;
+    const start = window.setTimeout(() => setInternalPhase("thinking"), 600);
+    return () => window.clearTimeout(start);
+  }, [replayKey, isControlled, autoStart]);
+
+  useEffect(() => {
+    if (isControlled) return;
+    if (timerRef.current) clearTimeout(timerRef.current);
+    if (internalPhase === "thinking") {
+      timerRef.current = setTimeout(() => setInternalPhase("shimmer"), HAT_PHASE_MS.thinking);
+    } else if (internalPhase === "shimmer") {
+      timerRef.current = setTimeout(() => {
+        setStepIndex(0);
+        setInternalPhase("cycling");
+      }, HAT_PHASE_MS.shimmer);
+    } else if (internalPhase === "cycling") {
+      timerRef.current = setTimeout(() => {
+        if (stepIndex >= CHAT_HAT_CYCLING_STEPS.length - 1) {
+          setInternalPhase("done");
+        } else {
+          setStepIndex((i) => i + 1);
+        }
+      }, HAT_CYCLING_STEP_MS);
+    } else if (internalPhase === "done") {
+      timerRef.current = setTimeout(() => {
+        setInternalPhase("idle");
+        onCycleComplete?.();
+      }, HAT_PHASE_MS.done);
+    }
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [internalPhase, stepIndex, onCycleComplete, isControlled]);
+
+  const isThinkingFamily = phase === "thinking" || phase === "shimmer" || phase === "cycling";
+
+  let icon: ReactNode;
+  if (phase === "done") icon = <IconHatCheckCircle />;
+  else if (isThinkingFamily) icon = <IconHatCourses />;
+  else icon = <IconHatBoxes />;
+
+  let label: ReactNode;
+  if (phase === "shimmer") {
+    label = <span className="chat__hat-shimmer" aria-hidden />;
+  } else if (phase === "thinking") {
+    label = <span className="chat__hat-label">Thinking…</span>;
+  } else if (phase === "cycling") {
+    label = (
+      <span
+        className="chat__hat-label chat__hat-label--cycling"
+        // When cycling under controlled mode there is no internal step rotation,
+        // so we surface a representative label instead of indexing into the
+        // sample cycle list.
+        key={isControlled ? "controlled-cycling" : `step-${stepIndex}`}
+      >
+        {isControlled ? CHAT_HAT_CYCLING_STEPS[0] : CHAT_HAT_CYCLING_STEPS[stepIndex]}
+      </span>
+    );
+  } else {
+    label = <span className="chat__hat-label">{contextLabel}</span>;
+  }
+
+  return (
+    <div
+      className={["chat__hat", `chat__hat--${phase}`, className].filter(Boolean).join(" ")}
+      data-phase={phase}
+      aria-hidden
+    >
+      <div className="chat__hat-leading">
+        <span className="chat__hat-icon" key={`icon-${phase === "done" ? "done" : isThinkingFamily ? "thinking" : "idle"}`}>
+          {icon}
+        </span>
+        <span className="chat__hat-text-slot">{label}</span>
+      </div>
+      <button
+        type="button"
+        className="chat__hat-close"
+        tabIndex={-1}
+        aria-label="Dismiss context"
+        onClick={onDismiss}
+      >
+        <IconHatClose />
+      </button>
+    </div>
   );
 }
 
@@ -452,6 +718,43 @@ export function ChatToolbarCloseIcon() {
   );
 }
 
+/**
+ * Expand glyph from the Pebble Icons Library (node 4881:358) — single-axis
+ * expand arrows (top-right + bottom-left) used in place of the four-corner
+ * `ChatToolbarExpandIcon` when the chat is in its animated panel version.
+ * Path data copied verbatim from Figma (17.5×17.5 inner glyph centered in a
+ * 24×24 frame, hence the translate(3.25 3.25) offset).
+ */
+export function ChatToolbarExpandPebbleIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        fill="currentColor"
+        transform="translate(3.25 3.25)"
+        d="M17.5 7.75H16V2.561L2.561 16H7.75V17.5H0V9.75H1.5V14.939L14.939 1.5H9.75V0H17.5V7.75Z"
+      />
+    </svg>
+  );
+}
+
+/**
+ * Collapse glyph from the Pebble Icons Library (node 4881:213) — paired with
+ * `ChatToolbarExpandPebbleIcon` to communicate the toggled "now expanded —
+ * click to collapse" state. Two vector paths (top-right arrow pointing in,
+ * bottom-left arrow pointing in), 20.06×20.06 inner glyph centered in a 24×24
+ * frame.
+ */
+export function ChatToolbarCollapsePebbleIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <g transform="translate(1.97 1.97)" fill="currentColor">
+        <path d="M13.841 7.281 20.061 1.061 19 0 12.78 6.22V1.031H11.28V8.781H19.03V7.281H13.841Z" />
+        <path d="M7.281 19.031H8.781V11.281H1.031V12.781H6.22L0 19.001 1.061 20.062 7.281 13.842V19.031Z" />
+      </g>
+    </svg>
+  );
+}
+
 /* Internal aliases — keep the in-file usages stable. */
 const IconHamburger = ChatToolbarMenuIcon;
 const IconAddComment = ChatToolbarAddCommentIcon;
@@ -466,6 +769,17 @@ export type ChatToolbarProps = {
   onExpandClick?: () => void;
   onCloseClick?: () => void;
   className?: string;
+  /**
+   * Optional override for the expand button's glyph. Used by the animated
+   * chat panel to swap in the Pebble expand/collapse icons that toggle as
+   * the surface is expanded and collapsed.
+   */
+  expandIcon?: ReactNode;
+  /**
+   * Optional override for the expand button's accessible label, paired with
+   * `expandIcon` (e.g. "Collapse chat" when in the expanded state).
+   */
+  expandLabel?: string;
 };
 
 /**
@@ -480,6 +794,8 @@ export function ChatToolbar({
   onExpandClick,
   onCloseClick,
   className,
+  expandIcon,
+  expandLabel,
 }: ChatToolbarProps) {
   return (
     <div
@@ -519,10 +835,10 @@ export function ChatToolbar({
           <button
             type="button"
             className="chat__toolbar-btn"
-            aria-label="Expand chat"
+            aria-label={expandLabel ?? "Expand chat"}
             onClick={onExpandClick}
           >
-            <IconExpand />
+            {expandIcon ?? <IconExpand />}
           </button>
         ) : null}
         {onCloseClick ? (
@@ -555,10 +871,19 @@ export function Chat({
   const layoutClass = `chat--${variant}`;
   const [thinkingReplayKey, setThinkingReplayKey] = useState(0);
   const [thinkingAnimComplete, setThinkingAnimComplete] = useState(false);
+  // Animated panel only — the composer hat advertises completion when it
+  // returns to `idle`. Mirrors the existing inline animated thinking block so
+  // the page-level Replay control still works for both versions.
+  const isAnimated = panelVersion === "animated";
+  // Animated panel only — the toolbar's expand affordance toggles between
+  // the Pebble expand and collapse glyphs. Tracked locally so the icon
+  // visibly swaps even when the consumer hasn't bound a real expand handler.
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     setThinkingAnimComplete(false);
     setThinkingReplayKey(0);
+    setIsExpanded(false);
   }, [panelVersion]);
 
   // Only render the toolbar if it has something to show.
@@ -573,6 +898,28 @@ export function Chat({
         toolbar.onCloseClick,
     );
 
+  // When in the animated panel, swap the toolbar's expand glyph for the
+  // Pebble expand/collapse pair and wrap the click handler so the icon
+  // toggles in lock-step with each press.
+  const resolvedToolbar: ChatToolbarProps | undefined =
+    toolbarVisible && isAnimated && toolbar
+      ? {
+          ...toolbar,
+          expandIcon: isExpanded ? (
+            <ChatToolbarCollapsePebbleIcon />
+          ) : (
+            <ChatToolbarExpandPebbleIcon />
+          ),
+          expandLabel: isExpanded ? "Collapse chat" : "Expand chat",
+          onExpandClick: toolbar.onExpandClick
+            ? () => {
+                setIsExpanded((v) => !v);
+                toolbar.onExpandClick?.();
+              }
+            : undefined,
+        }
+      : (toolbar as ChatToolbarProps | undefined);
+
   return (
     <section
       className={["chat", layoutClass, className].filter(Boolean).join(" ")}
@@ -581,7 +928,7 @@ export function Chat({
       data-chat-panel={panelVersion}
       data-chat-has-toolbar={toolbarVisible || undefined}
     >
-      {toolbarVisible ? <ChatToolbar {...(toolbar as ChatToolbarProps)} /> : null}
+      {toolbarVisible && resolvedToolbar ? <ChatToolbar {...resolvedToolbar} /> : null}
       {panelVersion === "animated" && thinkingAnimComplete ? (
         <button
           type="button"
@@ -613,7 +960,15 @@ export function Chat({
       </div>
       {footer ? (
         <div className="chat__footer" role="group" aria-label={ariaComposerLabel}>
-          <div className="chat__footer-inner">{footer}</div>
+          <div className="chat__footer-inner">
+            {isAnimated ? (
+              <ChatComposerHat
+                replayKey={thinkingReplayKey}
+                onCycleComplete={() => setThinkingAnimComplete(true)}
+              />
+            ) : null}
+            {footer}
+          </div>
         </div>
       ) : null}
     </section>

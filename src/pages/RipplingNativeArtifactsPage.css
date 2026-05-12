@@ -64,6 +64,44 @@
   font-weight: var(--font-weight-body);
 }
 
+/*
+ * Inline reference to the on-disk skill folder. Uses a soft beige fill so
+ * the path reads as a literal token without competing with surrounding
+ * prose; matches the muted code style used elsewhere in the docs.
+ */
+.rna-skill-code {
+  padding: 1px 6px;
+  font-family: "SF Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  background: var(--color-surface-dim);
+  border-radius: 4px;
+  color: #000000;
+}
+
+/*
+ * Chart segmented control — six options can be wider than the toolbar on
+ * narrow viewports. Let the row scroll horizontally rather than wrap,
+ * which would split the rounded outer border across two rows.
+ */
+.rna-chart-toolbar {
+  flex-wrap: wrap;
+}
+
+.rna-chart-toolbar .demo-group {
+  min-width: 0;
+}
+
+.rna-chart-toolbar .demo-segments {
+  max-width: 100%;
+  overflow-x: auto;
+  /* Keep border-radius visible while allowing horizontal scroll. */
+  scrollbar-width: thin;
+}
+
+.rna-chart-toolbar .demo-segment {
+  white-space: nowrap;
+}
+
 .rna-showcase {
   display: flex;
   justify-content: flex-start;
@@ -139,155 +177,4 @@
 
 .rna-action-btn--primary:active {
   background: #2e2e2e;
-}
-
-/* External link styling inside the Editing section lede. */
-.rna-figma-link {
-  color: var(--color-primary, #7a005d);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-/*
- * Editing flow demo — split two-pane stage that mirrors the Figma "Edit
- * mode" layout (1129:19972). Left pane is the app surface holding the
- * artifact under edit; right pane is the Rippling AI chat panel with its
- * own composer + chip context. Step / artifact toggles live in the top
- * toolbar and drive both panes from shared page state.
- */
-.rna-edit-flow {
-  padding: 0;
-  overflow: hidden;
-}
-
-.rna-edit-flow__stage {
-  display: grid;
-  grid-template-columns: 1fr 360px;
-  min-height: 540px;
-  background: var(--color-surface, #f9f7f6);
-}
-
-.rna-edit-flow__canvas {
-  position: relative;
-  box-sizing: border-box;
-  padding: 28px 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  min-width: 0;
-  background: var(--color-surface, #f9f7f6);
-}
-
-.rna-edit-flow__canvas-label {
-  margin: 0;
-  font-size: 11px;
-  font-weight: var(--font-weight-emphasis);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #716f6c;
-}
-
-/*
- * Stretch the artifact shell across the canvas so the dashboard / workflow
- * sits at a realistic size for editing. The shell normally caps at 400px;
- * inside this flow we expand it because the surrounding chrome IS the
- * editing canvas.
- */
-.rna-edit-flow__shell {
-  max-width: 100%;
-}
-
-/*
- * Click-through hit area inside the shell body. Wraps the dashboard /
- * workflow body so the user can click ANYWHERE on the artifact (outside of
- * a more-specific tile / block) to advance to "artifact selected" — this
- * matches the Figma interaction model where clicking the surface enters
- * report-level edit mode and clicking a child narrows it.
- */
-.rna-edit-flow__shell-hit {
-  display: block;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-.rna-edit-flow__shell-hit:focus-visible {
-  outline: 2px solid var(--artifact-outline-active);
-  outline-offset: 2px;
-}
-
-/*
- * AI chat panel — matches the Composer page's side-panel chrome at 360px
- * wide. Drops a hairline border on the left side to separate the panel
- * from the canvas and a top toolbar at the top to show the chat title.
- */
-.rna-edit-flow__panel {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  background: #ffffff;
-  border-left: 1px solid rgb(0 0 0 / 10%);
-}
-
-.rna-edit-flow__panel-head {
-  flex-shrink: 0;
-  border-bottom: 1px solid rgb(0 0 0 / 10%);
-}
-
-.rna-edit-flow__panel-thread {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.rna-edit-flow__bubble {
-  margin: 0;
-  max-width: 92%;
-  padding: 8px 10px;
-  border-radius: 10px;
-  font-size: 13px;
-  line-height: 1.45;
-  color: #000000;
-}
-
-.rna-edit-flow__bubble--user {
-  align-self: flex-end;
-  background: #f2eee6;
-}
-
-.rna-edit-flow__assistant {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #000000;
-}
-
-.rna-edit-flow__panel-footer {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 12px 14px 14px;
-  background: #ffffff;
-}
-
-.rna-edit-flow__disclaimer {
-  margin: 0;
-  font-size: 11px;
-  line-height: 14px;
-  color: rgb(0 0 0 / 40%);
-}
-
-@media (max-width: 760px) {
-  .rna-edit-flow__stage {
-    grid-template-columns: 1fr;
-  }
-
-  .rna-edit-flow__panel {
-    border-left: 0;
-    border-top: 1px solid rgb(0 0 0 / 10%);
-  }
 }

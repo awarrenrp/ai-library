@@ -432,7 +432,6 @@
 .chat__footer {
   flex-shrink: 0;
   padding: 12px;
-  border-top: 1px solid rgb(0 0 0 / 12%);
   background: #ffffff;
 }
 
@@ -446,4 +445,233 @@
   width: 100%;
   max-width: 712px;
   box-sizing: border-box;
+}
+
+/*
+ * Composer hat — Figma `1151:22080` ("Composer" small row stacked above the
+ * composer). Reads as a ribbon tucked BEHIND the composer so the composer's
+ * outline (default border + focus ring) is never broken at the corners.
+ *
+ * Two deviations from the raw Figma frame to get this look in code:
+ *   1. Slight horizontal inset (16px each side) — keeps the hat narrower than
+ *      the composer so its edges never overlap the composer's rounded
+ *      top-left / top-right corners (which would otherwise show the hat's
+ *      warm-beige fill peeking through where the composer's corner is
+ *      transparent).
+ *   2. Square bottom corners — the hat extends flush down to the composer's
+ *      top edge with no rounded notch. Combined with a small -2px overlap and
+ *      DOM order (composer paints after the hat), the bottom of the hat tucks
+ *      cleanly underneath without painting over the composer's border.
+ *
+ * Background: --color-surface (#f9f7f6). Foreground glyph + label: warm taupe
+ * (#806d60). The trailing X uses primary so it stays tied to the composer's
+ * send affordance.
+ */
+.chat__hat {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* 96% of the composer width — small enough to keep the hat's edges clear of
+   * the composer's rounded top corners, wide enough to read as a "ribbon"
+   * tucked behind the composer rather than a small chip. */
+  width: 96%;
+  height: 32px;
+  padding: 6px 8px;
+  /* Centered above the composer with a -2px overlap so the bottom tucks behind. */
+  margin: 0 auto -2px auto;
+  border-radius: 8px 8px 0 0;
+  background: var(--color-surface);
+  color: #806d60;
+}
+
+.chat__hat-leading {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.chat__hat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: #806d60;
+  /* The icon swap (boxes ↔ courses ↔ check) keys on phase, so a quick fade
+   * gives the morph a tactile feel without needing path interpolation. */
+  animation: chat-hat-icon-fade 240ms ease-out;
+}
+
+.chat__hat-svg {
+  display: block;
+}
+
+.chat__hat-text-slot {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex: 1 1 auto;
+  height: 16px;
+}
+
+.chat__hat-label {
+  display: inline-block;
+  max-width: 100%;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 16px;
+  color: #806d60;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: chat-hat-label-fade 220ms ease-out;
+}
+
+/* Cycling labels animate in fresh each step to telegraph progress. */
+.chat__hat-label--cycling {
+  animation: chat-hat-label-step 320ms ease-out;
+}
+
+.chat__hat-shimmer {
+  display: block;
+  width: 166px;
+  max-width: 100%;
+  height: 13px;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    rgb(0 0 0 / 8%),
+    rgb(0 0 0 / 18%),
+    rgb(0 0 0 / 8%)
+  );
+  background-size: 220% 100%;
+  animation: chat-hat-shimmer 1400ms linear infinite;
+}
+
+.chat__hat-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.chat__hat-close:hover {
+  background: rgb(122 0 93 / 8%);
+}
+
+.chat__hat-close:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.chat__hat-close-svg {
+  display: block;
+}
+
+@keyframes chat-hat-icon-fade {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes chat-hat-label-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes chat-hat-label-step {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes chat-hat-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat__hat-icon,
+  .chat__hat-label,
+  .chat__hat-label--cycling {
+    animation: none;
+  }
+  .chat__hat-shimmer {
+    animation: none;
+    background: rgb(0 0 0 / 12%);
+  }
+}
+
+/*
+ * Animated chat panel — composer overrides.
+ *
+ * When the chat shell is in its `animated` panel version (or the in-context
+ * example demo's animated mode), the composer drops two affordances:
+ *   1. The Fast (Pro/Fast) button becomes a ghost button — no border, no fill,
+ *      so it doesn't compete with the hat ribbon sitting above the composer.
+ *   2. The microphone icon button is removed entirely — voice capture isn't
+ *      part of this flow yet, and removing it tightens the action row.
+ *
+ * Both selectors are kept in lockstep so the override applies on the spec
+ * page's interactive preview AND inside `ChatExampleDemo` when its `panel`
+ * data attribute reads `animated`.
+ */
+.chat[data-chat-panel="animated"] .composer-fast,
+.chat-demo[data-panel="animated"] .composer-fast {
+  border: none;
+  background: transparent;
+  padding: 0 6px 0 10px;
+}
+
+.chat[data-chat-panel="animated"] .composer-fast:hover,
+.chat-demo[data-panel="animated"] .composer-fast:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+.chat[data-chat-panel="animated"] .composer-fast:active,
+.chat-demo[data-panel="animated"] .composer-fast:active {
+  background: rgb(0 0 0 / 8%);
+}
+
+.chat[data-chat-panel="animated"] .composer-voice,
+.chat-demo[data-panel="animated"] .composer-voice {
+  display: none;
+}
+
+/*
+ * Animated panel — the leading "+" icon button drops its border + surface
+ * fill so it reads as a ghost affordance, matching the lighter feel of the
+ * Pebble add-menu trigger and the Ask intent button alongside it.
+ *
+ * The send button (composer-send) keeps its primary purple fill — only the
+ * glyph inside is swapped to the Pebble Arrow Up Mini via Composer's
+ * `sendIcon` prop. The voice-input button is hidden altogether (above).
+ */
+.chat[data-chat-panel="animated"] .composer-add-anchor .composer-icon-btn,
+.chat-demo[data-panel="animated"] .composer-add-anchor .composer-icon-btn {
+  border: none;
+  background: transparent;
+}
+
+.chat[data-chat-panel="animated"] .composer-add-anchor .composer-icon-btn:hover,
+.chat-demo[data-panel="animated"] .composer-add-anchor .composer-icon-btn:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+.chat[data-chat-panel="animated"] .composer-add-anchor .composer-icon-btn:active,
+.chat-demo[data-panel="animated"] .composer-add-anchor .composer-icon-btn:active {
+  background: rgb(0 0 0 / 8%);
 }

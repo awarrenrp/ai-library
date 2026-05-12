@@ -114,3 +114,186 @@
   font-weight: var(--font-weight-body);
   color: #716f6c;
 }
+
+/* ─── Line + Area ──────────────────────────────────────────────────────── */
+
+/*
+ * Line/area share the bar chart's y-axis column so all four trend variants
+ * read against the same scale (charts/line.md: consistent aspect across
+ * comparable charts on the same dashboard).
+ */
+
+.line-chart-plot {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 210px;
+  padding-bottom: 14px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.line-chart-svg {
+  display: block;
+  width: 100%;
+  height: 196px;
+}
+
+.line-chart-endpoint-label {
+  position: absolute;
+  transform: translate(-100%, -100%);
+  margin-left: -6px;
+  margin-top: -2px;
+  padding: 2px 6px;
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: var(--font-weight-emphasis);
+  color: var(--color-primary, #7a005d);
+  background: var(--color-surface);
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.line-chart-x-axis {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+  padding: 0 4px;
+}
+
+/* ─── Donut ────────────────────────────────────────────────────────────── */
+
+.bar-chart-demo--donut .donut-chart-inner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+  min-height: 210px;
+  padding: 12px 4px;
+}
+
+.donut-chart-svg {
+  display: block;
+  width: 168px;
+  height: 168px;
+  flex-shrink: 0;
+}
+
+.donut-chart-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.donut-chart-legend-row {
+  display: grid;
+  grid-template-columns: 10px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #000000;
+}
+
+.donut-chart-legend-swatch {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.donut-chart-legend-label {
+  font-weight: var(--font-weight-emphasis);
+  color: #000000;
+}
+
+.donut-chart-legend-value {
+  font-variant-numeric: tabular-nums;
+  color: #716f6c;
+}
+
+/* ─── Single-value KPI ─────────────────────────────────────────────────── */
+
+/*
+ * single-value.md: label is smaller than the number; number is largest;
+ * comparison is mid-sized; sparkline is the smallest accent. Left-aligned
+ * so the tile reads top-to-bottom like a paragraph.
+ */
+.bar-chart-demo--kpi .kpi-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 210px;
+  padding: 16px 4px 12px;
+}
+
+.kpi-tile__label {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: var(--font-weight-body);
+  color: #716f6c;
+}
+
+.kpi-tile__value {
+  margin: 4px 0 6px;
+  font-size: 48px;
+  line-height: 56px;
+  font-weight: var(--font-weight-heading);
+  letter-spacing: -0.01em;
+  color: #000000;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpi-tile__delta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: var(--font-weight-emphasis);
+}
+
+/*
+ * Colour for direction is the colourblind-safer blue/orange pairing from
+ * encode/color.md (also called out in single-value.md). We always pair the
+ * colour with an explicit ↑/↓ glyph so colour isn't the sole signal.
+ */
+.kpi-tile__delta--up {
+  color: rgb(8 96 158); /* blue, favourable */
+}
+
+.kpi-tile__delta--down {
+  color: rgb(196 84 24); /* orange, unfavourable */
+}
+
+.kpi-tile__delta-glyph {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.kpi-tile__period {
+  margin-left: 4px;
+  font-weight: var(--font-weight-body);
+  color: #716f6c;
+}
+
+.kpi-tile__sparkline {
+  display: block;
+  margin-top: 8px;
+  width: 200px;
+  max-width: 100%;
+  height: 36px;
+}

@@ -2,14 +2,20 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Chat,
+  ChatExampleDemo,
   CHAT_LAYOUT_VARIANTS,
   CHAT_PANEL_VERSION_LABELS,
   CHAT_PANEL_VERSIONS,
   CHAT_THREAD_PRESETS,
 } from "../components/Chat";
-import type { ChatLayoutVariant, ChatPanelVersion, ChatThreadPreset } from "../components/Chat";
+import type {
+  ChatExampleDemoMode,
+  ChatLayoutVariant,
+  ChatPanelVersion,
+  ChatThreadPreset,
+} from "../components/Chat";
 import { Composer } from "../components/Composer";
-import { IconSettings } from "../components/Composer/icons";
+import { IconArrowUpMini, IconSettings } from "../components/Composer/icons";
 import { IconCopy } from "../components/Composer/icons";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
@@ -17,7 +23,6 @@ import "../App.css";
 
 const CHAT_WHEN = [
   "The user is in a dedicated AI conversation with the assistant.",
-  "Scrollable turns from both sides need a single, consistent home.",
   "One place to type the next message — no dual composers per page.",
 ];
 
@@ -107,6 +112,7 @@ export function ChatPage() {
   const [layout, setLayout] = useState<ChatLayoutVariant>("side-panel");
   const [thread, setThread] = useState<ChatThreadPreset>("conversation");
   const [panelVersion, setPanelVersion] = useState<ChatPanelVersion>("default");
+  const [exampleMode, setExampleMode] = useState<ChatExampleDemoMode>("side-chat");
   const [copyAck, setCopyAck] = useState(false);
 
   useEffect(() => {
@@ -187,10 +193,6 @@ export function ChatPage() {
           The chat shell wraps the message thread and the composer—one surface for back-and-forth with Rippling AI,
           aligned with the side-panel and full-page chat patterns in AI-components.
         </p>
-        <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 16, lineHeight: 1.5, color: "#716f6c" }}>
-          Composer width follows the 712px content track (same as messages). Use the settings control (upper right) to
-          switch panel versions: default thinking glyphs, no glyphs, or animated thinking with replay.
-        </p>
       </header>
 
       <ComponentIntentPanel when={CHAT_WHEN} designIntent={CHAT_DESIGN_INTENT} />
@@ -270,6 +272,53 @@ export function ChatPage() {
         />
       </div>
       </div>
+
+      <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Examples</h2>
+
+      <section
+        className="in-context-stage demo-fullbleed"
+        id="chat-example-in-context"
+        aria-labelledby="chat-example-in-context-heading"
+      >
+        <div className="in-context-stage__head">
+          <div className="in-context-stage__copy">
+            <h2 id="chat-example-in-context-heading" className="in-context-stage__title">
+              Example in chat — {CHAT_PANEL_VERSION_LABELS[panelVersion]}
+            </h2>
+            <p className="in-context-stage__lede">
+              A working chat using the real composer. The example mirrors the panel version
+              picked from the gear (upper right): {CHAT_PANEL_VERSION_LABELS[panelVersion]}.
+              {panelVersion === "animated"
+                ? " Send a message to drive the composer hat through its full cycle (idle → thinking → shimmer → cycling → done → idle), or pin a phase below to inspect each animation state on its own."
+                : " Send a message — the inline thinking block lands with the assistant's reply, just as it would in product."}
+            </p>
+          </div>
+          <div className="demo-segments" role="group" aria-label="Chat example surface mode">
+            <button
+              type="button"
+              className="demo-segment"
+              aria-pressed={exampleMode === "side-chat"}
+              onClick={() => setExampleMode("side-chat")}
+            >
+              Side chat
+            </button>
+            <button
+              type="button"
+              className="demo-segment"
+              aria-pressed={exampleMode === "full-screen"}
+              onClick={() => setExampleMode("full-screen")}
+            >
+              Full screen
+            </button>
+          </div>
+        </div>
+        <ChatExampleDemo
+          key={`${exampleMode}-${panelVersion}`}
+          mode={exampleMode}
+          panelVersion={panelVersion}
+        />
+      </section>
 
       <section className="demo-code-section" id="chat-assistant-example" aria-labelledby="chat-assistant-example-heading">
         <div className="demo-code-section__top">
