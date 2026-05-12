@@ -28,6 +28,11 @@
   overflow: hidden;
 }
 
+/* Second card sits directly below the When / Design intent block. */
+.component-intent-panel + .component-intent-panel {
+  margin-top: 12px;
+}
+
 .component-intent-panel__col {
   box-sizing: border-box;
   padding: 22px 24px;

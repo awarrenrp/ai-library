@@ -1,5 +1,48 @@
+import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { IconChat, IconGoogleDrive, IconRipplingLogo } from "../icons";
 import "./LandingPage.css";
+
+/**
+ * Single landing row. `icon` is optional. When the icon communicates state
+ * (e.g. 🚧 "work in progress"), pass `iconLabel` so screen readers hear it;
+ * decorative icons (brand glyphs) should leave it undefined and stay aria-hidden.
+ */
+function LandingCard({
+  to,
+  title,
+  description,
+  icon,
+  iconLabel,
+}: {
+  to: string;
+  title: string;
+  description: string;
+  icon?: ReactNode;
+  iconLabel?: string;
+}) {
+  return (
+    <li>
+      <Link to={to} className="landing-card">
+        <div className="landing-card-title-wrap">
+          {icon ? (
+            <span
+              className="landing-card-icon"
+              role={iconLabel ? "img" : undefined}
+              aria-label={iconLabel}
+              aria-hidden={iconLabel ? undefined : true}
+            >
+              {icon}
+            </span>
+          ) : null}
+          <h3 className="landing-card-title">{title}</h3>
+        </div>
+        <p className="landing-card-desc">{description}</p>
+        <span className="landing-card-cta">Open spec</span>
+      </Link>
+    </li>
+  );
+}
 
 export function LandingPage() {
   return (
@@ -15,33 +58,24 @@ export function LandingPage() {
           Artifacts + widgets
         </h2>
         <ul className="landing-cards" role="list">
-          <li>
-            <Link to="/in-chat-artifacts" className="landing-card">
-              <h3 className="landing-card-title">In-chat widget</h3>
-              <p className="landing-card-desc">
-                Structured replies in the thread—cards, tables, confirmations, and rich previews aligned with Block Kit.
-              </p>
-              <span className="landing-card-cta">Open spec</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/rippling-native-artifacts" className="landing-card">
-              <h3 className="landing-card-title">Rippling-native artifacts</h3>
-              <p className="landing-card-desc">
-                UI built with Rippling patterns—profiles, policies, workflows, and actions that match the product shell.
-              </p>
-              <span className="landing-card-cta">Open spec</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/external-artifacts" className="landing-card">
-              <h3 className="landing-card-title">External artifacts</h3>
-              <p className="landing-card-desc">
-                Embeds, linked docs, partner surfaces, and previews that bridge out of Rippling from the conversation.
-              </p>
-              <span className="landing-card-cta">Open spec</span>
-            </Link>
-          </li>
+          <LandingCard
+            to="/in-chat-artifacts"
+            title="In-chat widget"
+            description="Structured replies in the thread—cards, tables, confirmations, and rich previews aligned with Block Kit."
+            icon={<IconChat />}
+          />
+          <LandingCard
+            to="/rippling-native-artifacts"
+            title="Rippling-native artifacts"
+            description="UI built with Rippling patterns—profiles, policies, workflows, and actions that match the product shell."
+            icon={<IconRipplingLogo />}
+          />
+          <LandingCard
+            to="/external-artifacts"
+            title="External artifacts"
+            description="Embeds, linked docs, partner surfaces, and previews that bridge out of Rippling from the conversation."
+            icon={<IconGoogleDrive />}
+          />
         </ul>
       </section>
 
@@ -49,61 +83,52 @@ export function LandingPage() {
         <h2 id="landing-specs-heading" className="landing-section-title">
           Component specs
         </h2>
+        {/* Stable specs — alphabetical. */}
         <ul className="landing-cards" role="list">
-          <li>
-            <Link to="/composer" className="landing-card">
-              <h3 className="landing-card-title">Composer</h3>
-              <p className="landing-card-desc">
-                Primary chat input—width variants, states, and actions for the side-panel experience.
-              </p>
-              <span className="landing-card-cta">Open spec</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/chat" className="landing-card">
-              <h3 className="landing-card-title">Chat</h3>
-              <p className="landing-card-desc">
-                Conversation shell—scrollable thread plus anchored composer for Rippling AI chat surfaces.
-              </p>
-              <span className="landing-card-cta">Open spec</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/prompts" className="landing-card">
-              <h3 className="landing-card-title">Prompts</h3>
-              <p className="landing-card-desc">
-                Prompt templates, guardrails, and recommended copy—placeholder until content is wired.
-              </p>
-              <span className="landing-card-cta">Open spec</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/disambiguation" className="landing-card">
-              <h3 className="landing-card-title">Disambiguation</h3>
-              <p className="landing-card-desc">
-                Clarifying questions in-chat—progress, rich option rows, radio or checkbox, and footer actions.
-              </p>
-              <span className="landing-card-cta">Open spec</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/links" className="landing-card">
-              <h3 className="landing-card-title">Links</h3>
-              <p className="landing-card-desc">
-                Inline text and citations in the thread, rich external previews, and emphasized actions below the chat.
-              </p>
-              <span className="landing-card-cta">Open spec</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/strong-type" className="landing-card">
-              <h3 className="landing-card-title">Strong type</h3>
-              <p className="landing-card-desc">
-                Heavyweight inline pill for AI surfaces—scope, capability, and state labels (AI, Beta, Live, Confidential).
-              </p>
-              <span className="landing-card-cta">Open spec</span>
-            </Link>
-          </li>
+          <LandingCard
+            to="/chat"
+            title="Chat"
+            description="Conversation shell—scrollable thread plus anchored composer for Rippling AI chat surfaces."
+          />
+          <LandingCard
+            to="/composer"
+            title="Composer"
+            description="Primary chat input—width variants, states, and actions for the side-panel experience."
+          />
+          <LandingCard
+            to="/disambiguation"
+            title="Disambiguation"
+            description="Clarifying questions in-chat—progress, rich option rows, radio or checkbox, and footer actions."
+          />
+          <LandingCard
+            to="/links"
+            title="Links"
+            description="Inline text and citations in the thread, rich external previews, and emphasized actions below the chat."
+          />
+          <LandingCard
+            to="/prompts"
+            title="Prompts"
+            description="Prompt templates, guardrails, and recommended copy—placeholder until content is wired."
+          />
+        </ul>
+        {/* Visual divider separates shipped specs from the in-progress group below. */}
+        <hr className="landing-cards-rule" aria-hidden />
+        {/* In-progress specs — Artifact tray first, Strong type at the very bottom. */}
+        <ul className="landing-cards" role="list" aria-label="In progress">
+          <LandingCard
+            to="/artifact-tray"
+            title="Artifact tray"
+            description="Persistent tray that surfaces saved artifacts—reports, dashboards, workflows, and pinned outputs—across AI surfaces."
+            icon="🚧"
+            iconLabel="Work in progress"
+          />
+          <LandingCard
+            to="/strong-type"
+            title="Strong type"
+            description="Slash-command and mention menu—typing / or @ opens a grouped picker that turns a token into a structured choice."
+            icon="🚧"
+            iconLabel="Work in progress"
+          />
         </ul>
       </section>
     </main>

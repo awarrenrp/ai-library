@@ -21,28 +21,21 @@ const COMPOSER_WHEN =
   "When a user requests to interact with the AI chat, the composer is the method of using natural language inputs to query more information.";
 
 const COMPOSER_DESIGN_INTENT = (
-  <>
-    <p>
-      The composer should be consistent across Rippling—one primary input pattern for AI chat, aligned with AI-components.
-      A single composer can exist on each page or surface so the entry point stays obvious.
-    </p>
-    <div>
-      <p className="component-intent-panel__dos-donts-label">Dos</p>
-      <ul className="component-intent-panel__dos-list">
-        <li>Use one composer per page or surface and match the standard spec for shipped experiences.</li>
-        <li>Use alternate composer variants only where the spec calls for them (for example, isolated previews).</li>
-      </ul>
-    </div>
-    <div>
-      <p className="component-intent-panel__dos-donts-label">Don&apos;ts</p>
-      <ul className="component-intent-panel__dont-list">
-        <li>
-          Pair a full composer with a separate side-panel chat on the same page—duplicate inputs confuse users.
-        </li>
-      </ul>
-    </div>
-  </>
+  <p>
+    The composer should be consistent across Rippling&mdash;one primary input pattern for AI chat,
+    aligned with AI-components. A single composer can exist on each page or surface so the entry
+    point stays obvious.
+  </p>
 );
+
+const COMPOSER_DOS = [
+  "Use one composer per page or surface and match the standard spec for shipped experiences.",
+  "Use alternate composer variants only where the spec calls for them (for example, isolated previews).",
+];
+
+const COMPOSER_DONTS = [
+  "Pair a full composer with a separate side-panel chat on the same page\u2014duplicate inputs confuse users.",
+];
 
 /** Rippling product wiring for Chat SDK `MessageInput` + Lexical — paths are app-relative. */
 const COMPOSER_MESSAGE_INPUT_EXAMPLE_SOURCE = `import { useCallback, useId, useState } from 'react';
@@ -233,9 +226,18 @@ export function ComposerPage() {
         </p>
       </header>
 
-      <ComponentIntentPanel when={COMPOSER_WHEN} designIntent={COMPOSER_DESIGN_INTENT} />
+      <ComponentIntentPanel
+        when={COMPOSER_WHEN}
+        designIntent={COMPOSER_DESIGN_INTENT}
+        dos={COMPOSER_DOS}
+        donts={COMPOSER_DONTS}
+      />
 
-      <div className="demo-preview-surface" role="region" aria-label="Composer interactive preview">
+      <div
+        className="demo-preview-surface demo-preview-surface--no-toolbar-divider"
+        role="region"
+        aria-label="Composer interactive preview"
+      >
       <div className="demo-toolbar" aria-label="Composer preview controls">
         <div className="demo-group">
           <p className="demo-label" id="label-width">

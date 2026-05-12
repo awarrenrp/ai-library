@@ -99,6 +99,8 @@ export function Composer({
 }: ComposerProps) {
   const autoId = useId();
   const modeMenuId = useId();
+  const intentMenuId = useId();
+  const speedMenuId = useId();
   const addMenuId = useId();
   const inputId = inputIdProp ?? `composer-input-${autoId}`;
   const isControlled = valueProp !== undefined;
@@ -107,10 +109,21 @@ export function Composer({
   const [mode, setMode] = useState<ComposerMode>(defaultMode);
   const [intent, setIntent] = useState<ComposerIntent>(defaultIntent);
   const [modeMenuOpen, setModeMenuOpen] = useState(false);
+  const [intentMenuOpen, setIntentMenuOpen] = useState(false);
+  const [speedMenuOpen, setSpeedMenuOpen] = useState(false);
   const [addMenuOpen, setAddMenuOpen] = useState(false);
   const fastAnchorRef = useRef<HTMLDivElement>(null);
+  const intentAnchorRef = useRef<HTMLDivElement>(null);
+  const speedAnchorRef = useRef<HTMLDivElement>(null);
   const addAnchorRef = useRef<HTMLDivElement>(null);
   const isAlternate = version === "alternate";
+
+  const closeAllMenus = () => {
+    setModeMenuOpen(false);
+    setIntentMenuOpen(false);
+    setSpeedMenuOpen(false);
+    setAddMenuOpen(false);
+  };
 
   const setValue = (next: string) => {
     onChange?.(next);
@@ -120,19 +133,18 @@ export function Composer({
   const canSend = value.trim().length > 0;
 
   useEffect(() => {
-    if (!modeMenuOpen && !addMenuOpen) return;
+    const anyOpen = modeMenuOpen || intentMenuOpen || speedMenuOpen || addMenuOpen;
+    if (!anyOpen) return;
     function onDocMouseDown(e: MouseEvent) {
       const t = e.target as Node;
       if (fastAnchorRef.current?.contains(t)) return;
+      if (intentAnchorRef.current?.contains(t)) return;
+      if (speedAnchorRef.current?.contains(t)) return;
       if (addAnchorRef.current?.contains(t)) return;
-      setModeMenuOpen(false);
-      setAddMenuOpen(false);
+      closeAllMenus();
     }
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        setModeMenuOpen(false);
-        setAddMenuOpen(false);
-      }
+      if (e.key === "Escape") closeAllMenus();
     }
     document.addEventListener("mousedown", onDocMouseDown);
     document.addEventListener("keydown", onKey);
@@ -140,7 +152,7 @@ export function Composer({
       document.removeEventListener("mousedown", onDocMouseDown);
       document.removeEventListener("keydown", onKey);
     };
-  }, [modeMenuOpen, addMenuOpen]);
+  }, [modeMenuOpen, intentMenuOpen, speedMenuOpen, addMenuOpen]);
 
   const fastBtnLabel = `${mode} mode, ${modeMenuOpen ? "close menu" : "open menu"}`;
 
@@ -250,27 +262,53 @@ export function Composer({
           </div>
 
           {isAlternate ? (
-            <div
-              className="composer-intent"
-              role="group"
-              aria-label="Composer intent"
-            >
-              {COMPOSER_INTENTS.map((id) => {
-                const active = intent === id;
-                return (
-                  <button
-                    key={id}
-                    type="button"
-                    className={["composer-intent-option", active ? "composer-intent-option--active" : ""]
-                      .filter(Boolean)
-                      .join(" ")}
-                    aria-pressed={active}
-                    onClick={() => setIntent(id)}
-                  >
-                    {COMPOSER_INTENT_LABELS[id]}
-                  </button>
-                );
-              })}
+            <div className="composer-intent-anchor" ref={intentAnchorRef}>
+              <button
+                type="button"
+                className="composer-ghost-btn composer-intent-trigger"
+                aria-label={`Composer intent: ${COMPOSER_INTENT_LABELS[intent]}, ${intentMenuOpen ? "close menu" : "open menu"}`}
+                aria-expanded={intentMenuOpen}
+                aria-haspopup="menu"
+                aria-controls={intentMenuOpen ? intentMenuId : undefined}
+                onClick={() => {
+                  setIntentMenuOpen((o) => !o);
+                  setModeMenuOpen(false);
+                  setAddMenuOpen(false);
+                  setSpeedMenuOpen(false);
+                }}
+              >
+                <span className="composer-ghost-btn__label">{COMPOSER_INTENT_LABELS[intent]}</span>
+                <IconChevronDown />
+              </button>
+              {intentMenuOpen ? (
+                <div
+                  id={intentMenuId}
+                  className="composer-mode-menu composer-mode-menu--up"
+                  role="menu"
+                  aria-label="Composer intent"
+                >
+                  {COMPOSER_INTENTS.map((id) => (
+                    <button
+                      key={id}
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={intent === id}
+                      className={[
+                        "composer-mode-option",
+                        intent === id ? "composer-mode-option--active" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      onClick={() => {
+                        setIntent(id);
+                        setIntentMenuOpen(false);
+                      }}
+                    >
+                      {COMPOSER_INTENT_LABELS[id]}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
             </div>
           ) : (
             <div className="composer-fast-anchor" ref={fastAnchorRef}>
@@ -335,23 +373,53 @@ export function Composer({
 
       {isAlternate ? (
         <div className="composer-speed-row">
-          <div className="composer-speed" role="group" aria-label="Response speed">
-            {COMPOSER_MODES.map((m) => {
-              const active = mode === m;
-              return (
-                <button
-                  key={m}
-                  type="button"
-                  className={["composer-speed-option", active ? "composer-speed-option--active" : ""]
-                    .filter(Boolean)
-                    .join(" ")}
-                  aria-pressed={active}
-                  onClick={() => setMode(m)}
-                >
-                  {m}
-                </button>
-              );
-            })}
+          <div className="composer-speed-anchor" ref={speedAnchorRef}>
+            <button
+              type="button"
+              className="composer-ghost-btn composer-ghost-btn--xs composer-speed-trigger"
+              aria-label={`Response speed: ${mode}, ${speedMenuOpen ? "close menu" : "open menu"}`}
+              aria-expanded={speedMenuOpen}
+              aria-haspopup="menu"
+              aria-controls={speedMenuOpen ? speedMenuId : undefined}
+              onClick={() => {
+                setSpeedMenuOpen((o) => !o);
+                setIntentMenuOpen(false);
+                setModeMenuOpen(false);
+                setAddMenuOpen(false);
+              }}
+            >
+              <span className="composer-ghost-btn__label">{mode}</span>
+              <IconChevronDown />
+            </button>
+            {speedMenuOpen ? (
+              <div
+                id={speedMenuId}
+                className="composer-mode-menu composer-mode-menu--up composer-mode-menu--xs"
+                role="menu"
+                aria-label="Response speed"
+              >
+                {COMPOSER_MODES.map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    role="menuitemradio"
+                    aria-checked={mode === m}
+                    className={[
+                      "composer-mode-option",
+                      mode === m ? "composer-mode-option--active" : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                    onClick={() => {
+                      setMode(m);
+                      setSpeedMenuOpen(false);
+                    }}
+                  >
+                    {m}
+                  </button>
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
       ) : null}

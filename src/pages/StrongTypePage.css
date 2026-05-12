@@ -13,48 +13,62 @@
   color: #716f6c;
 }
 
-.strong-type-page__section-lede code {
+.strong-type-page__section-lede code,
+.strong-type-page__trigger-desc code {
   font-size: 0.92em;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 }
 
-/* Matrix: tone (row) × variant (col) — keeps the visual + the rationale side by side. */
-.strong-type-page__matrix {
+.strong-type-page__section-lede kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin: 0 2px;
+  border: 1px solid rgb(0 0 0 / 18%);
+  border-radius: 4px;
+  background: #ffffff;
+  font: inherit;
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  color: #000;
+}
+
+/* Demo stage: composer sits at the bottom, menu floats above it. */
+.strong-type-page__stage {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  padding: 24px 24px 32px;
   border: 1px solid rgb(0 0 0 / 10%);
-  border-radius: 10px;
-  overflow: hidden;
+  border-radius: 12px;
   background: #ffffff;
 }
 
-.strong-type-page__matrix-row {
-  display: grid;
-  grid-template-columns: 140px repeat(2, minmax(100px, 1fr)) minmax(220px, 2fr);
-  align-items: center;
-  gap: 12px;
-  padding: 14px 18px;
-  border-bottom: 1px solid rgb(0 0 0 / 8%);
+.strong-type-example {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
 }
 
-.strong-type-page__matrix-row:last-child {
-  border-bottom: none;
-}
-
-.strong-type-page__matrix-row--head {
-  background: rgb(0 0 0 / 3%);
-}
-
-.strong-type-page__matrix-cell {
+.strong-type-example__menu-anchor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 8px);
   display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #000;
-  min-width: 0;
+  justify-content: stretch;
+  z-index: 5;
 }
 
-.strong-type-page__matrix-cell--head {
+.strong-type-example__menu-anchor > * {
+  width: 100%;
+}
+
+.strong-type-example__label {
+  display: block;
+  margin-bottom: 6px;
   font-size: 11px;
   font-weight: var(--font-weight-emphasis);
   letter-spacing: 0.06em;
@@ -62,76 +76,77 @@
   color: #716f6c;
 }
 
-.strong-type-page__matrix-cell--tone {
-  font-weight: var(--font-weight-emphasis);
+.strong-type-example__input {
+  box-sizing: border-box;
+  width: 100%;
+  resize: vertical;
+  padding: 12px 14px;
+  border: 1px solid rgb(0 0 0 / 18%);
+  border-radius: 10px;
+  background: #ffffff;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 22px;
+  color: #000;
 }
 
-.strong-type-page__matrix-cell--desc {
-  font-size: 13px;
-  color: #716f6c;
-  line-height: 1.45;
+.strong-type-example__input:focus-visible {
+  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
+  outline-offset: 2px;
+  border-color: rgb(0 0 0 / 35%);
 }
 
-/* Sizes block */
-.strong-type-page__sizes {
+.strong-type-example__input::placeholder {
+  color: #9c9b98;
+}
+
+/* Triggers panel */
+.strong-type-page__triggers {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.strong-type-page__size-cell {
+.strong-type-page__triggers > li {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  gap: 14px;
   padding: 14px 16px;
   border: 1px solid rgb(0 0 0 / 10%);
   border-radius: 10px;
   background: #ffffff;
 }
 
-.strong-type-page__size-label {
-  font-size: 11px;
-  font-weight: var(--font-weight-emphasis);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #716f6c;
-  margin-right: auto;
+.strong-type-page__trigger-key {
+  flex-shrink: 0;
 }
 
-/* In-context demo: render the example component on a faux chat surface. */
-.strong-type-page__chat-stage {
-  padding: 18px 20px;
-  border: 1px solid rgb(0 0 0 / 10%);
-  border-radius: 12px;
+.strong-type-page__trigger-key kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgb(0 0 0 / 18%);
+  border-radius: 6px;
   background: #ffffff;
-  font-size: 15px;
-  line-height: 1.55;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 14px;
   color: #000;
 }
 
-.strong-type-page__chat-stage p {
+.strong-type-page__trigger-title {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: var(--font-weight-heading);
+  color: #000;
+}
+
+.strong-type-page__trigger-desc {
   margin: 0;
-}
-
-.strong-type-page__chat-stage p + p {
-  margin-top: 10px;
-}
-
-@media (max-width: 720px) {
-  .strong-type-page__matrix-row {
-    grid-template-columns: 1fr 1fr;
-    row-gap: 10px;
-  }
-
-  .strong-type-page__matrix-row--head {
-    display: none;
-  }
-
-  .strong-type-page__matrix-cell--tone {
-    grid-column: 1 / -1;
-  }
-
-  .strong-type-page__matrix-cell--desc {
-    grid-column: 1 / -1;
-  }
+  font-size: 13px;
+  line-height: 1.5;
+  color: #716f6c;
 }

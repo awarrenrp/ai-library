@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import "./RipplingArtifactShell.css";
 
 export type RipplingArtifactShellProps = {
@@ -8,6 +8,20 @@ export type RipplingArtifactShellProps = {
   /** Shown on the hover row below the card (right side). */
   footerTimestamp?: string;
   className?: string;
+  /**
+   * Optional handlers for the hover More menu (… icon next to Expand).
+   * The three rows always render; pass handlers to wire them to product flows.
+   */
+  onViewDetail?: () => void;
+  onEditPage?: () => void;
+  onDownload?: () => void;
+  /**
+   * Custom JSX rendered below the divider in the More menu, in a slot styled to
+   * match `.rippling-artifact-body` (12px 16px 16px padding). Drop product-specific
+   * controls, form bits, or notes here — they sit inside the menu's `role="menu"`
+   * inside a labelled `role="group"` so they're announced as a related set.
+   */
+  moreMenuSlot?: ReactNode;
 };
 
 function IconMoreHorizontal() {
@@ -67,16 +81,112 @@ export function RipplingArtifactShell({
   children,
   footerTimestamp = "2:34 PM",
   className,
+  onViewDetail,
+  onEditPage,
+  onDownload,
+  moreMenuSlot,
 }: RipplingArtifactShellProps) {
+  const moreMenuId = useId();
+  const moreBtnId = useId();
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreAnchorRef = useRef<HTMLDivElement>(null);
+  const moreBtnRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!moreOpen) return;
+    function onDocMouseDown(e: MouseEvent) {
+      if (moreAnchorRef.current?.contains(e.target as Node)) return;
+      setMoreOpen(false);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setMoreOpen(false);
+        moreBtnRef.current?.focus();
+      }
+    }
+    document.addEventListener("mousedown", onDocMouseDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocMouseDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [moreOpen]);
+
+  function runAction(fn?: () => void) {
+    fn?.();
+    setMoreOpen(false);
+    moreBtnRef.current?.focus();
+  }
+
   return (
-    <div className={["rippling-artifact-wrap", className].filter(Boolean).join(" ")}>
+    <div
+      className={["rippling-artifact-wrap", className].filter(Boolean).join(" ")}
+      data-more-menu-open={moreOpen || undefined}
+    >
       <article className="rippling-artifact">
         <header className="rippling-artifact-header">
           <h3 className="rippling-artifact-title">{title}</h3>
           <div className="rippling-artifact-actions" role="toolbar" aria-label="Artifact actions">
-            <button type="button" className="rippling-artifact-icon-btn" aria-label="More actions">
-              <IconMoreHorizontal />
-            </button>
+            <div className="rippling-artifact-more-anchor" ref={moreAnchorRef}>
+              <button
+                id={moreBtnId}
+                ref={moreBtnRef}
+                type="button"
+                className="rippling-artifact-icon-btn"
+                aria-label={moreOpen ? "Close artifact options" : "More artifact options"}
+                aria-haspopup="menu"
+                aria-expanded={moreOpen}
+                aria-controls={moreOpen ? moreMenuId : undefined}
+                onClick={() => setMoreOpen((o) => !o)}
+              >
+                <IconMoreHorizontal />
+              </button>
+              {moreOpen ? (
+                <div
+                  id={moreMenuId}
+                  className="rippling-artifact-more-menu"
+                  role="menu"
+                  aria-labelledby={moreBtnId}
+                >
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="rippling-artifact-more-menu__item"
+                    onClick={() => runAction(onViewDetail)}
+                  >
+                    View detail
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="rippling-artifact-more-menu__item"
+                    onClick={() => runAction(onEditPage)}
+                  >
+                    Edit page
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="rippling-artifact-more-menu__item"
+                    onClick={() => runAction(onDownload)}
+                  >
+                    Download
+                  </button>
+                  {moreMenuSlot ? (
+                    <>
+                      <hr className="rippling-artifact-more-menu__divider" aria-hidden />
+                      <div
+                        className="rippling-artifact-more-menu__slot"
+                        role="group"
+                        aria-label="Additional options"
+                      >
+                        {moreMenuSlot}
+                      </div>
+                    </>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
             <button type="button" className="rippling-artifact-icon-btn" aria-label="Expand">
               <IconExpand />
             </button>

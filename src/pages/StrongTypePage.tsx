@@ -3,69 +3,37 @@ import { Link } from "react-router-dom";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
 import { IconCopy } from "../components/Composer/icons";
-import {
-  STRONG_TYPE_TONES,
-  STRONG_TYPE_VARIANTS,
-  StrongType,
-} from "../components/StrongType";
-import type { StrongTypeTone, StrongTypeVariant } from "../components/StrongType";
-import { StrongTypeChatExample } from "../examples/StrongTypeExample";
+import { StrongTypeComposerExample } from "../examples/StrongTypeExample";
 import STRONG_TYPE_EXAMPLE_SOURCE from "../examples/StrongTypeExample.tsx?raw";
 import { copyText } from "../utils/copyText";
 import "../App.css";
 import "./StrongTypePage.css";
 
 const STRONG_TYPE_WHEN =
-  "Use when the conversation needs to flag scope, capability, or state at a glance — \u201cAI\u201d, \u201cBeta\u201d, \u201cLive\u201d, \u201cConfidential\u201d, \u201cApproved\u201d. Heavier than a tag or chip; meant to be visually loud without being a button.";
+  "When the user types `/` (commands) or `@` (mentions) in the composer. Strong typing converts free-form input into a structured pick from a curated set of actions, people, or knowledge sources \u2014 so the model gets an unambiguous reference instead of a guess.";
 
 const STRONG_TYPE_DESIGN_INTENT = (
-  <>
-    <p>
-      A heavyweight inline label. Sits in the body of an assistant turn alongside text. Reads as a
-      pill, but communicates classification, not action. Pair tone with meaning—keep the mapping
-      stable so the same tone always means the same thing across the product.
-    </p>
-    <div>
-      <p className="component-intent-panel__dos-donts-label">Dos</p>
-      <ul className="component-intent-panel__dos-list">
-        <li>Keep labels 1&ndash;2 words, uppercase.</li>
-        <li>
-          Use <code>asStatus</code> for live state changes (&ldquo;Live&rdquo;, &ldquo;Approved&rdquo;).
-        </li>
-        <li>
-          Provide <code>ariaLabel</code> when the visible text is abbreviated (e.g.{" "}
-          <code>&ldquo;AI&rdquo;</code> &rarr; <code>&ldquo;AI generated&rdquo;</code>).
-        </li>
-      </ul>
-    </div>
-    <div>
-      <p className="component-intent-panel__dos-donts-label">Don&apos;ts</p>
-      <ul className="component-intent-panel__dont-list">
-        <li>Use as a button. If it&rsquo;s interactive, use a button or tag with affordance.</li>
-        <li>Stack more than two in the same line of body copy.</li>
-        <li>Mix tones for the same concept across surfaces.</li>
-      </ul>
-    </div>
-  </>
+  <p>
+    A floating menu anchored above the composer. Opens as soon as a trigger character is typed at
+    the start of a fresh token, filters live as the user keeps typing, and commits with{" "}
+    <code>Enter</code> or a click. The menu never steals focus &mdash; the composer keeps it the
+    whole time, so typing remains the source of truth.
+  </p>
 );
 
-const TONE_DESCRIPTIONS: Record<StrongTypeTone, string> = {
-  primary: "Product scope · AI, brand-level labels",
-  info: "Capability hints · Beta, Preview, New",
-  neutral: "Generic emphasis · Internal, Draft",
-  critical: "Restricted scope · Confidential, Blocked",
-  positive: "Completed state · Approved, Live, Done",
-  progress: "Working state · In progress, Running, Pending",
-};
+const STRONG_TYPE_DOS = [
+  <>
+    Use <code>/</code> for actions and knowledge scopes, <code>@</code> for people and teams.
+  </>,
+  <>Group items by category so the menu reads as a curated set, not a flat list.</>,
+  <>Show keyboard hints (Up / Down / Enter / Esc) in the footer.</>,
+];
 
-const SAMPLE_LABELS: Record<StrongTypeTone, string> = {
-  primary: "AI",
-  info: "Beta",
-  neutral: "Draft",
-  critical: "Confidential",
-  positive: "Approved",
-  progress: "In progress",
-};
+const STRONG_TYPE_DONTS = [
+  <>Open the menu mid-word. Only trigger when the character starts a token.</>,
+  <>Use this for free-text autocomplete. Strong typing is for structured choices, not phrase completion.</>,
+  <>Move focus into the menu &mdash; the composer keeps focus so typing keeps working.</>,
+];
 
 export function StrongTypePage() {
   const [copyAck, setCopyAck] = useState(false);
@@ -86,106 +54,67 @@ export function StrongTypePage() {
           Strong type
         </h1>
         <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 18, lineHeight: 1.55, color: "#716f6c" }}>
-          Heavyweight inline label for AI surfaces. Use for scope, capability, or state pills
-          embedded in assistant turns.
+          The slash-command and mention menu that opens when the user types <code>/</code> or{" "}
+          <code>@</code> in the composer. Turns a typed token into a structured pick.
         </p>
       </header>
 
-      <ComponentIntentPanel when={STRONG_TYPE_WHEN} designIntent={STRONG_TYPE_DESIGN_INTENT} />
+      <ComponentIntentPanel
+        when={STRONG_TYPE_WHEN}
+        designIntent={STRONG_TYPE_DESIGN_INTENT}
+        dos={STRONG_TYPE_DOS}
+        donts={STRONG_TYPE_DONTS}
+      />
 
       <div
         className="demo-preview-surface demo-preview-surface--stack"
         role="region"
         aria-label="Strong type interactive preview"
       >
-        <section aria-labelledby="strong-type-matrix-heading">
-          <h2 id="strong-type-matrix-heading" className="strong-type-page__section-title">
-            Tones &times; variants
+        <section aria-labelledby="strong-type-demo-heading">
+          <h2 id="strong-type-demo-heading" className="strong-type-page__section-title">
+            Try it
           </h2>
           <p className="strong-type-page__section-lede">
-            Filled communicates state with the highest visual weight; outlined is a quieter chip
-            treatment for the same semantics.
+            Click into the input and start typing. <code>/</code> opens the command menu;{" "}
+            <code>@</code> opens the mention menu. <kbd>↑</kbd>/<kbd>↓</kbd> to move,{" "}
+            <kbd>↵</kbd> to insert, <kbd>esc</kbd> to dismiss.
           </p>
-          <div className="strong-type-page__matrix" role="table" aria-label="Tone and variant matrix">
-            <div className="strong-type-page__matrix-row strong-type-page__matrix-row--head" role="row">
-              <span className="strong-type-page__matrix-cell strong-type-page__matrix-cell--head" role="columnheader">
-                Tone
+          <div className="strong-type-page__stage">
+            <StrongTypeComposerExample />
+          </div>
+        </section>
+
+        <section aria-labelledby="strong-type-triggers-heading">
+          <h2 id="strong-type-triggers-heading" className="strong-type-page__section-title">
+            Triggers
+          </h2>
+          <ul className="strong-type-page__triggers">
+            <li>
+              <span className="strong-type-page__trigger-key">
+                <kbd>/</kbd>
               </span>
-              {STRONG_TYPE_VARIANTS.map((variant) => (
-                <span
-                  key={variant}
-                  className="strong-type-page__matrix-cell strong-type-page__matrix-cell--head"
-                  role="columnheader"
-                >
-                  {variant === "filled" ? "Filled" : "Outlined"}
-                </span>
-              ))}
-              <span className="strong-type-page__matrix-cell strong-type-page__matrix-cell--head" role="columnheader">
-                When to use
-              </span>
-            </div>
-            {STRONG_TYPE_TONES.map((tone) => (
-              <div key={tone} className="strong-type-page__matrix-row" role="row">
-                <span className="strong-type-page__matrix-cell strong-type-page__matrix-cell--tone" role="rowheader">
-                  {tone.charAt(0).toUpperCase() + tone.slice(1)}
-                </span>
-                {STRONG_TYPE_VARIANTS.map((variant: StrongTypeVariant) => (
-                  <span key={variant} className="strong-type-page__matrix-cell" role="cell">
-                    <StrongType tone={tone} variant={variant}>
-                      {SAMPLE_LABELS[tone]}
-                    </StrongType>
-                  </span>
-                ))}
-                <span className="strong-type-page__matrix-cell strong-type-page__matrix-cell--desc" role="cell">
-                  {TONE_DESCRIPTIONS[tone]}
-                </span>
+              <div>
+                <p className="strong-type-page__trigger-title">Commands</p>
+                <p className="strong-type-page__trigger-desc">
+                  Actions the assistant can take (<code>/summarize</code>, <code>/draft</code>) and
+                  knowledge scopes it should read from (<code>/policy</code>, <code>/benefits</code>).
+                </p>
               </div>
-            ))}
-          </div>
-        </section>
-
-        <section aria-labelledby="strong-type-sizes-heading">
-          <h2 id="strong-type-sizes-heading" className="strong-type-page__section-title">
-            Sizes
-          </h2>
-          <p className="strong-type-page__section-lede">
-            <code>sm</code> sits cleanly on a 20px line height — use it inline inside body copy.{" "}
-            <code>md</code> is the default for standalone labels in card headers.
-          </p>
-          <div className="strong-type-page__sizes">
-            <div className="strong-type-page__size-cell">
-              <span className="strong-type-page__size-label">sm · 11px / 20px</span>
-              <StrongType tone="primary" size="sm">
-                AI
-              </StrongType>
-              <StrongType tone="info" size="sm" variant="outlined">
-                Beta
-              </StrongType>
-            </div>
-            <div className="strong-type-page__size-cell">
-              <span className="strong-type-page__size-label">md · 12px / 24px</span>
-              <StrongType tone="primary" size="md">
-                AI
-              </StrongType>
-              <StrongType tone="info" size="md" variant="outlined">
-                Beta
-              </StrongType>
-            </div>
-          </div>
-        </section>
-
-        <section aria-labelledby="strong-type-context-heading">
-          <h2 id="strong-type-context-heading" className="strong-type-page__section-title">
-            In an assistant turn
-          </h2>
-          <p className="strong-type-page__section-lede">
-            Same component, dropped into a real assistant message. <code>asStatus</code> on
-            &ldquo;Approved&rdquo; routes it through <code>role=&quot;status&quot;</code> for SR
-            announcements.
-          </p>
-          <div className="strong-type-page__chat-stage">
-            <StrongTypeChatExample />
-          </div>
+            </li>
+            <li>
+              <span className="strong-type-page__trigger-key">
+                <kbd>@</kbd>
+              </span>
+              <div>
+                <p className="strong-type-page__trigger-title">Mentions</p>
+                <p className="strong-type-page__trigger-desc">
+                  People and teams to scope the reply to. Inserts a strongly-typed reference the
+                  model can resolve to a Rippling employee or group.
+                </p>
+              </div>
+            </li>
+          </ul>
         </section>
       </div>
 
@@ -197,12 +126,12 @@ export function StrongTypePage() {
         <div className="demo-code-section__top">
           <div>
             <h2 id="strong-type-example-heading" className="demo-code-section__title">
-              Strong type &mdash; implementation example
+              Strong type &mdash; composer integration
             </h2>
             <p className="demo-code-section__lede">
-              Drop <code>StrongType</code> directly into assistant message copy. The example below
-              is the source file rendered on this page, so anything you copy is type-checked at
-              build time.
+              Full wiring: trigger detection, live filtering, keyboard nav, token replacement on
+              select. This file is the source rendered on this page, so anything you copy is
+              type-checked at build time.
             </p>
           </div>
           <div className="demo-segments" role="presentation">

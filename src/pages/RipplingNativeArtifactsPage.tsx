@@ -42,10 +42,19 @@ export function RipplingNativeArtifactsPage() {
           Shell
         </h2>
         <p className="rna-section-lede">
-          Container, header (artifact title + hover actions), and body slot.
+          Container, header (artifact title + hover actions), and body slot. Hover the artifact and
+          open the <strong>…</strong> menu to see the fixed actions plus a custom JSX slot styled
+          to match the body slot.
         </p>
         <div className="rna-showcase">
-          <RipplingArtifactShell title="Artifact title">
+          <RipplingArtifactShell
+            title="Artifact title"
+            moreMenuSlot={
+              <p className="rna-slot-placeholder rna-slot-placeholder--menu">
+                Custom slot — any JSX, styled like the body slot.
+              </p>
+            }
+          >
             <p className="rna-slot-placeholder">Body slot — drop charts, tables, or actions here.</p>
           </RipplingArtifactShell>
         </div>

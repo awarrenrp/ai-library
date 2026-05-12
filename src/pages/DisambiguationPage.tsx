@@ -27,29 +27,23 @@ const DISAMBIGUATION_WHEN =
   "When user input could mean more than one thing and a wrong guess is costly. Rippling AI resolves ambiguity from context and stated assumptions first, then asks a direct clarifying question only when needed—at most two questions, bundled when possible.";
 
 const DISAMBIGUATION_DESIGN_INTENT = (
-  <>
-    <p>
-      In-thread popover that sits over the composer input to capture additional information from the user. Not meant to sit
-      inside of the chat itself, or above the composer.
-    </p>
-    <div>
-      <p className="component-intent-panel__dos-donts-label">Dos</p>
-      <ul className="component-intent-panel__dos-list">
-        <li>Place on top of the composer.</li>
-        <li>Use disambig to clarify intent.</li>
-        <li>Provide more than 4 choices.</li>
-      </ul>
-    </div>
-    <div>
-      <p className="component-intent-panel__dos-donts-label">Don&apos;ts</p>
-      <ul className="component-intent-panel__dont-list">
-        <li>Place inside of the chat text.</li>
-        <li>Ask more than 2 questions.</li>
-        <li>Use disambig for long-form content.</li>
-      </ul>
-    </div>
-  </>
+  <p>
+    In-thread popover that sits over the composer input to capture additional information from the
+    user. Not meant to sit inside of the chat itself, or above the composer.
+  </p>
 );
+
+const DISAMBIGUATION_DOS = [
+  "Place on top of the composer.",
+  "Use disambig to clarify intent.",
+  "Provide more than 4 choices.",
+];
+
+const DISAMBIGUATION_DONTS = [
+  "Place inside of the chat text.",
+  "Ask more than 2 questions.",
+  "Use disambig for long-form content.",
+];
 
 const DEMO_QUESTION = "Which Jordan do you want to update?";
 
@@ -176,7 +170,12 @@ export function DisambiguationPage() {
         </p>
       </header>
 
-      <ComponentIntentPanel when={DISAMBIGUATION_WHEN} designIntent={DISAMBIGUATION_DESIGN_INTENT} />
+      <ComponentIntentPanel
+        when={DISAMBIGUATION_WHEN}
+        designIntent={DISAMBIGUATION_DESIGN_INTENT}
+        dos={DISAMBIGUATION_DOS}
+        donts={DISAMBIGUATION_DONTS}
+      />
 
       <div
         className="demo-preview-surface demo-preview-surface--stack"

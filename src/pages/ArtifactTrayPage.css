@@ -1,0 +1,44 @@
+/*
+ * Artifact tray spec page — minimal stage tweaks. The demo stage centers the
+ * card and gives it room to breathe under the toolbar; everything else inherits
+ * the shared `.demo-preview-surface` chrome from App.css.
+ */
+
+.artifact-tray-stage {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 24px;
+  background: var(--color-surface, #f9f7f6);
+  border-radius: 12px;
+}
+
+/* In-context section — side chat vs full screen toggle + framed demo. */
+.artifact-tray-context {
+  margin-top: 40px;
+}
+
+.artifact-tray-context__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.artifact-tray-context__title {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: var(--font-weight-heading);
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+
+.artifact-tray-context__lede {
+  margin: 0;
+  max-width: 560px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #716f6c;
+}

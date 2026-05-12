@@ -26,29 +26,19 @@ const LINKS_WHEN =
   "Rippling AI chat supports three kinds of destinations: links inside the assistant message (linked text or citation chips), emphasized patterns directly below the chat (agent handoff and external web previews), and Rippling-specific actions that route into product, help, sales, or approvals.";
 
 const LINKS_DESIGN_INTENT = (
-  <>
-    <p>
-      There are a few patterns for links that we provide: links within the message, below the chat, and Rippling links.
-      We split them so lightweight navigation can stay inside the answer, thread-adjacent moments get their own surface,
-      and in-product next steps stay unmistakable as CTAs.
-    </p>
-    <div>
-      <p className="component-intent-panel__dos-donts-label">Dos</p>
-      <ul className="component-intent-panel__dos-list">
-        <li>
-          Only one primary CTA, with the fewest number of buttons as possible. If we want to provide additional links, we
-          can use regular text links.
-        </li>
-      </ul>
-    </div>
-    <div>
-      <p className="component-intent-panel__dos-donts-label">Don&apos;ts</p>
-      <ul className="component-intent-panel__dont-list">
-        <li>Crowd responses with multiple paths. We don&apos;t want to confuse users.</li>
-      </ul>
-    </div>
-  </>
+  <p>
+    There are a few patterns for links that we provide: links within the message, below the chat,
+    and Rippling links. We split them so lightweight navigation can stay inside the answer,
+    thread-adjacent moments get their own surface, and in-product next steps stay unmistakable as
+    CTAs.
+  </p>
 );
+
+const LINKS_DOS = [
+  "Only one primary CTA, with the fewest number of buttons as possible. If we want to provide additional links, we can use regular text links.",
+];
+
+const LINKS_DONTS = ["Crowd responses with multiple paths. We don\u2019t want to confuse users."];
 
 export function LinksPage() {
   return (
@@ -79,7 +69,12 @@ export function LinksPage() {
         </p>
       </header>
 
-      <ComponentIntentPanel when={LINKS_WHEN} designIntent={LINKS_DESIGN_INTENT} />
+      <ComponentIntentPanel
+        when={LINKS_WHEN}
+        designIntent={LINKS_DESIGN_INTENT}
+        dos={LINKS_DOS}
+        donts={LINKS_DONTS}
+      />
 
       <nav className="links-spec-toc" aria-label="On this page">
         <p className="links-spec-toc-label">On this page</p>

@@ -107,9 +107,6 @@ export function ReportArtifactDemo({ embed = "artifact-shell" }: ReportArtifactD
             <tr>
               <th className="report-artifact-th report-artifact-th--rich" scope="col">
                 <div className="report-th-rich">
-                  <span className="report-th-required" aria-hidden>
-                    *
-                  </span>
                   <div className="report-th-copy">
                     <span className="report-th-title">Employee</span>
                     <span className="report-th-sub">Legal name</span>
@@ -124,9 +121,6 @@ export function ReportArtifactDemo({ embed = "artifact-shell" }: ReportArtifactD
               </th>
               <th className="report-artifact-th" scope="col">
                 <div className="report-th-simple">
-                  <span className="report-th-required" aria-hidden>
-                    *
-                  </span>
                   <span className="report-th-title">Department</span>
                 </div>
               </th>

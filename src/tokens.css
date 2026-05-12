@@ -38,6 +38,12 @@
   --color-citation-image: #512f3e;
   /* Focus outline — #000 @ 25% */
   --color-ring: rgb(0 0 0 / 25%);
+  /**
+   * Input focus accent (#5AA5E7). Cool blue used when an input or active
+   * element wants a louder focus than `--color-ring`. Applied to the composer
+   * shell while typing, the artifact "active" outline, the add-menu search, etc.
+   */
+  --color-focus-input: #5aa5e7;
   /** Neutral surface — docs preview chrome, elevated panels on white. */
   --color-surface: #f9f7f6;
 
@@ -53,5 +59,5 @@
   --artifact-hover-shadow-card-active: var(--shadow-md);
   --artifact-hover-shadow-thumb: var(--shadow-md);
   --artifact-hover-shadow-thumb-active: var(--shadow-md);
-  --artifact-outline-active: #5aa5e7;
+  --artifact-outline-active: var(--color-focus-input);
 }

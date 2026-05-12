@@ -287,6 +287,12 @@ export type ChatProps = {
   ariaThreadLabel?: string;
   /** Name for the footer / composer strip when `footer` is set. */
   ariaComposerLabel?: string;
+  /**
+   * Top toolbar — Figma `AI · Copilot — Embedded Experiences` node 7164:61241.
+   * Pass `false` to suppress; pass a partial object to opt into the buttons you
+   * want. The toolbar is hidden entirely when there's no `title` and no handlers.
+   */
+  toolbar?: ChatToolbarProps | false;
 };
 
 export function ChatSampleThread({
@@ -372,6 +378,155 @@ function IconReplay() {
   );
 }
 
+/*
+ * Chat top toolbar — sourced from Figma `AI · Copilot - Embedded Experiences`
+ * node 7164:61241 ("Property 1=With Chat Title"). 24px content row inside the
+ * panel chrome, hamburger + title on the left, comment/expand/close on the right.
+ * Each glyph is 24×24 with a 16×~16 vector inside; paths copied verbatim and
+ * normalized to a 0..24 viewBox.
+ */
+function IconHamburger() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M20 15.25V16.75H4V15.25H20ZM20 12.75H4V11.25H20V12.75ZM20 8.75H4V7.25H20V8.75Z"
+      />
+    </svg>
+  );
+}
+
+function IconAddComment() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M11.25 8.75V5H12.75V8.75H16.5V10.25H12.75V14H11.25V10.25H7.5V8.75H11.25Z"
+      />
+      <path
+        fill="currentColor"
+        d="M1.25 1.25H22.75V17.75H15.25L8.25 23V17.75H1.25V1.25ZM2.75 2.75V16.25H9.75V20L14.75 16.25H21.25V2.75H2.75Z"
+      />
+    </svg>
+  );
+}
+
+function IconExpand() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M18.689 4.25H15.5V2.75H21.25V8.5H19.75V5.311L15.03 10.031L13.969 8.97L18.689 4.25Z"
+      />
+      <path
+        fill="currentColor"
+        d="M5.311 19.75H8.5V21.25H2.75V15.5H4.25V18.689L8.97 13.969L10.031 15.03L5.311 19.75Z"
+      />
+      <path
+        fill="currentColor"
+        d="M4.25 5.311V8.5H2.75V2.75H8.5V4.25H5.311L10.031 8.97L8.97 10.031L4.25 5.311Z"
+      />
+      <path
+        fill="currentColor"
+        d="M19.75 18.689V15.5H21.25V21.25H15.5V19.75H18.689L13.969 15.03L15.03 13.969L19.75 18.689Z"
+      />
+    </svg>
+  );
+}
+
+function IconClose() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M10.939 12L4.469 5.53L5.53 4.469L12 10.939L18.47 4.469L19.531 5.53L13.061 12L19.531 18.47L18.47 19.531L12 13.061L5.53 19.531L4.469 18.47L10.939 12Z"
+      />
+    </svg>
+  );
+}
+
+export type ChatToolbarProps = {
+  title?: string;
+  /** When omitted, the button is hidden. */
+  onMenuClick?: () => void;
+  onAddCommentClick?: () => void;
+  onExpandClick?: () => void;
+  onCloseClick?: () => void;
+  className?: string;
+};
+
+/**
+ * Standalone toolbar — exported so consumers can drop it into their own chat
+ * shell (e.g. an existing Pebble panel) without using the full `Chat` component.
+ * Mirrors Figma `Property 1=With Chat Title` 1:1.
+ */
+export function ChatToolbar({
+  title,
+  onMenuClick,
+  onAddCommentClick,
+  onExpandClick,
+  onCloseClick,
+  className,
+}: ChatToolbarProps) {
+  return (
+    <div
+      role="toolbar"
+      aria-label="Chat actions"
+      className={["chat__toolbar", className].filter(Boolean).join(" ")}
+    >
+      <div className="chat__toolbar-cluster chat__toolbar-cluster--start">
+        {onMenuClick ? (
+          <button
+            type="button"
+            className="chat__toolbar-btn"
+            aria-label="Open menu"
+            onClick={onMenuClick}
+          >
+            <IconHamburger />
+          </button>
+        ) : null}
+        {title ? (
+          <p className="chat__toolbar-title" aria-live="polite">
+            {title}
+          </p>
+        ) : null}
+      </div>
+      <div className="chat__toolbar-cluster chat__toolbar-cluster--end">
+        {onAddCommentClick ? (
+          <button
+            type="button"
+            className="chat__toolbar-btn"
+            aria-label="Add comment"
+            onClick={onAddCommentClick}
+          >
+            <IconAddComment />
+          </button>
+        ) : null}
+        {onExpandClick ? (
+          <button
+            type="button"
+            className="chat__toolbar-btn"
+            aria-label="Expand chat"
+            onClick={onExpandClick}
+          >
+            <IconExpand />
+          </button>
+        ) : null}
+        {onCloseClick ? (
+          <button
+            type="button"
+            className="chat__toolbar-btn"
+            aria-label="Close chat"
+            onClick={onCloseClick}
+          >
+            <IconClose />
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 export function Chat({
   variant = "side-panel",
   threadPreset = "conversation",
@@ -382,6 +537,7 @@ export function Chat({
   ariaLabel = "AI chat",
   ariaThreadLabel = "Messages",
   ariaComposerLabel = "Message composer",
+  toolbar,
 }: ChatProps) {
   const layoutClass = `chat--${variant}`;
   const [thinkingReplayKey, setThinkingReplayKey] = useState(0);
@@ -392,13 +548,27 @@ export function Chat({
     setThinkingReplayKey(0);
   }, [panelVersion]);
 
+  // Only render the toolbar if it has something to show.
+  const toolbarVisible =
+    toolbar !== false &&
+    toolbar !== undefined &&
+    Boolean(
+      toolbar.title ||
+        toolbar.onMenuClick ||
+        toolbar.onAddCommentClick ||
+        toolbar.onExpandClick ||
+        toolbar.onCloseClick,
+    );
+
   return (
     <section
       className={["chat", layoutClass, className].filter(Boolean).join(" ")}
       aria-label={ariaLabel}
       data-chat-variant={variant}
       data-chat-panel={panelVersion}
+      data-chat-has-toolbar={toolbarVisible || undefined}
     >
+      {toolbarVisible ? <ChatToolbar {...(toolbar as ChatToolbarProps)} /> : null}
       {panelVersion === "animated" && thinkingAnimComplete ? (
         <button
           type="button"

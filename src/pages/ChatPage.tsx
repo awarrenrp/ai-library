@@ -189,7 +189,11 @@ export function ChatPage() {
 
       <ComponentIntentPanel when={CHAT_WHEN} designIntent={CHAT_DESIGN_INTENT} />
 
-      <div className="demo-preview-surface" role="region" aria-label="Chat interactive preview">
+      <div
+        className="demo-preview-surface demo-preview-surface--no-toolbar-divider"
+        role="region"
+        aria-label="Chat interactive preview"
+      >
       <div className="demo-toolbar" aria-label="Chat preview controls">
         <div className="demo-group">
           <p className="demo-label" id="label-chat-layout">
@@ -239,6 +243,13 @@ export function ChatPage() {
           ariaLabel="Rippling AI chat"
           ariaThreadLabel="Conversation messages"
           ariaComposerLabel="Message composer"
+          toolbar={{
+            title: thread === "empty" ? "New conversation" : "Headcount by department",
+            onMenuClick: () => {},
+            onAddCommentClick: () => {},
+            onExpandClick: () => {},
+            onCloseClick: () => {},
+          }}
           footer={
             <Composer
               width="fill"

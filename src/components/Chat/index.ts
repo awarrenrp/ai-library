@@ -3,6 +3,7 @@ export {
   ChatEmptyThread,
   ChatSampleThread,
   ChatThinkingBlock,
+  ChatToolbar,
   CHAT_LAYOUT_VARIANTS,
   CHAT_PANEL_VERSION_LABELS,
   CHAT_PANEL_VERSIONS,
@@ -16,4 +17,5 @@ export type {
   ChatThinkingBlockProps,
   ChatThinkingStep,
   ChatThreadPreset,
+  ChatToolbarProps,
 } from "./Chat";

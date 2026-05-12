@@ -83,3 +83,10 @@
   border: 1px dashed rgb(122 0 93 / 35%);
   border-radius: 8px;
 }
+
+/* Compact for the More menu slot — same swatch, less vertical space. */
+.rna-slot-placeholder--menu {
+  padding: 14px 12px;
+  font-size: 13px;
+  line-height: 1.4;
+}

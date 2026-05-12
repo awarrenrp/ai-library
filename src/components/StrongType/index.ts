@@ -1,13 +1,12 @@
 export {
+  STRONG_TYPE_TRIGGERS,
   StrongType,
-  STRONG_TYPE_SIZES,
-  STRONG_TYPE_TONES,
-  STRONG_TYPE_TONE_LABELS,
-  STRONG_TYPE_VARIANTS,
+  filterStrongTypeGroups,
+  flattenStrongTypeItems,
 } from "./StrongType";
 export type {
+  StrongTypeGroup,
+  StrongTypeItem,
   StrongTypeProps,
-  StrongTypeSize,
-  StrongTypeTone,
-  StrongTypeVariant,
+  StrongTypeTrigger,
 } from "./StrongType";

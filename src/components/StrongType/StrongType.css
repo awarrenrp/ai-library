@@ -1,112 +1,171 @@
 /*
- * StrongType — heavyweight label / pill.
+ * StrongType menu (slash-command + mention picker).
  *
- * Contrast table (label text vs fill, computed):
- *   primary    #ffffff on #7a005d  → 10.6 : 1   (AAA)
- *   info       #ffffff on #1e4aa9  →  8.1 : 1   (AAA)
- *   neutral    #ffffff on #000000  → 21.0 : 1   (AAA)
- *   critical   #ffffff on #bb3d2a  →  5.5 : 1   (AA)
- *   positive   #ffffff on #166534  →  7.3 : 1   (AAA)
- *   progress   #ffffff on #92400e  →  7.5 : 1   (AAA)   — amber-800, distinct from red critical and green positive
+ * Visual contract:
+ * - Floats above the composer input, anchored by the host with absolute
+ *   positioning. This file only styles the panel itself.
+ * - Row hover/active uses #f2f0ed (warm grey) so it reads as a focus ring
+ *   without competing with primary actions. Active is darker than hover so
+ *   keyboard nav reads clearly even when the mouse hovers a different row.
  *
- * Outlined variants render the tone color as foreground on white; the foregrounds above
- * sit on top of #ffffff with the same ratios.
+ * Contrast (WCAG 1.4.3 AA):
+ *   #000 on #ffffff           21:1   AAA
+ *   #000 on #f2f0ed            ~19:1  AAA  (active row)
+ *   #716f6c on #ffffff         5.0:1  AA   (descriptions, group label)
+ *   #716f6c on #f2f0ed         4.7:1  AA   (descriptions when row is active)
  */
 
-.strong-type {
-  --strong-type-fill: #000000;
-  --strong-type-on-fill: #ffffff;
-  --strong-type-outline: rgb(0 0 0 / 45%);
-  --strong-type-radius: 999px;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.strong-type-menu {
   box-sizing: border-box;
-  border-radius: var(--strong-type-radius);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 420px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 6px 0 0;
+  border: 1px solid rgb(0 0 0 / 12%);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: var(--shadow-md, 0 10px 30px -8px rgb(0 0 0 / 18%));
   font-family: inherit;
-  font-weight: var(--font-weight-heading);
-  letter-spacing: 0.02em;
+  color: #000000;
+}
+
+.strong-type-menu__empty {
+  margin: 0;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #716f6c;
+}
+
+.strong-type-menu__empty code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.92em;
+}
+
+.strong-type-menu__group {
+  padding: 4px 0 8px;
+}
+
+.strong-type-menu__group + .strong-type-menu__group {
+  border-top: 1px solid rgb(0 0 0 / 6%);
+  margin-top: 2px;
+  padding-top: 8px;
+}
+
+.strong-type-menu__group-label {
+  margin: 6px 12px 4px;
+  padding: 0;
+  font-size: 10px;
+  font-weight: var(--font-weight-emphasis);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  white-space: nowrap;
-  user-select: none;
+  color: #716f6c;
 }
 
-button.strong-type {
-  border: none;
+.strong-type-menu__list {
+  margin: 0;
+  padding: 0 4px;
+  list-style: none;
+}
+
+/* Row: icon · label · description (description right-aligned with min-gap from label). */
+.strong-type-menu__item {
+  display: grid;
+  grid-template-columns: 20px minmax(0, auto) 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
   cursor: pointer;
-  font: inherit;
-  font-weight: var(--font-weight-heading);
+  font-size: 14px;
+  line-height: 18px;
 }
 
-button.strong-type:focus-visible {
-  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
-  outline-offset: 2px;
+.strong-type-menu__item:hover {
+  background: rgb(0 0 0 / 4%);
 }
 
-.strong-type__icon {
+.strong-type-menu__item--active {
+  background: #f2f0ed;
+}
+
+.strong-type-menu__item-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: #000;
 }
 
-.strong-type__icon svg {
+.strong-type-menu__item-icon svg {
   display: block;
-  width: 1em;
-  height: 1em;
+  width: 100%;
+  height: 100%;
 }
 
-.strong-type__label {
-  line-height: 1;
+.strong-type-menu__item-label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+  font-weight: var(--font-weight-emphasis);
+  color: #000;
 }
 
-/* Sizes — heights chosen so the pill sits cleanly against a 24px text baseline. */
-.strong-type--sm {
-  height: 20px;
-  padding: 0 8px;
+.strong-type-menu__item-trigger {
+  color: #716f6c;
+  font-weight: var(--font-weight-body);
+}
+
+.strong-type-menu__item-desc {
+  justify-self: end;
+  max-width: 60%;
+  font-size: 13px;
+  color: #716f6c;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Footer (keyboard legend, etc.) */
+.strong-type-menu__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  margin-top: 4px;
+  border-top: 1px solid rgb(0 0 0 / 8%);
   font-size: 11px;
+  color: #716f6c;
 }
 
-.strong-type--md {
-  height: 24px;
-  padding: 0 10px;
-  font-size: 12px;
+.strong-type-menu__footer kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin: 0 2px;
+  border: 1px solid rgb(0 0 0 / 18%);
+  border-radius: 4px;
+  background: #ffffff;
+  font: inherit;
+  font-size: 10px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  color: #000;
 }
 
-/* Filled — strong fill, white label. */
-.strong-type--filled {
-  background: var(--strong-type-fill);
-  color: var(--strong-type-on-fill);
-}
+@media (max-width: 560px) {
+  .strong-type-menu__item {
+    grid-template-columns: 20px 1fr;
+  }
 
-/* Outlined — transparent body, tone-colored ring + label. */
-.strong-type--outlined {
-  background: transparent;
-  color: var(--strong-type-fill);
-  box-shadow: inset 0 0 0 1.5px var(--strong-type-fill);
-}
-
-/* Tones — keep `--strong-type-fill` as the single source of truth for both variants. */
-.strong-type--neutral {
-  --strong-type-fill: #000000;
-}
-
-.strong-type--primary {
-  --strong-type-fill: var(--color-primary, #7a005d);
-}
-
-.strong-type--info {
-  --strong-type-fill: var(--color-info, #1e4aa9);
-}
-
-.strong-type--critical {
-  --strong-type-fill: #bb3d2a;
-}
-
-.strong-type--positive {
-  --strong-type-fill: #166534;
-}
-
-.strong-type--progress {
-  --strong-type-fill: #92400e;
+  .strong-type-menu__item-desc {
+    display: none;
+  }
 }

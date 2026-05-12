@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ArtifactTrayPage } from "./pages/ArtifactTrayPage";
 import { ComposerPage } from "./pages/ComposerPage";
 import { ExternalArtifactsPage } from "./pages/ExternalArtifactsPage";
 import { InChatArtifactsPage } from "./pages/InChatArtifactsPage";
@@ -15,6 +16,7 @@ export function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/artifact-tray" element={<ArtifactTrayPage />} />
         <Route path="/composer" element={<ComposerPage />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/in-chat-artifacts" element={<InChatArtifactsPage />} />

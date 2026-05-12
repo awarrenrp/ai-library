@@ -8,8 +8,8 @@
   --composer-send-active: var(--color-primary, #7a005d);
   /* Focus ring — buttons / toolbar (#000 @ 25%) */
   --composer-focus-ring: var(--color-ring, rgb(0 0 0 / 25%));
-  /* Shell outline while message field is focused / typing */
-  --composer-typing-focus-ring: #5aa5e7;
+  /* Shell outline while message field is focused / typing — pulls from the global token. */
+  --composer-typing-focus-ring: var(--color-focus-input, #5aa5e7);
   --composer-radius: 8px;
   --composer-btn-radius: 6px;
   --composer-action-gap: 8px;
@@ -51,114 +51,75 @@
 }
 
 /*
- * Intent switcher — Ask | Agent | Plan (alternate variant only).
- * Replaces the Fast dropdown in the toolbar; lives at toolbar baseline (32px).
+ * Ghost button — text + chevron, no border, transparent background.
+ * Used by:
+ *   - .composer-intent-trigger (Ask / Agent / Plan, alternate toolbar)
+ *   - .composer-speed-trigger  (Pro / Fast, sits below the alternate surface)
+ *
+ * Hover is the only persistent state: a subtle #000 @ 5% tint on the bg. Focus uses the
+ * standard #000 @ 25% ring for non-typing controls (typing focus is reserved for the field).
  */
-.composer-intent {
+.composer-ghost-btn {
   display: inline-flex;
   flex-direction: row;
-  align-items: stretch;
-  height: 32px;
-  padding: 2px;
-  border: 1px solid var(--composer-border);
-  border-radius: 999px;
-  background: var(--composer-surface);
-}
-
-.composer-intent-option {
-  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 0 12px;
+  height: 32px;
+  padding: 0 6px 0 10px;
+  gap: 4px;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--composer-btn-radius);
   background: transparent;
+  color: #000000;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 20px;
-  color: #000000;
   cursor: pointer;
 }
 
-.composer-intent-option:hover {
+.composer-ghost-btn:hover {
   background: rgb(0 0 0 / 5%);
 }
 
-.composer-intent-option--active {
-  background: #000000;
-  color: #ffffff;
+.composer-ghost-btn:active {
+  background: rgb(0 0 0 / 8%);
 }
 
-.composer-intent-option--active:hover {
-  background: #000000;
-  filter: brightness(1.05);
-}
-
-.composer-intent-option:focus-visible {
+.composer-ghost-btn:focus-visible {
   outline: 2px solid var(--composer-focus-ring);
   outline-offset: 2px;
 }
 
-/*
- * Speed switcher (alternate) — XS Fast | Pro pill sitting under the surface.
- * Height ~22px, font 11px, tight letter-spacing-free pill. Visible on focus too.
- */
+.composer-ghost-btn__label {
+  flex-shrink: 0;
+}
+
+/* XS — used by the speed switcher under the alternate composer (Pro / Fast). */
+.composer-ghost-btn--xs {
+  height: 22px;
+  padding: 0 4px 0 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.composer-ghost-btn--xs svg {
+  width: 12px;
+  height: 12px;
+}
+
+.composer-intent-anchor,
+.composer-speed-anchor {
+  position: relative;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* Speed switcher row — sits centered under the alternate surface. */
 .composer-speed-row {
   display: flex;
   justify-content: center;
   margin-top: 8px;
-}
-
-.composer-speed {
-  display: inline-flex;
-  flex-direction: row;
-  align-items: stretch;
-  height: 22px;
-  padding: 2px;
-  border: 1px solid rgb(0 0 0 / 12%);
-  border-radius: 999px;
-  background: var(--composer-surface);
-  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
-}
-
-.composer-speed-option {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 38px;
-  height: 100%;
-  padding: 0 8px;
-  border: none;
-  border-radius: 999px;
-  background: transparent;
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: var(--font-weight-emphasis);
-  line-height: 14px;
-  letter-spacing: 0.02em;
-  color: var(--composer-muted);
-  cursor: pointer;
-}
-
-.composer-speed-option:hover {
-  color: #000000;
-}
-
-.composer-speed-option--active {
-  background: #000000;
-  color: #ffffff;
-}
-
-.composer-speed-option--active:hover {
-  color: #ffffff;
-  filter: brightness(1.05);
-}
-
-.composer-speed-option:focus-visible {
-  outline: 2px solid var(--composer-focus-ring);
-  outline-offset: 2px;
 }
 
 /*
@@ -186,22 +147,25 @@
   margin-bottom: 6px;
 }
 
-/* Chip — Regular · AI-components · 865:10482 */
+/*
+ * Chip — Regular · AI-components · 865:10482, shrunk to a 22px-tall context tag so it
+ * reads as metadata, not as a primary control. Sits flush-left above the message field.
+ */
 .composer-edit-chip {
   display: inline-flex;
   flex-direction: row;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   box-sizing: border-box;
   max-width: 100%;
-  min-height: 32px;
-  padding: 6px 10px 6px 8px;
-  border-radius: 6px;
+  height: 22px;
+  padding: 0 8px 0 6px;
+  border-radius: 999px;
   border: 1px solid rgb(0 0 0 / 10%);
   background: rgb(185 219 243);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
+  font-size: 12px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 16px;
   letter-spacing: -0.01em;
   color: #000000;
 }
@@ -211,7 +175,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 14px;
+  height: 14px;
   color: rgb(0 0 0 / 72%);
+}
+
+.composer-edit-chip__icon svg {
+  width: 12px;
+  height: 12px;
 }
 
 .composer-edit-chip__label {
@@ -443,6 +414,24 @@
   border-radius: 8px;
   background: var(--composer-surface);
   box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
+}
+
+/* Opens upward — used by the alternate intent (sits at toolbar bottom) and the speed switcher (sits below the shell). */
+.composer-mode-menu--up {
+  top: auto;
+  bottom: calc(100% + 6px);
+}
+
+/* Smaller — matches the xs ghost trigger (speed switcher). */
+.composer-mode-menu--xs {
+  min-width: 88px;
+  border-radius: 6px;
+}
+
+.composer-mode-menu--xs .composer-mode-option {
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 16px;
 }
 
 .composer-mode-option {

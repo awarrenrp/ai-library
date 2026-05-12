@@ -1,0 +1,159 @@
+/*
+ * Artifact tray — Figma 1076:18510. Two states defined: `default` and `hover`.
+ * Card padding values come from Figma children offsets (title at 16,16; list at
+ * 16,50; close at 216,12 inside a 260×170 card), implemented here with flex.
+ */
+
+.artifact-tray {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 260px;
+  padding: 16px 12px 16px 16px;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 16px;
+  background: #ffffff;
+  /* Default · subtle baseline elevation (Figma: y:1 blur:1 #000 @ 5%). */
+  box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+  transition: box-shadow 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .artifact-tray {
+    transition: none;
+  }
+}
+
+/* Card-level hover — real `:hover` plus an opt-in `data-state="hover"` for static specs. */
+.artifact-tray:hover,
+.artifact-tray:focus-within,
+.artifact-tray[data-state="hover"] {
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgb(0 0 0 / 15%));
+}
+
+.artifact-tray__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 32px;
+}
+
+.artifact-tray__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 24px;
+  letter-spacing: -0.01em;
+  color: #000000;
+}
+
+/* Close button — 32×32 ghost, square hover affordance to match other artifact icon buttons. */
+.artifact-tray__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #000000;
+  cursor: pointer;
+}
+
+.artifact-tray__close:hover {
+  background: var(--artifact-overlay-hover, rgb(0 0 0 / 10%));
+}
+
+.artifact-tray__close:active {
+  background: var(--artifact-overlay-pressed, rgb(0 0 0 / 20%));
+}
+
+.artifact-tray__close:focus-visible {
+  outline: 2px solid var(--color-focus-input, #5aa5e7);
+  outline-offset: 2px;
+}
+
+.artifact-tray__close-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* List — 4px gap between rows (Figma vertical Auto Layout, itemSpacing 4). */
+.artifact-tray__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/*
+ * Row — 4px padding, 8px icon/title gap, 8px radius.
+ * Color (#716f6c) matches the body-text muted token used across artifacts.
+ */
+.artifact-tray__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 4px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  text-align: left;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 24px;
+  color: #716f6c;
+  cursor: pointer;
+}
+
+.artifact-tray__item:hover,
+.artifact-tray__item:focus-visible,
+.artifact-tray__item[data-hovered] {
+  background: var(--artifact-overlay-hover, rgb(0 0 0 / 10%));
+  color: #000000;
+}
+
+.artifact-tray__item:active {
+  background: var(--artifact-overlay-pressed, rgb(0 0 0 / 20%));
+  color: #000000;
+}
+
+.artifact-tray__item:focus-visible {
+  outline: 2px solid var(--color-focus-input, #5aa5e7);
+  outline-offset: 2px;
+}
+
+.artifact-tray__item-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: currentColor;
+}
+
+.artifact-tray__item-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.artifact-tray__item-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
