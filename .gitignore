@@ -2,3 +2,6 @@ node_modules
 dist
 .DS_Store
 .vercel
+
+# Local clone used for design-team subtree PR (see docs or CONTRIBUTING)
+_subtree_work/
