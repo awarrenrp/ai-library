@@ -144,7 +144,7 @@ export function ChatPage() {
             role="menu"
             aria-labelledby={settingsBtnId}
           >
-            {CHAT_PANEL_VERSIONS.map((v) => (
+            {CHAT_PANEL_VERSIONS.filter((v) => v !== "animated").map((v) => (
               <button
                 key={v}
                 type="button"
@@ -178,7 +178,7 @@ export function ChatPage() {
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Chat
         </p>
-        <h1 style={{ margin: 0, fontSize: 32, fontWeight: "var(--font-weight-heading)", letterSpacing: "-0.02em" }}>Chat</h1>
+        <h1 className="page-doc-title">Chat</h1>
         <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 18, lineHeight: 1.55, color: "#716f6c" }}>
           The chat shell wraps the message thread and the composer—one surface for back-and-forth with Rippling AI,
           aligned with the side-panel and full-page chat patterns in AI-components.
@@ -267,10 +267,9 @@ export function ChatPage() {
       </div>
 
       <hr className="page-section__divider" aria-hidden="true" />
-      <h2 className="page-section__title">Examples</h2>
 
       <section
-        className="in-context-stage demo-fullbleed"
+        className="in-context-stage"
         id="chat-example-in-context"
         aria-labelledby="chat-example-in-context-heading"
       >
@@ -280,11 +279,12 @@ export function ChatPage() {
               Example in chat — {CHAT_PANEL_VERSION_LABELS[panelVersion]}
             </h2>
             <p className="in-context-stage__lede">
-              A working chat using the real composer. The example mirrors the panel version
-              picked from the gear (upper right): {CHAT_PANEL_VERSION_LABELS[panelVersion]}.
-              {panelVersion === "animated"
-                ? " Send a message to drive the composer hat through its full cycle (idle → thinking → shimmer → cycling → done → idle), or pin a phase below to inspect each animation state on its own."
-                : " Send a message — the inline thinking block lands with the assistant's reply, just as it would in product."}
+              A working chat using the real composer. Send a message — the inline thinking block
+              lands with the assistant's reply, just as it would in product. Toggle between the
+              Default (with step glyphs) and No glyphs variants via the gear above.{" "}
+              <Link to="/thinking-states" style={{ color: "#7a005d" }}>
+                See the animated hat on the Thinking states page →
+              </Link>
             </p>
           </div>
           <div className="demo-segments" role="group" aria-label="Chat example surface mode">

@@ -5,27 +5,65 @@
 }
 
 /*
- * Page sections — the page narrative is "Usage → Specs → Examples". Every
- * page renders these three eyebrow headings (or as many as apply) in the
- * shared style below. `--lead` drops the divider for the first section.
+ * Page sections — the page narrative is "Usage → Specs → Examples". Each H2
+ * uses `.page-section__title` for a consistent 24px semibold section heading below
+ * the intent panel. `--lead` retained for layout compat.
  */
 .page-section__divider {
   margin: 36px 0 14px;
-  border: none;
-  border-top: 1px solid rgb(0 0 0 / 12%);
+  border: 0;
+  background: none;
+  height: 0;
 }
 
 .page-section__title {
   margin: 0 0 16px;
-  font-size: 13px;
+  font-size: 24px;
   font-weight: var(--font-weight-heading);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #716f6c;
+  line-height: 28px;
+  letter-spacing: -0.02em;
+  color: #000000;
 }
 
 .page-section__title--lead {
   margin-top: 0;
+}
+
+/** Primary page title (H1) on component doc pages — pairs with `.page-section__title` for hierarchy */
+.page-doc-title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: var(--font-weight-heading);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: #000000;
+}
+
+/* Figma link badge — icon + label used in page headers */
+.figma-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: var(--font-weight-emphasis);
+  color: #716f6c;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.figma-link:hover {
+  color: #000000;
+}
+
+.figma-link:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.figma-link__icon {
+  display: block;
+  flex-shrink: 0;
 }
 
 /*
@@ -72,10 +110,9 @@
 
 /*
  * Full-bleed utility — lets a child break out of `.demo-wrap`'s 960px column
- * and stretch to the viewport width while preserving the surrounding prose
- * column. Use on in-context / side-chat demo wrappers so the example feels
- * like a real product surface. Pairs well with `.in-context-stage` controls
- * on top.
+ * and stretch to the viewport width. Optional: pair with `.in-context-stage`
+ * only when an example must span edge-to-edge; default Examples sections stay
+ * inside the page column (no `demo-fullbleed`).
  */
 .demo-fullbleed {
   width: 100vw;
@@ -84,11 +121,9 @@
 }
 
 /*
- * In-context stage — shared container that hosts the side-chat / full-screen
- * mode toggle above a full-bleed demo surface. Sits on the standard
- * `--color-surface` tier so the section reads as a continuous extension of
- * the page chrome rather than its own beige band. Framed top + bottom with a
- * 40%-black hairline.
+ * In-context stage — hosts the example intro (title, lede, toggles) and the
+ * demo surface below. No section background so Examples align visually with the
+ * rest of the page; hairlines only separate the header block from the preview.
  */
 .in-context-stage {
   margin-top: 32px;
@@ -96,7 +131,6 @@
   padding-top: 32px;
   display: flex;
   flex-direction: column;
-  background: var(--color-surface);
   border-top: 1px solid rgb(0 0 0 / 40%);
   border-bottom: 1px solid rgb(0 0 0 / 40%);
 }
@@ -105,12 +139,18 @@
   max-width: 960px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 24px 24px;
+  /* Inside `.demo-wrap`, horizontal gutters come from the page — no extra inset. */
+  padding: 0 0 24px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
+}
+
+/* Legacy: when the stage uses `.demo-fullbleed` to span the viewport, mirror `.demo-wrap` side padding on the inner column. */
+.in-context-stage.demo-fullbleed .in-context-stage__head {
+  padding: 0 24px 24px;
 }
 
 /*
@@ -131,7 +171,7 @@
 
 .in-context-stage__title {
   margin: 0;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: var(--font-weight-heading);
   letter-spacing: -0.02em;
   color: #000000;
@@ -244,8 +284,8 @@
 
 .demo-meta {
   margin: 16px 0 0;
-  font-size: 13px;
-  color: #716f6c;
+  font-size: 16px;
+  color: #d0513a;
 }
 
 /* Composer demo page — version picker (viewport upper right) */

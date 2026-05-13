@@ -16,17 +16,16 @@ import IN_CHAT_WIDGET_EXAMPLE_SOURCE from "../examples/InChatWidgetExample.tsx?r
 import { copyText } from "../utils/copyText";
 import "../App.css";
 import "../components/Links/Links.css";
+import { FigmaLink } from "../components/FigmaLink";
 
 const FIGMA_SECTION =
   "https://www.figma.com/design/Dvcv5Yj50PM2WuJhPj1qUH/AI-components?node-id=885-17310";
-
-const FIGMA_TABLE_PREVIEW =
-  "https://www.figma.com/design/Dvcv5Yj50PM2WuJhPj1qUH/AI-components?node-id=883-13314";
 
 export function InChatArtifactsPage() {
   const [hoverVariant, setHoverVariant] = useState<ArtifactHoverVariant>("shadow");
   const [copyAck, setCopyAck] = useState(false);
   const [contextMode, setContextMode] = useState<InChatWidgetDemoMode>("side-chat");
+  const [widgetSelected, setWidgetSelected] = useState(false);
 
   return (
     <main className="demo-wrap" data-artifact-hover-style={hoverVariant}>
@@ -41,21 +40,13 @@ export function InChatArtifactsPage() {
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Artifacts
         </p>
-        <h1 style={{ margin: 0, fontSize: 32, fontWeight: "var(--font-weight-heading)", letterSpacing: "-0.02em" }}>
-          In-chat widget
-        </h1>
+        <h1 className="page-doc-title">In-chat widget</h1>
         <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 18, lineHeight: 1.55, color: "#716f6c" }}>
           Structured outputs the assistant renders inside the conversation—entity cards, tables, confirmations,
           streaming blocks, and rich previews.
         </p>
         <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 14, lineHeight: 1.5, color: "#716f6c" }}>
-          <a href={FIGMA_SECTION} target="_blank" rel="noreferrer" style={{ color: "#7a005d" }}>
-            Figma · AI-components (In-chat artifacts)
-          </a>
-          {" · "}
-          <a href={FIGMA_TABLE_PREVIEW} target="_blank" rel="noreferrer" style={{ color: "#7a005d" }}>
-            Table preview (883:13314)
-          </a>
+          <FigmaLink href={FIGMA_SECTION} />
         </p>
       </header>
 
@@ -96,26 +87,46 @@ export function InChatArtifactsPage() {
         >
           Widget previews
         </h2>
-        <p
-          style={{
-            margin: "0 0 24px",
-            maxWidth: 640,
-            fontSize: 15,
-            lineHeight: 1.55,
-            color: "#716f6c",
-          }}
-        >
-          Standalone rows for each widget category—the Table pattern is the grid only (no title/Open strip like the link
-          widgets). The side-chat example below embeds the same table.
-        </p>
-        <InChatWidgets />
+        <div style={{ display: "flex", alignItems: "baseline", gap: 16, margin: "0 0 24px", flexWrap: "wrap" }}>
+          <p
+            style={{
+              margin: 0,
+              maxWidth: 560,
+              fontSize: 15,
+              lineHeight: 1.55,
+              color: "#716f6c",
+              flex: "1 1 auto",
+            }}
+          >
+            Standalone rows for each widget category—the Table pattern is the grid only (no title/Open strip like the link
+            widgets). The side-chat example below embeds the same table.
+          </p>
+          <div className="demo-segments" role="group" aria-label="Widget state">
+            <button
+              type="button"
+              className="demo-segment"
+              aria-pressed={!widgetSelected}
+              onClick={() => setWidgetSelected(false)}
+            >
+              Default
+            </button>
+            <button
+              type="button"
+              className="demo-segment"
+              aria-pressed={widgetSelected}
+              onClick={() => setWidgetSelected(true)}
+            >
+              Selected
+            </button>
+          </div>
+        </div>
+        <InChatWidgets selected={widgetSelected} />
       </section>
 
       <hr className="page-section__divider" aria-hidden="true" />
-      <h2 className="page-section__title">Examples</h2>
 
       <section
-        className="in-context-stage demo-fullbleed"
+        className="in-context-stage"
         id="ic-artifacts-context"
         aria-labelledby="ic-artifacts-context-heading"
       >

@@ -14,6 +14,7 @@ import { IconFile, IconReport, IconWorkflow } from "../icons";
 import { copyText } from "../utils/copyText";
 import "../App.css";
 import "./ArtifactTrayPage.css";
+import { FigmaLink } from "../components/FigmaLink";
 
 const FIGMA_URL =
   "https://www.figma.com/design/Dvcv5Yj50PM2WuJhPj1qUH/AI-components?node-id=1076-18510";
@@ -62,14 +63,7 @@ export function ArtifactTrayPage() {
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Artifact tray
         </p>
-        <h1
-          style={{
-            margin: 0,
-            fontSize: 32,
-            fontWeight: "var(--font-weight-heading)",
-            letterSpacing: "-0.02em",
-          }}
-        >
+        <h1 className="page-doc-title">
           Artifact tray <span aria-label="Work in progress" role="img">🚧</span>
         </h1>
         <p
@@ -93,9 +87,7 @@ export function ArtifactTrayPage() {
             color: "#716f6c",
           }}
         >
-          <a href={FIGMA_URL} target="_blank" rel="noreferrer" style={{ color: "#7a005d" }}>
-            Figma · AI-components / Artifact tray (1076:18510)
-          </a>
+          <FigmaLink href={FIGMA_URL} />
         </p>
       </header>
 
@@ -166,10 +158,9 @@ export function ArtifactTrayPage() {
       </div>
 
       <hr className="page-section__divider" aria-hidden="true" />
-      <h2 className="page-section__title">Examples</h2>
 
       <section
-        className="in-context-stage demo-fullbleed"
+        className="in-context-stage"
         aria-labelledby="artifact-tray-context-heading"
       >
         <div className="in-context-stage__head">

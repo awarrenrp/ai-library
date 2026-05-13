@@ -259,6 +259,36 @@
 }
 
 /*
+ * Action strip — always-visible row between header and body in the
+ * `"action-bar"` variant. Figma AI-components 1129:19698 / Frame 1618872044.
+ *
+ * Background: warm neutral #F9F7F6 (Figma fill r:0.976 g:0.969 b:0.965).
+ * Padding: 8px top/bottom, 16px left/right (matches Figma spec exactly).
+ * The strip is always rendered; no hover reveal or animation.
+ */
+.rippling-artifact-action-strip {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 16px;
+  background: #f9f7f6;
+  border-top: 1px solid rgb(0 0 0 / 8%);
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* In the `action-bar` variant the strip sits between header and body,
+ * so the body loses its top corner rounding to stay flush with the strip. */
+.rippling-artifact-wrap[data-variant="action-bar"] .rippling-artifact-body {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+/*
  * Action bar — only present when `variant === "with-actions"`. Pinned to the
  * bottom of the card, hidden at rest, revealed on hover or keyboard focus so
  * the artifact reads as a clean preview until the user engages. The bar

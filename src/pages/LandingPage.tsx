@@ -110,6 +110,11 @@ export function LandingPage() {
             title="Prompts"
             description="Prompt templates, guardrails, and recommended copy—placeholder until content is wired."
           />
+          <LandingCard
+            to="/thinking-states"
+            title="Thinking states"
+            description="How Rippling AI communicates it's working—animated composer hat and inline thinking block variants."
+          />
         </ul>
         {/* Visual divider separates shipped specs from the in-progress group below. */}
         <hr className="landing-cards-rule" aria-hidden />
@@ -133,6 +138,13 @@ export function LandingPage() {
             to="/strong-type"
             title="Strong type"
             description="Slash-command and mention menu—typing / or @ opens a grouped picker that turns a token into a structured choice."
+            icon="🚧"
+            iconLabel="Work in progress"
+          />
+          <LandingCard
+            to="/text"
+            title="Text"
+            description="Typography and formatting for AI-generated prose—type scale, markdown rendering, and streaming behaviour."
             icon="🚧"
             iconLabel="Work in progress"
           />

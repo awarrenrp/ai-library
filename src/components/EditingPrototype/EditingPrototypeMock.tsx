@@ -1,21 +1,73 @@
 /**
  * Editing — product-frame prototype (Analytics · Payroll mix).
- * Mirrors Figma `Edit mode` 802:14409 · AI-components.
+ * Mirrors Figma Edit mode 802:14409; top nav 802:14410 · AI-components.
  */
-import { useState } from "react";
-import { ChatToolbar } from "../Chat/Chat";
+import { useEffect, useRef, useState } from "react";
+import { ChatComposerHat, ChatToolbar } from "../Chat/Chat";
 import "../Chat/Chat.css";
 import { Composer } from "../Composer";
-import {
-  ChartDashboardDemo,
-  type ChartDashboardTileId,
-  RipplingArtifactShell,
-  SimpleBarChartDemo,
-} from "../RipplingArtifact";
+import { RipplingArtifactShell, SimpleBarChartDemo } from "../RipplingArtifact";
+import { InChatLinkWidget } from "../InChatWidget/InChatWidgets";
 import "./EditingPrototypeMock.css";
+import { FigmaLink } from "../FigmaLink";
 
 const FIGMA_PROTOTYPE =
   "https://www.figma.com/design/Dvcv5Yj50PM2WuJhPj1qUH/AI-components?node-id=802-14409";
+
+/** Title on the in-chat donut artifact (matches chart footer label + composer chip when selected). */
+const CHAT_ARTIFACT_TITLE = "Q3 revenue by segment";
+
+/** Title on the in-chat form artifact (forms mode). */
+const CHAT_FORM_ARTIFACT_TITLE = "New medical plan";
+
+/** Report-level editing context before the user picks a specific touchpoint. */
+const DEFAULT_EDIT_CONTEXT = "Payroll mix by department";
+
+/** Default context label for the forms mode. */
+const FORMS_EDIT_CONTEXT = "Benefits enrollment form";
+
+const DASHBOARD_VISUALS = [
+  { id: "headcount", title: "Open headcount by department" },
+  { id: "expenses", title: "Expenses by type" },
+] as const;
+
+/** Form field rows for the Benefits Admin mock. */
+const FORM_FIELDS = [
+  { id: "plan-name", label: "Plan name", value: "New medical plan", type: "text" },
+  { id: "plan-type", label: "Plan type", value: "Medical", type: "select" },
+  { id: "coverage", label: "Coverage level", value: "Employee + family", type: "select" },
+  { id: "carrier", label: "Carrier", value: "Anthem Blue Cross", type: "text" },
+  { id: "effective", label: "Effective date", value: "Jan 1, 2025", type: "text" },
+  { id: "open-enrollment", label: "Open enrollment", value: "Oct 15 – Nov 1, 2024", type: "text" },
+] as const;
+
+/** Icon for the medical plan document link widget. */
+function IconMedicalPlan() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden focusable="false">
+      <rect x="2.5" y="1.5" width="11" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.25" />
+      <path d="M8 5v6M5 8h6" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/** Simple form field row used in the forms workspace. */
+function FormField({ label, value, type }: { label: string; value: string; type: "text" | "select" }) {
+  return (
+    <div className="editing-prototype__form-field">
+      <label className="editing-prototype__form-label">{label}</label>
+      <div className={`editing-prototype__form-input${type === "select" ? " editing-prototype__form-input--select" : ""}`}>
+        <span className="editing-prototype__form-value">{value}</span>
+        {type === "select" && <span className="editing-prototype__form-chevron" aria-hidden>›</span>}
+      </div>
+    </div>
+  );
+}
+
+type EditFocus =
+  | { kind: "none" }
+  | { kind: "dashboard"; vizId: (typeof DASHBOARD_VISUALS)[number]["id"] }
+  | { kind: "chat" };
 
 function ProtoGhostIcon({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -85,6 +137,15 @@ function IconProtoPlus() {
   );
 }
 
+function IconProtoSearch() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden focusable="false">
+      <circle cx="6.75" cy="6.75" r="4.25" stroke="currentColor" strokeWidth="1.25" />
+      <path d="M10 10l3.5 3.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function IconProtoMore() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden focusable="false">
@@ -95,24 +156,52 @@ function IconProtoMore() {
   );
 }
 
-export function EditingPrototypeMock() {
-  const [dashSelection, setDashSelection] = useState<ChartDashboardTileId>("headcount-by-dept");
+export function EditingPrototypeMock({
+  variant = "default",
+  contentType = "dashboards",
+}: {
+  variant?: "default" | "animated";
+  contentType?: "dashboards" | "forms";
+}) {
+  const vizButtonRefs = useRef<Partial<Record<(typeof DASHBOARD_VISUALS)[number]["id"], HTMLButtonElement | null>>>(
+    {},
+  );
+  const [editFocus, setEditFocus] = useState<EditFocus>({ kind: "none" });
+
+  const selectedVizId = editFocus.kind === "dashboard" ? editFocus.vizId : null;
+
+  const editContextLabel =
+    contentType === "forms"
+      ? FORMS_EDIT_CONTEXT
+      : editFocus.kind === "dashboard"
+        ? DASHBOARD_VISUALS.find((v) => v.id === editFocus.vizId)?.title ?? DEFAULT_EDIT_CONTEXT
+        : editFocus.kind === "chat"
+          ? CHAT_ARTIFACT_TITLE
+          : DEFAULT_EDIT_CONTEXT;
+
+  useEffect(() => {
+    if (editFocus.kind !== "dashboard") return;
+    vizButtonRefs.current[editFocus.vizId]?.focus();
+  }, [editFocus]);
 
   return (
     <div className="editing-prototype" aria-label="Editing prototype mock — Analytics workspace with AI chat">
       <header className="editing-prototype__top-bar">
         <div className="editing-prototype__top-bar-left">
           <div className="editing-prototype__logo-dot" aria-hidden />
-          <span className="editing-prototype__suite-divider" aria-hidden />
+          <span className="editing-prototype__top-bar-divider" aria-hidden />
           <button type="button" className="editing-prototype__suite-select">
             <span>Analytics</span>
             <span className="editing-prototype__suite-chevron" aria-hidden />
           </button>
+          <span className="editing-prototype__top-bar-divider" aria-hidden />
         </div>
 
         <div className="editing-prototype__search" role="search">
-          <span className="editing-prototype__search-prefix" aria-hidden />
-          Search or jump to…
+          <span className="editing-prototype__search-icon" aria-hidden>
+            <IconProtoSearch />
+          </span>
+          <span className="editing-prototype__search-text">Search or jump to...</span>
         </div>
 
         <div className="editing-prototype__top-bar-right">
@@ -187,88 +276,103 @@ export function EditingPrototypeMock() {
           <hr className="editing-prototype__rule" />
 
           <div className="editing-prototype__canvas">
-            <aside className="editing-prototype__rail" aria-hidden />
-
-            <aside className="editing-prototype__inspector">
-              <p className="editing-prototype__inspector-heading">Dashboard context</p>
-              <dl className="editing-prototype__fields">
-                <div className="editing-prototype__field">
-                  <dt>Dashboard name</dt>
-                  <dd>
-                    <div className="editing-prototype__fake-field">People analytics</div>
-                  </dd>
+            {contentType === "forms" ? (
+              <div className="editing-prototype__main-canvas">
+                <div className="editing-prototype__form-header">
+                  <p className="editing-prototype__dash-caption">Benefits Admin · Plan configuration</p>
                 </div>
-                <div className="editing-prototype__field">
-                  <dt>Default view</dt>
-                  <dd>
-                    <div className="editing-prototype__fake-field">Compact</div>
-                  </dd>
-                </div>
-                <div className="editing-prototype__field">
-                  <dt>Date</dt>
-                  <dd>
-                    <div className="editing-prototype__fake-field">Last 30 days</div>
-                  </dd>
-                </div>
-                <div className="editing-prototype__field">
-                  <dt>Cohort</dt>
-                  <dd>
-                    <div className="editing-prototype__fake-field">All employees</div>
-                  </dd>
-                </div>
-                <div className="editing-prototype__field editing-prototype__field--stretch">
-                  <dt>Work location</dt>
-                  <dd>
-                    <div className="editing-prototype__fake-field">California, United States</div>
-                  </dd>
-                </div>
-              </dl>
-              <button type="button" className="editing-prototype__add-chip">
-                <span aria-hidden>+</span> Add
-              </button>
-            </aside>
-
-            <div className="editing-prototype__main-canvas">
-              <div className="editing-prototype__dash-meta">
-                <p className="editing-prototype__dash-caption">Executive summary</p>
-                <div className="editing-prototype__kpi-row">
-                  <div className="editing-prototype__kpi">
-                    <span className="editing-prototype__kpi-label">Open headcount</span>
-                    <span className="editing-prototype__kpi-value">42</span>
-                    <span className="editing-prototype__kpi-delta editing-prototype__kpi-delta--up">+8%</span>
-                  </div>
-                  <div className="editing-prototype__kpi">
-                    <span className="editing-prototype__kpi-label">Avg. days approval</span>
-                    <span className="editing-prototype__kpi-value">6.2</span>
-                    <span className="editing-prototype__kpi-delta">Target 5</span>
-                  </div>
-                  <div className="editing-prototype__kpi">
-                    <span className="editing-prototype__kpi-label">Payroll variance</span>
-                    <span className="editing-prototype__kpi-value">$1.24M</span>
-                    <span className="editing-prototype__kpi-delta editing-prototype__kpi-delta--down">−3%</span>
-                  </div>
+                <div className="editing-prototype__form-body">
+                  {FORM_FIELDS.map((f) => (
+                    <FormField key={f.id} label={f.label} value={f.value} type={f.type} />
+                  ))}
                 </div>
               </div>
+            ) : (
+              <div className="editing-prototype__main-canvas">
+                <div className="editing-prototype__dash-meta">
+                  <p className="editing-prototype__dash-caption">Executive summary</p>
+                  <div className="editing-prototype__kpi-row">
+                    <div className="editing-prototype__kpi">
+                      <span className="editing-prototype__kpi-label">Open headcount</span>
+                      <span className="editing-prototype__kpi-value">42</span>
+                      <span className="editing-prototype__kpi-delta editing-prototype__kpi-delta--up">+8%</span>
+                    </div>
+                    <div className="editing-prototype__kpi">
+                      <span className="editing-prototype__kpi-label">Avg. days approval</span>
+                      <span className="editing-prototype__kpi-value">6.2</span>
+                      <span className="editing-prototype__kpi-delta">Target 5</span>
+                    </div>
+                    <div className="editing-prototype__kpi">
+                      <span className="editing-prototype__kpi-label">Payroll variance</span>
+                      <span className="editing-prototype__kpi-value">$1.24M</span>
+                      <span className="editing-prototype__kpi-delta editing-prototype__kpi-delta--down">−3%</span>
+                    </div>
+                  </div>
+                </div>
 
-              <div className="editing-prototype__chart-grid">
-                <div className="editing-prototype__chart-panel">
-                  <p className="editing-prototype__chart-heading">Tiles — select focus (edit preview)</p>
-                  <ChartDashboardDemo selectedTileId={dashSelection} onSelectTile={setDashSelection} />
-                </div>
-                <div className="editing-prototype__chart-panel editing-prototype__chart-panel--tall">
-                  <p className="editing-prototype__chart-heading">Open headcount by department</p>
-                  <div className="editing-prototype__chart-surface editing-prototype__chart-surface--fill">
-                    <SimpleBarChartDemo variant="stacked-bar" />
-                  </div>
-                </div>
-                <div className="editing-prototype__chart-panel">
-                  <p className="editing-prototype__chart-heading">Expenses by type</p>
-                  <div className="editing-prototype__chart-surface">
-                    <SimpleBarChartDemo variant="bar" />
-                  </div>
+                <div
+                  className="editing-prototype__chart-grid"
+                  role="radiogroup"
+                  aria-label="Select a visualization to edit"
+                >
+                  {DASHBOARD_VISUALS.map((viz) => {
+                    const selected = editFocus.kind === "dashboard" && editFocus.vizId === viz.id;
+                    return (
+                      <button
+                        key={viz.id}
+                        type="button"
+                        role="radio"
+                        aria-checked={selected}
+                        tabIndex={
+                          selectedVizId === null
+                            ? viz.id === DASHBOARD_VISUALS[0].id
+                              ? 0
+                              : -1
+                            : selected
+                              ? 0
+                              : -1
+                        }
+                        className={
+                          "editing-prototype__chart-panel editing-prototype__chart-panel--selectable" +
+                          (viz.id === "headcount" ? " editing-prototype__chart-panel--tall" : "") +
+                          (selected ? " editing-prototype__chart-panel--selected" : "")
+                        }
+                        onClick={() => setEditFocus({ kind: "dashboard", vizId: viz.id })}
+                        ref={(el) => {
+                          vizButtonRefs.current[viz.id] = el;
+                        }}
+                        onKeyDown={(e) => {
+                          const currentId = editFocus.kind === "dashboard" ? editFocus.vizId : null;
+                          const idx = currentId == null ? -1 : DASHBOARD_VISUALS.findIndex((v) => v.id === currentId);
+                          const from = idx < 0 ? 0 : idx;
+                          if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+                            e.preventDefault();
+                            const next = Math.min(from + 1, DASHBOARD_VISUALS.length - 1);
+                            setEditFocus({ kind: "dashboard", vizId: DASHBOARD_VISUALS[next].id });
+                          } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+                            e.preventDefault();
+                            const prev = Math.max(from - 1, 0);
+                            setEditFocus({ kind: "dashboard", vizId: DASHBOARD_VISUALS[prev].id });
+                          }
+                        }}
+                      >
+                        <p className="editing-prototype__chart-heading">{viz.title}</p>
+                        <div
+                          className={
+                            "editing-prototype__chart-surface" +
+                            (viz.id === "headcount" ? " editing-prototype__chart-surface--fill" : "")
+                          }
+                        >
+                          <SimpleBarChartDemo
+                            variant={viz.id === "headcount" ? "stacked-bar" : "bar"}
+                          />
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </section>
 
@@ -287,23 +391,71 @@ export function EditingPrototypeMock() {
             />
 
             <div className="editing-prototype__ai-thread">
-              <blockquote className="editing-prototype__user-bubble">
-                Show me how many people started in the company over the past few months.
-              </blockquote>
-              <p className="editing-prototype__assistant-intro">I created these tiles for your dashboard preview.</p>
-              <RipplingArtifactShell selected title="Headcount snapshots" footerTimestamp="Just now">
-                <div className="editing-prototype__ai-shell-chart">
-                  <ChartDashboardDemo />
-                </div>
-              </RipplingArtifactShell>
+              {contentType === "forms" ? (
+                <>
+                  <blockquote className="editing-prototype__user-bubble">
+                    Can you help me set up the new medical plan for open enrollment?
+                  </blockquote>
+                  <p className="editing-prototype__assistant-intro">
+                    I’ve drafted the new medical plan configuration. Review the details and open to edit before publishing.
+                  </p>
+                  <div className="editing-prototype__chat-artifact-host editing-prototype__chat-artifact-host--open">
+                    <InChatLinkWidget
+                      title={CHAT_FORM_ARTIFACT_TITLE}
+                      previewCaption="Benefits Admin"
+                      previewIcon={<IconMedicalPlan />}
+                      previewBody={null}
+                      selected
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <blockquote className="editing-prototype__user-bubble">
+                    Show me how many people started in the company over the past few months.
+                  </blockquote>
+                  <p className="editing-prototype__assistant-intro">
+                    Here’s a concise read on recent hiring and staffing from your People analytics data.
+                  </p>
+                  <div
+                    className="editing-prototype__chat-artifact-host"
+                    onClick={(e) => {
+                      const el = e.target as HTMLElement;
+                      if (el.closest("button, a, [role='menu'], [role='menuitem'], input, textarea")) return;
+                      setEditFocus({ kind: "chat" });
+                    }}
+                  >
+                    <RipplingArtifactShell
+                      title={CHAT_ARTIFACT_TITLE}
+                      footerTimestamp="Just now"
+                      selected={editFocus.kind === "chat"}
+                      onAddToDashboard={() => {}}
+                    >
+                      <SimpleBarChartDemo variant="donut" />
+                    </RipplingArtifactShell>
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="editing-prototype__ai-composer-wrap">
+              {variant === "animated" ? (
+                <ChatComposerHat
+                  contextLabel={editContextLabel}
+                  autoStart
+                  className={[
+                    "editing-prototype__ai-hat",
+                    editFocus.kind !== "none" ? "editing-prototype__ai-hat--selected" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                />
+              ) : null}
               <Composer
                 width="fill"
                 version="alternate"
-                surfaceState="edit"
-                editContextLabel="Payroll mix chart"
+                surfaceState={variant === "animated" ? undefined : "edit"}
+                editContextLabel={variant === "animated" ? undefined : editContextLabel}
                 ariaComposerLabel="Editing assistant"
                 ariaMessageLabel="Message to Rippling AI"
                 placeholder="Describe the change…"
@@ -317,10 +469,7 @@ export function EditingPrototypeMock() {
       </div>
 
       <p className="editing-prototype__figma-caption">
-        Layout reference ·{" "}
-        <a href={FIGMA_PROTOTYPE} target="_blank" rel="noreferrer">
-          Figma Edit mode (802:14409)
-        </a>
+        <FigmaLink href={FIGMA_PROTOTYPE} />
       </p>
     </div>
   );

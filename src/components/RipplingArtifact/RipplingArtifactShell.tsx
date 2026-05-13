@@ -11,8 +11,12 @@ import "./RipplingArtifactShell.css";
  *   (buttons, links, inline form bits). The bar slides in on hover or
  *   keyboard focus and shares the card's bottom rounding so the surface
  *   reads as one piece.
+ * - `"action-bar"` — always-visible action strip pinned between the header
+ *   and the body. The strip has a warm neutral background and is shown at
+ *   all times (no hover reveal). Use for artifacts where primary actions
+ *   must remain permanently accessible — Figma AI-components 1129:19698.
  */
-export type RipplingArtifactShellVariant = "default" | "with-actions";
+export type RipplingArtifactShellVariant = "default" | "with-actions" | "action-bar";
 
 export type RipplingArtifactShellProps = {
   title: string;
@@ -24,8 +28,9 @@ export type RipplingArtifactShellProps = {
   /** Visual variant — see {@link RipplingArtifactShellVariant}. Defaults to `"default"`. */
   variant?: RipplingArtifactShellVariant;
   /**
-   * Action bar contents — only rendered when `variant === "with-actions"`.
-   * The bar is announced as `role="toolbar"` so consumers should pass focusable
+   * Action bar contents — rendered when `variant === "with-actions"` (hover-revealed
+   * bottom bar) or `variant === "action-bar"` (always-visible strip between header and body).
+   * The bar / strip is announced as `role="toolbar"` so consumers should pass focusable
    * controls (buttons, links). Pass a `<></>` to render an empty styled bar.
    */
   actions?: ReactNode;
@@ -42,6 +47,11 @@ export type RipplingArtifactShellProps = {
   onEdit?: () => void;
   onPin?: () => void;
   onViewSql?: () => void;
+  /**
+   * When set, adds an “Add to dashboard” row (with plus icon) after Edit in the
+   * More menu — Pebble Icons · Plus, 4881:292.
+   */
+  onAddToDashboard?: () => void;
   /**
    * Custom JSX rendered below a third divider in the More menu, in a slot
    * styled to match `.rippling-artifact-body` (12 16 16 padding). Drop
@@ -228,6 +238,20 @@ function IconRowPin() {
   );
 }
 
+/** Pebble Plus — 16×16 for menu row · Pebble Icons Library 4881:292 (stroke). */
+function IconRowPlus() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden focusable="false">
+      <path
+        d="M8 3.5v9M3.5 8h9"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 function IconRowViewSql() {
   return (
     <svg width="16" height="16" viewBox="0 2 16 16" fill="none" aria-hidden focusable="false">
@@ -266,6 +290,7 @@ export function RipplingArtifactShell({
   onEdit,
   onPin,
   onViewSql,
+  onAddToDashboard,
   moreMenuSlot,
   editing = false,
   onCancelEdit,
@@ -298,6 +323,16 @@ export function RipplingArtifactShell({
     { id: "download", label: "Download", icon: <IconRowDownload />, onClick: onDownload },
     { id: "duplicate", label: "Duplicate", icon: <IconRowDuplicate />, onClick: onDuplicate },
     { id: "edit", label: "Edit", icon: <IconRowEdit />, onClick: onEdit },
+    ...(onAddToDashboard
+      ? [
+          {
+            id: "add-to-dashboard",
+            label: "Add to dashboard",
+            icon: <IconRowPlus />,
+            onClick: onAddToDashboard,
+          } satisfies MenuRow,
+        ]
+      : []),
   ];
 
   const secondaryRows: MenuRow[] = [
@@ -306,6 +341,7 @@ export function RipplingArtifactShell({
   ];
 
   const withActions = variant === "with-actions" && !editing;
+  const withActionStrip = variant === "action-bar" && !editing;
 
   return (
     <div
@@ -427,6 +463,16 @@ export function RipplingArtifactShell({
         </header>
 
         {children ? <div className="rippling-artifact-body">{children}</div> : null}
+
+        {withActionStrip ? (
+          <div
+            className="rippling-artifact-action-strip"
+            role="toolbar"
+            aria-label="Artifact actions"
+          >
+            {actions}
+          </div>
+        ) : null}
 
         {withActions ? (
           <div

@@ -81,6 +81,8 @@ export type ExternalFileArtifactProps = {
   /** When `small`, compact row: icon + title (+ date); Open only (no Drive, no file-type label). */
   layoutWidth?: ComposerWidth;
   className?: string;
+  /** When true, applies the artifact focus outline to indicate this artifact is selected/active. */
+  selected?: boolean;
 };
 
 export function ExternalFileArtifact({
@@ -89,6 +91,7 @@ export function ExternalFileArtifact({
   dateLabel = "April 4th, 2026",
   layoutWidth = "large",
   className,
+  selected,
 }: ExternalFileArtifactProps) {
   const meta = FILE_META[kind];
   const title = titleProp ?? SAMPLE_TITLE_BY_KIND[kind];
@@ -105,8 +108,13 @@ export function ExternalFileArtifact({
         .join(" ")}
     >
       <article
-        className={["external-file-artifact", compact ? "external-file-artifact--compact" : ""].filter(Boolean).join(" ")}
+        className={[
+          "external-file-artifact",
+          compact ? "external-file-artifact--compact" : "",
+          selected ? "external-file-artifact--selected" : "",
+        ].filter(Boolean).join(" ")}
         aria-label={`External file: ${title}`}
+        data-selected={selected || undefined}
       >
         {!compact ? (
           <div className="external-file-artifact-thumb">

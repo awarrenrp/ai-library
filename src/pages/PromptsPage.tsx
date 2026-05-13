@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { Prompt } from "../components/Prompt";
+import { PromptsInChatDemo } from "../components/Prompt";
 import type { PromptSurface } from "../components/Prompt";
+import type { PromptsInChatDemoMode } from "../components/Prompt";
 import "../App.css";
 
 const PROMPTS_WHEN = [
@@ -23,6 +25,7 @@ const SAMPLE_DESCRIPTION =
 export function PromptsPage() {
   const [surface, setSurface] = useState<PromptSurface>("outline");
   const [subtextOn, setSubtextOn] = useState(true);
+  const [contextMode, setContextMode] = useState<PromptsInChatDemoMode>("side-chat");
 
   const subtext = subtextOn ? "Product designer" : undefined;
 
@@ -38,7 +41,7 @@ export function PromptsPage() {
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Prompts
         </p>
-        <h1 style={{ margin: 0, fontSize: 32, fontWeight: "var(--font-weight-heading)", letterSpacing: "-0.02em" }}>Prompts</h1>
+        <h1 className="page-doc-title">Prompts</h1>
         <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 18, lineHeight: 1.55, color: "#716f6c" }}>
           Personalized prompts give users quick ways to start or steer AI conversations. Each tile shows a title, an
           optional short description (about two lines), and optional subtext such as persona or role—matching the prompt
@@ -126,6 +129,40 @@ export function PromptsPage() {
         <strong>{subtextOn ? "On" : "Off"}</strong>
       </p>
       </div>
+
+      <hr className="page-section__divider" aria-hidden="true" />
+
+      <section
+        className="in-context-stage"
+        id="prompts-in-context"
+        aria-labelledby="prompts-in-context-heading"
+      >
+        <div className="in-context-stage__head">
+          <div className="in-context-stage__copy">
+            <h2 id="prompts-in-context-heading" className="in-context-stage__title">
+              In context
+            </h2>
+            <p className="in-context-stage__lede">
+              Prompts surface in the empty thread before the user types. Toggle to compare
+              how the tiles read in a side panel versus full screen.
+            </p>
+          </div>
+          <div className="demo-segments" role="group" aria-label="Context view mode">
+            {(["side-chat", "full-screen"] as const).map((m) => (
+              <button
+                key={m}
+                type="button"
+                className="demo-segment"
+                aria-pressed={contextMode === m}
+                onClick={() => setContextMode(m)}
+              >
+                {m === "side-chat" ? "Side chat" : "Full screen"}
+              </button>
+            ))}
+          </div>
+        </div>
+        <PromptsInChatDemo mode={contextMode} surface={surface} subtextOn={subtextOn} />
+      </section>
     </main>
   );
 }

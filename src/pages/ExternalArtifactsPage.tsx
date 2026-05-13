@@ -11,7 +11,8 @@ import type { ComposerWidth } from "../components/Composer";
 type DemoOuterWidth = Exclude<ComposerWidth, "fill">;
 import { IconCopy } from "../components/Composer/icons";
 import type { ExternalFileKind } from "../components/ExternalArtifact";
-import { ExternalFileArtifact } from "../components/ExternalArtifact";
+import { ExternalFileArtifact, ExternalArtifactInChatDemo } from "../components/ExternalArtifact";
+import type { ExternalArtifactInChatDemoMode } from "../components/ExternalArtifact";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
 import EXTERNAL_ARTIFACT_EXAMPLE_SOURCE from "../examples/ExternalArtifactExample.tsx?raw";
@@ -42,7 +43,9 @@ export function ExternalArtifactsPage() {
   const [hoverVariant, setHoverVariant] = useState<ArtifactHoverVariant>("shadow");
   const [width, setWidth] = useState<DemoOuterWidth>("large");
   const [kind, setKind] = useState<ExternalFileKind>("ppt");
+  const [contextMode, setContextMode] = useState<ExternalArtifactInChatDemoMode>("side-chat");
   const [copyAck, setCopyAck] = useState(false);
+  const [artifactSelected, setArtifactSelected] = useState(false);
 
   /** Preview shell is 8px narrower than composer track so the file-type tag isn’t flush to the chrome edge. */
   const outerPx = WIDTH_PX[width] - 8;
@@ -60,7 +63,7 @@ export function ExternalArtifactsPage() {
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Artifacts
         </p>
-        <h1 style={{ margin: 0, fontSize: 32, fontWeight: "var(--font-weight-heading)", letterSpacing: "-0.02em" }}>External artifacts</h1>
+        <h1 className="page-doc-title">External artifacts</h1>
         <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 18, lineHeight: 1.55, color: "#716f6c" }}>
           Content pulled in or framed from outside Rippling—linked docs, embeds, partner apps, and previews where the
           user leaves or deep-links from the conversation.
@@ -120,6 +123,30 @@ export function ExternalArtifactsPage() {
             ))}
           </div>
         </div>
+
+        <div className="demo-group">
+          <p className="demo-label" id="ea-label-state">
+            State
+          </p>
+          <div className="demo-segments" role="group" aria-labelledby="ea-label-state">
+            <button
+              type="button"
+              className="demo-segment"
+              aria-pressed={!artifactSelected}
+              onClick={() => setArtifactSelected(false)}
+            >
+              Default
+            </button>
+            <button
+              type="button"
+              className="demo-segment"
+              aria-pressed={artifactSelected}
+              onClick={() => setArtifactSelected(true)}
+            >
+              Selected
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="demo-stage" role="region" aria-label="External artifact preview">
@@ -130,7 +157,7 @@ export function ExternalArtifactsPage() {
             boxSizing: "border-box",
           }}
         >
-          <ExternalFileArtifact kind={kind} layoutWidth={width} />
+          <ExternalFileArtifact kind={kind} layoutWidth={width} selected={artifactSelected} />
         </div>
       </div>
 
@@ -138,6 +165,34 @@ export function ExternalArtifactsPage() {
         Outer width <strong>{outerPx}px</strong> · <strong>{FILE_LABEL[kind]}</strong>
       </p>
       </div>
+
+      <section
+        className="in-context-stage"
+        id="external-artifact-in-context"
+        aria-labelledby="ea-in-context-heading"
+      >
+        <div className="in-context-stage__header">
+          <h2 id="ea-in-context-heading" className="in-context-stage__title">
+            Example in chat
+          </h2>
+          <div className="demo-segments" role="group" aria-label="Context view mode">
+            {(["side-chat", "full-screen"] as const).map((m) => (
+              <button
+                key={m}
+                type="button"
+                className="demo-segment"
+                aria-pressed={contextMode === m}
+                onClick={() => setContextMode(m)}
+              >
+                {m === "side-chat" ? "Side chat" : "Full screen"}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="in-context-stage__demo">
+          <ExternalArtifactInChatDemo mode={contextMode} />
+        </div>
+      </section>
 
       <section
         className="demo-code-section"

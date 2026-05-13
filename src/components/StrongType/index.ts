@@ -10,3 +10,5 @@ export type {
   StrongTypeProps,
   StrongTypeTrigger,
 } from "./StrongType";
+export { StrongTypeInChatDemo } from "./StrongTypeInChatDemo";
+export type { StrongTypeInChatDemoMode, StrongTypeInChatDemoProps } from "./StrongTypeInChatDemo";

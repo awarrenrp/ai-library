@@ -11,12 +11,10 @@ import type {
 import { IconSettings } from "../components/Composer/icons";
 import { useDismissOnOutsidePress } from "../hooks/useDismissOnOutsidePress";
 import "../App.css";
+import { FigmaLink } from "../components/FigmaLink";
 
 const FIGMA_SPEC =
   "https://www.figma.com/design/Dvcv5Yj50PM2WuJhPj1qUH/AI-components?node-id=182-7027";
-
-const FIGMA_DESIGN_SYSTEM_SPEC =
-  "https://www.figma.com/design/Dvcv5Yj50PM2WuJhPj1qUH/AI-components?node-id=262-12244";
 
 const DISAMBIG_VARIANTS = ["default", "design-system"] as const satisfies readonly DisambiguationVariant[];
 
@@ -149,7 +147,7 @@ export function DisambiguationPage() {
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Disambiguation
         </p>
-        <h1 style={{ margin: 0, fontSize: 32, fontWeight: "var(--font-weight-heading)", letterSpacing: "-0.02em" }}>Disambiguation</h1>
+        <h1 className="page-doc-title">Disambiguation</h1>
         <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 18, lineHeight: 1.55, color: "#716f6c" }}>
           Clarifying UI when the model needs structured input to proceed—single or multi-select rows with optional
           metadata, bundled into at most two questions.
@@ -175,13 +173,7 @@ export function DisambiguationPage() {
           </ul>
         </aside>
         <p style={{ margin: "16px 0 0", maxWidth: 640, fontSize: 14, lineHeight: 1.5, color: "#716f6c" }}>
-          <a href={FIGMA_SPEC} target="_blank" rel="noreferrer" style={{ color: "#7a005d" }}>
-            Figma · AI-components (Disambiguation overview)
-          </a>
-          {" · "}
-          <a href={FIGMA_DESIGN_SYSTEM_SPEC} target="_blank" rel="noreferrer" style={{ color: "#7a005d" }}>
-            Design system frame (262:12244)
-          </a>
+          <FigmaLink href={FIGMA_SPEC} />
         </p>
       </header>
 
@@ -280,10 +272,9 @@ export function DisambiguationPage() {
       </div>
 
       <hr className="page-section__divider" aria-hidden="true" />
-      <h2 className="page-section__title">Examples</h2>
 
       <section
-        className="in-context-stage demo-fullbleed"
+        className="in-context-stage"
         id="disambig-in-context"
         aria-labelledby="disambig-in-context-heading"
       >

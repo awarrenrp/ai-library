@@ -18,12 +18,13 @@ export type ComponentIntentPanelProps = {
   designIntent?: ComponentIntentContent;
   /**
    * Structured Dos. Rendered as a separate two-column card directly below the
-   * When / Design intent block. Each entry is one `<li>` with a green check.
+   * When / Design intent block. Each entry is one `<li>` with a disc bullet;
+   * the column heading shows a green checkmark.
    */
   dos?: ReactNode[];
   /**
    * Structured Don'ts. Rendered alongside `dos` in the same card. Each entry is
-   * one `<li>` with a red cross.
+   * one `<li>` with a disc bullet; the column heading shows a red X.
    */
   donts?: ReactNode[];
 };

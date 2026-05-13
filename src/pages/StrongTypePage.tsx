@@ -4,6 +4,8 @@ import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
 import { IconCopy } from "../components/Composer/icons";
 import { StrongTypeComposerExample } from "../examples/StrongTypeExample";
+import { StrongTypeInChatDemo } from "../components/StrongType";
+import type { StrongTypeInChatDemoMode } from "../components/StrongType";
 import STRONG_TYPE_EXAMPLE_SOURCE from "../examples/StrongTypeExample.tsx?raw";
 import { copyText } from "../utils/copyText";
 import "../App.css";
@@ -43,6 +45,7 @@ const STRONG_TYPE_DONTS = [
 
 export function StrongTypePage() {
   const [copyAck, setCopyAck] = useState(false);
+  const [contextMode, setContextMode] = useState<StrongTypeInChatDemoMode>("side-chat");
 
   return (
     <main className="demo-wrap">
@@ -56,9 +59,7 @@ export function StrongTypePage() {
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Strong type
         </p>
-        <h1 style={{ margin: 0, fontSize: 32, fontWeight: "var(--font-weight-heading)", letterSpacing: "-0.02em" }}>
-          Strong type
-        </h1>
+        <h1 className="page-doc-title">Strong type</h1>
         <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 18, lineHeight: 1.55, color: "#716f6c" }}>
           The slash-command and mention menu that opens when the user types <code>/</code> or{" "}
           <code>@</code> in the composer. Turns a typed token into a structured pick.
@@ -161,6 +162,40 @@ export function StrongTypePage() {
           </div>
         </div>
         <DemoHighlightedCode code={STRONG_TYPE_EXAMPLE_SOURCE} language="tsx" />
+      </section>
+
+      <hr className="page-section__divider" aria-hidden="true" />
+
+      <section
+        className="in-context-stage"
+        id="strong-type-in-context"
+        aria-labelledby="strong-type-in-context-heading"
+      >
+        <div className="in-context-stage__head">
+          <div className="in-context-stage__copy">
+            <h2 id="strong-type-in-context-heading" className="in-context-stage__title">
+              In context
+            </h2>
+            <p className="in-context-stage__lede">
+              The slash-command and mention menus open from the composer at the bottom of the
+              thread. Try typing <code>/</code> or <code>@</code> in the input below.
+            </p>
+          </div>
+          <div className="demo-segments" role="group" aria-label="Context view mode">
+            {(["side-chat", "full-screen"] as const).map((m) => (
+              <button
+                key={m}
+                type="button"
+                className="demo-segment"
+                aria-pressed={contextMode === m}
+                onClick={() => setContextMode(m)}
+              >
+                {m === "side-chat" ? "Side chat" : "Full screen"}
+              </button>
+            ))}
+          </div>
+        </div>
+        <StrongTypeInChatDemo mode={contextMode} />
       </section>
     </main>
   );

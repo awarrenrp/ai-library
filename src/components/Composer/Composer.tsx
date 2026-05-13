@@ -55,7 +55,7 @@ const COMPOSER_ADD_MENU_ITEMS: readonly ComposerAddMenuItem[] = [
 
 export type ComposerWidth = "large" | "medium" | "small" | "fill";
 
-/** Shell chrome — default border vs edit (focus-style outline + optional context chip). Edit is alternate-only; standard ignores `edit`. */
+/** Shell chrome — default border vs edit (focus-style outline + Chip - Regular context chip · 782:20530). Edit is alternate-only; standard ignores `edit`. */
 export const COMPOSER_SURFACE_STATES = ["default", "edit"] as const;
 export type ComposerSurfaceState = (typeof COMPOSER_SURFACE_STATES)[number];
 
@@ -117,7 +117,7 @@ export type ComposerProps = {
   ariaMessageLabel?: string;
   /** Styling variant (defaults to `standard`). */
   version?: ComposerVersion;
-  /** `edit` uses blue shell border (replaces gray; no duplicate outline) and Chip Regular · 865:10482. */
+  /** `edit` uses blue shell border (replaces gray; no duplicate outline) and Chip - Regular · 782:20530. */
   surfaceState?: ComposerSurfaceState;
   /** Shown in the edit chip when `surfaceState` is `edit` (e.g. artifact or thread being edited). */
   editContextLabel?: string;

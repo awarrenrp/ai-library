@@ -193,36 +193,41 @@ function FullScreenDemo() {
       role="region"
       aria-label="Artifact tray in full-screen AI workspace"
     >
-      <section className="artifact-tray-demo__fs-chat" aria-label="Rippling AI chat">
-        <ChatToolbar
-          className="artifact-tray-demo__fs-chat-head"
-          title="Rippling AI"
-          onMenuClick={() => {}}
-          onAddCommentClick={() => {}}
-          onExpandClick={() => {}}
-          onCloseClick={() => {}}
-        />
-        <div className="artifact-tray-demo__fs-thread">
-          <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
-            Pull Q3 attendance, draft an in-office policy refresh, and route it through approvals.
-          </p>
-          <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--assistant">
-            Done — three artifacts generated for this conversation. They&rsquo;ll stay in the tray
-            on the right until you clear them.
-          </p>
-        </div>
-        <div className="artifact-tray-demo__fs-footer">
-          <Composer
-            width="fill"
-            ariaComposerLabel="Chat composer"
-            ariaMessageLabel="Message to Rippling AI"
-            placeholder="Ask Rippling AI anything…"
-          />
-        </div>
-      </section>
-      <aside className="artifact-tray-demo__fs-tray-rail" aria-label="Artifact tray">
-        <ArtifactTray items={TRAY_ITEMS} className="artifact-tray-demo__tray" />
-      </aside>
+      {/* Header spans the full width — across both chat and tray columns */}
+      <ChatToolbar
+        className="artifact-tray-demo__fs-header"
+        title="Rippling AI"
+        onMenuClick={() => {}}
+        onAddCommentClick={() => {}}
+        onExpandClick={() => {}}
+        onCloseClick={() => {}}
+      />
+
+      {/* Body: centered chat column + pinned tray rail */}
+      <div className="artifact-tray-demo__fs-body">
+        <section className="artifact-tray-demo__fs-chat" aria-label="Rippling AI chat">
+          <div className="artifact-tray-demo__fs-thread">
+            <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
+              Pull Q3 attendance, draft an in-office policy refresh, and route it through approvals.
+            </p>
+            <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--assistant">
+              Done — three artifacts generated for this conversation. They&rsquo;ll stay in the tray
+              on the right until you clear them.
+            </p>
+          </div>
+          <div className="artifact-tray-demo__fs-footer">
+            <Composer
+              width="fill"
+              ariaComposerLabel="Chat composer"
+              ariaMessageLabel="Message to Rippling AI"
+              placeholder="Ask Rippling AI anything…"
+            />
+          </div>
+        </section>
+        <aside className="artifact-tray-demo__fs-tray-rail" aria-label="Artifact tray">
+          <ArtifactTray items={TRAY_ITEMS} className="artifact-tray-demo__tray" />
+        </aside>
+      </div>
     </div>
   );
 }
