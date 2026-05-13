@@ -1,0 +1,86 @@
+/*
+ * Strong type — in-context demo. Two modes via `data-mode`:
+ *   - `side-chat`: app surface left, 440px chat panel right.
+ *   - `full-screen`: chat fills the viewport; app surface hidden.
+ */
+
+.st-ic-demo { width: 100%; }
+
+.st-ic-demo__surface {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  width: 100%;
+  min-height: 520px;
+  height: min(80vh, 760px);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+/* —— Side chat ——— */
+.st-ic-demo[data-mode="side-chat"] .st-ic-demo__app {
+  grid-area: 1 / 1; z-index: 0;
+  box-sizing: border-box; align-self: stretch; min-height: 0;
+  padding: 28px 32px; padding-right: min(460px, 48vw);
+  display: flex; flex-direction: column; gap: 8px;
+  border: 1px solid rgb(0 0 0 / 12%); border-radius: 16px; overflow: hidden;
+}
+.st-ic-demo__app-label {
+  margin: 0; font-size: 11px; font-weight: var(--font-weight-emphasis);
+  letter-spacing: 0.06em; text-transform: uppercase; color: #716f6c;
+}
+.st-ic-demo__app-body { margin: 0; font-size: 14px; line-height: 1.5; color: #716f6c; max-width: 420px; }
+.st-ic-demo__app-body code { font-size: 13px; }
+
+.st-ic-demo[data-mode="side-chat"] .st-ic-demo__chat-wrap {
+  grid-area: 1 / 1; justify-self: end; align-self: stretch;
+  width: min(440px, 100%); display: flex; flex-direction: column; min-height: 0; z-index: 2;
+}
+.st-ic-demo[data-mode="side-chat"] .st-ic-demo__chat {
+  border-left: 1px solid rgb(0 0 0 / 10%);
+  box-shadow: -6px 0 32px rgb(0 0 0 / 8%);
+}
+
+/* —— Full screen ——— */
+.st-ic-demo[data-mode="full-screen"] .st-ic-demo__app { display: none; }
+.st-ic-demo[data-mode="full-screen"] .st-ic-demo__chat-wrap {
+  grid-area: 1 / 1; justify-self: stretch; align-self: stretch;
+  width: 100%; display: flex; flex-direction: column; min-height: 0;
+}
+.st-ic-demo[data-mode="full-screen"] .st-ic-demo__chat { border-left: none; box-shadow: none; }
+.st-ic-demo[data-mode="full-screen"] .st-ic-demo__thread,
+.st-ic-demo[data-mode="full-screen"] .st-ic-demo__footer {
+  max-width: 760px; width: 100%; margin-left: auto; margin-right: auto;
+}
+
+/* —— Shared chrome ——— */
+.st-ic-demo__chat {
+  box-sizing: border-box; display: flex; flex-direction: column;
+  flex: 1 1 auto; min-height: 0; height: 100%; background: #ffffff;
+}
+.st-ic-demo__chat-head { flex-shrink: 0; border-bottom: 1px solid rgb(0 0 0 / 10%); }
+
+.st-ic-demo__thread {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto;
+  padding: 14px 18px; display: flex; flex-direction: column; gap: 12px; box-sizing: border-box;
+}
+
+.st-ic-demo__bubble {
+  margin: 0; max-width: 92%; padding: 8px 10px;
+  border-radius: 8px; font-size: 14px; line-height: 20px; color: #000;
+}
+.st-ic-demo__bubble--user { align-self: flex-end; background: #f2eee6; }
+
+.st-ic-demo__assistant-msg { margin: 0; font-size: 14px; line-height: 20px; color: #000; }
+.st-ic-demo__assistant-msg code { font-size: 13px; }
+
+/* Footer — wraps StrongTypeComposerExample which renders its own input */
+.st-ic-demo__footer {
+  flex-shrink: 0; padding: 12px 14px 14px; background: #ffffff;
+  display: flex; flex-direction: column; align-items: stretch; width: 100%; box-sizing: border-box;
+  /* Ensure the strong-type menu opens upward without clipping */
+  overflow: visible;
+  position: relative;
+  z-index: 10;
+}

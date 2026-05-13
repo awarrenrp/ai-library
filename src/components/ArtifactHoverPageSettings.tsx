@@ -1,5 +1,6 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { IconSettings } from "./Composer/icons";
+import { useDismissOnOutsidePress } from "../hooks/useDismissOnOutsidePress";
 
 export const ARTIFACT_HOVER_VARIANTS = ["shadow", "overlay"] as const;
 export type ArtifactHoverVariant = (typeof ARTIFACT_HOVER_VARIANTS)[number];
@@ -22,22 +23,11 @@ export function ArtifactHoverPageSettings({ variant, onVariantChange }: Artifact
   const ref = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    if (!menuOpen) return;
-    function onDocMouseDown(e: MouseEvent) {
-      const el = ref.current;
-      if (el && !el.contains(e.target as Node)) setMenuOpen(false);
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setMenuOpen(false);
-    }
-    document.addEventListener("mousedown", onDocMouseDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDocMouseDown);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
+  useDismissOnOutsidePress(
+    menuOpen,
+    () => setMenuOpen(false),
+    (n) => ref.current?.contains(n) ?? false,
+  );
 
   return (
     <div className="composer-page-settings" ref={ref}>

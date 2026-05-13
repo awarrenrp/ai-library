@@ -17,7 +17,8 @@
  *    full-screen tray pinned → 1076:16797
  */
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
+import { useDismissOnOutsidePress } from "../../hooks/useDismissOnOutsidePress";
 import {
   ChatToolbar,
   ChatToolbarAddCommentIcon,
@@ -57,24 +58,14 @@ function SideChatDemo() {
   const moreAnchorRef = useRef<HTMLDivElement>(null);
   const moreBtnRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    if (!menuOpen) return;
-    const onClick = (event: MouseEvent) => {
-      if (!moreAnchorRef.current?.contains(event.target as Node)) setMenuOpen(false);
-    };
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setMenuOpen(false);
-        moreBtnRef.current?.focus();
-      }
-    };
-    document.addEventListener("mousedown", onClick);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onClick);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
+  useDismissOnOutsidePress(
+    menuOpen,
+    (reason) => {
+      setMenuOpen(false);
+      if (reason === "escape") moreBtnRef.current?.focus();
+    },
+    (n) => moreAnchorRef.current?.contains(n) ?? false,
+  );
 
   return (
     <div
@@ -202,36 +193,41 @@ function FullScreenDemo() {
       role="region"
       aria-label="Artifact tray in full-screen AI workspace"
     >
-      <section className="artifact-tray-demo__fs-chat" aria-label="Rippling AI chat">
-        <ChatToolbar
-          className="artifact-tray-demo__fs-chat-head"
-          title="Rippling AI"
-          onMenuClick={() => {}}
-          onAddCommentClick={() => {}}
-          onExpandClick={() => {}}
-          onCloseClick={() => {}}
-        />
-        <div className="artifact-tray-demo__fs-thread">
-          <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
-            Pull Q3 attendance, draft an in-office policy refresh, and route it through approvals.
-          </p>
-          <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--assistant">
-            Done — three artifacts generated for this conversation. They&rsquo;ll stay in the tray
-            on the right until you clear them.
-          </p>
-        </div>
-        <div className="artifact-tray-demo__fs-footer">
-          <Composer
-            width="fill"
-            ariaComposerLabel="Chat composer"
-            ariaMessageLabel="Message to Rippling AI"
-            placeholder="Ask Rippling AI anything…"
-          />
-        </div>
-      </section>
-      <aside className="artifact-tray-demo__fs-tray-rail" aria-label="Artifact tray">
-        <ArtifactTray items={TRAY_ITEMS} className="artifact-tray-demo__tray" />
-      </aside>
+      {/* Header spans the full width — across both chat and tray columns */}
+      <ChatToolbar
+        className="artifact-tray-demo__fs-header"
+        title="Rippling AI"
+        onMenuClick={() => {}}
+        onAddCommentClick={() => {}}
+        onExpandClick={() => {}}
+        onCloseClick={() => {}}
+      />
+
+      {/* Body: centered chat column + pinned tray rail */}
+      <div className="artifact-tray-demo__fs-body">
+        <section className="artifact-tray-demo__fs-chat" aria-label="Rippling AI chat">
+          <div className="artifact-tray-demo__fs-thread">
+            <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
+              Pull Q3 attendance, draft an in-office policy refresh, and route it through approvals.
+            </p>
+            <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--assistant">
+              Done — three artifacts generated for this conversation. They&rsquo;ll stay in the tray
+              on the right until you clear them.
+            </p>
+          </div>
+          <div className="artifact-tray-demo__fs-footer">
+            <Composer
+              width="fill"
+              ariaComposerLabel="Chat composer"
+              ariaMessageLabel="Message to Rippling AI"
+              placeholder="Ask Rippling AI anything…"
+            />
+          </div>
+        </section>
+        <aside className="artifact-tray-demo__fs-tray-rail" aria-label="Artifact tray">
+          <ArtifactTray items={TRAY_ITEMS} className="artifact-tray-demo__tray" />
+        </aside>
+      </div>
     </div>
   );
 }

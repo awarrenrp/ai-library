@@ -39,6 +39,18 @@
   box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
 }
 
+/* Selected / active state — mirrors RipplingArtifactShell selected treatment */
+.icw-widget--selected,
+.icw-table-widget-wrap.icw-widget--selected {
+  border-color: var(--artifact-outline-active);
+  box-shadow: 0 0 0 1px var(--artifact-outline-active);
+  outline: none;
+}
+
+.icw-table-widget-wrap {
+  display: contents;
+}
+
 [data-artifact-hover-style="overlay"] .icw-widget:hover {
   box-shadow: inset 0 0 0 9999px var(--artifact-overlay-hover), 0 1px 3px rgb(0 0 0 / 8%);
 }

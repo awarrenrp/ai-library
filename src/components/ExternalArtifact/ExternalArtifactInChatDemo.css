@@ -1,17 +1,14 @@
 /*
- * Links — in-context demo. Two modes driven by `data-mode` on the root:
- *   - `side-chat`: app surface left, 440px chat panel pinned to the right.
- *   - `full-screen`: chat fills the viewport; app surface mock hidden.
- *
- * The actual conversation content is identical between modes — only the
- * surrounding chrome changes.
+ * External artifacts — in-context demo. Two modes driven by `data-mode`:
+ *   - `side-chat`: app surface left, 440px chat panel on the right.
+ *   - `full-screen`: chat fills the viewport; app surface hidden.
  */
 
-.links-ic-demo {
+.ea-ic-demo {
   width: 100%;
 }
 
-.links-ic-demo__surface {
+.ea-ic-demo__surface {
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr;
@@ -24,7 +21,7 @@
 }
 
 /* —— Side chat ——————————————————————————————————————————— */
-.links-ic-demo[data-mode="side-chat"] .links-ic-demo__app {
+.ea-ic-demo[data-mode="side-chat"] .ea-ic-demo__app {
   grid-area: 1 / 1;
   position: relative;
   z-index: 0;
@@ -41,7 +38,7 @@
   overflow: hidden;
 }
 
-.links-ic-demo__app-label {
+.ea-ic-demo__app-label {
   margin: 0;
   font-size: 11px;
   font-weight: var(--font-weight-emphasis);
@@ -50,7 +47,7 @@
   color: #716f6c;
 }
 
-.links-ic-demo__app-body {
+.ea-ic-demo__app-body {
   margin: 0;
   font-size: 14px;
   line-height: 1.5;
@@ -58,7 +55,7 @@
   max-width: 420px;
 }
 
-.links-ic-demo[data-mode="side-chat"] .links-ic-demo__chat-wrap {
+.ea-ic-demo[data-mode="side-chat"] .ea-ic-demo__chat-wrap {
   grid-area: 1 / 1;
   justify-self: end;
   align-self: stretch;
@@ -69,17 +66,17 @@
   z-index: 2;
 }
 
-.links-ic-demo[data-mode="side-chat"] .links-ic-demo__chat {
+.ea-ic-demo[data-mode="side-chat"] .ea-ic-demo__chat {
   border-left: 1px solid rgb(0 0 0 / 10%);
   box-shadow: -6px 0 32px rgb(0 0 0 / 8%);
 }
 
 /* —— Full screen ————————————————————————————————————————— */
-.links-ic-demo[data-mode="full-screen"] .links-ic-demo__app {
+.ea-ic-demo[data-mode="full-screen"] .ea-ic-demo__app {
   display: none;
 }
 
-.links-ic-demo[data-mode="full-screen"] .links-ic-demo__chat-wrap {
+.ea-ic-demo[data-mode="full-screen"] .ea-ic-demo__chat-wrap {
   grid-area: 1 / 1;
   justify-self: stretch;
   align-self: stretch;
@@ -89,15 +86,13 @@
   min-height: 0;
 }
 
-.links-ic-demo[data-mode="full-screen"] .links-ic-demo__chat {
+.ea-ic-demo[data-mode="full-screen"] .ea-ic-demo__chat {
   border-left: none;
   box-shadow: none;
 }
 
-/* Cap thread/composer to a comfortable column inside the chat panel so
-   full-screen mode doesn't stretch messages across the entire viewport. */
-.links-ic-demo[data-mode="full-screen"] .links-ic-demo__thread,
-.links-ic-demo[data-mode="full-screen"] .links-ic-demo__footer {
+.ea-ic-demo[data-mode="full-screen"] .ea-ic-demo__thread,
+.ea-ic-demo[data-mode="full-screen"] .ea-ic-demo__footer {
   max-width: 880px;
   width: 100%;
   margin-left: auto;
@@ -105,7 +100,7 @@
 }
 
 /* —— Shared chat chrome ——————————————————————————————————— */
-.links-ic-demo__chat {
+.ea-ic-demo__chat {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -115,18 +110,12 @@
   background: #ffffff;
 }
 
-/*
- * Chat head — wraps the shared `ChatToolbar` so the in-context demo mirrors
- * the real Chat panel chrome (hamburger + title left, add comment / expand /
- * close right). The toolbar provides its own padding; we only add the
- * bottom hairline that separates the head from the thread.
- */
-.links-ic-demo__chat-head {
+.ea-ic-demo__chat-head {
   flex-shrink: 0;
   border-bottom: 1px solid rgb(0 0 0 / 10%);
 }
 
-.links-ic-demo__thread {
+.ea-ic-demo__thread {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
@@ -137,85 +126,62 @@
   box-sizing: border-box;
 }
 
-.links-ic-demo__bubble {
+.ea-ic-demo__bubble {
   margin: 0;
   max-width: 92%;
   padding: 8px 10px;
   border-radius: 8px;
-  font-size: 13px;
-  line-height: 1.45;
+  font-size: 14px;
+  line-height: 20px;
   color: #000000;
 }
 
-.links-ic-demo__bubble--user {
+.ea-ic-demo__bubble--user {
   align-self: flex-end;
   background: #f2eee6;
 }
 
-.links-ic-demo__assistant-turn {
+.ea-ic-demo__assistant-turn {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 16px;
+  gap: 10px;
   max-width: 100%;
 }
 
-.links-ic-demo__assistant-msg {
+.ea-ic-demo__assistant-msg {
   margin: 0;
-  max-width: 100%;
-  font-size: 15px;
-  line-height: 1.55;
+  font-size: 14px;
+  line-height: 20px;
   color: #000000;
 }
 
-/* Inline file citation (same row as prose — no “PDF” label block). */
-.links-ic-demo__inline-embed {
-  display: inline-block;
-  vertical-align: middle;
-  max-width: min(100%, 260px);
-  margin: 0 2px;
-}
-
-.links-ic-demo__inline-embed .links-file-row {
-  width: 100%;
-  max-width: 100%;
-}
-
-.links-ic-demo__block-embed {
-  display: block;
-  margin-top: 10px;
-  max-width: 100%;
-}
-
-.links-ic-demo__block-embed .links-handoff,
-.links-ic-demo__block-embed .links-rich-card,
-.links-ic-demo__block-embed .links-below-stack {
+.ea-ic-demo__artifact-embed {
   max-width: 100%;
   box-sizing: border-box;
 }
 
-.links-ic-demo__block-embed--actions {
-  margin-top: 12px;
+.ea-ic-demo__artifact-embed .external-file-artifact-scroll {
+  max-width: 100%;
 }
 
-.links-ic-demo__footer {
+.ea-ic-demo__footer {
   flex-shrink: 0;
   padding: 12px 14px 14px;
   background: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 0;
   width: 100%;
   box-sizing: border-box;
 }
 
-.links-ic-demo__footer .composer {
+.ea-ic-demo__footer .composer {
   align-self: stretch;
 }
 
 @media (max-width: 720px) {
-  .links-ic-demo[data-mode="side-chat"] .links-ic-demo__app {
+  .ea-ic-demo[data-mode="side-chat"] .ea-ic-demo__app {
     padding-right: 28px;
   }
 }

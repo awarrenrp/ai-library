@@ -54,9 +54,9 @@ const STACK_COLORS = [
  * greys per the "accent-on-grey" rule.
  */
 const DONUT_SEGMENTS = [
-  { id: "enterprise", label: "Enterprise", value: 6.2, share: 0.58, color: "var(--color-primary, #7a005d)" },
-  { id: "mid-market", label: "Mid-market", value: 3.1, share: 0.29, color: "rgb(0 0 0 / 35%)" },
-  { id: "smb", label: "SMB", value: 1.4, share: 0.13, color: "rgb(0 0 0 / 18%)" },
+  { id: "enterprise", label: "Enterprise", value: 6.2, share: 0.58, color: STACK_COLORS[0] },
+  { id: "mid-market", label: "Mid-market", value: 3.1, share: 0.29, color: STACK_COLORS[2] },
+  { id: "smb", label: "SMB", value: 1.4, share: 0.13, color: STACK_COLORS[4] },
 ] as const;
 const DONUT_TOTAL = DONUT_SEGMENTS.reduce((acc, s) => acc + s.value, 0);
 

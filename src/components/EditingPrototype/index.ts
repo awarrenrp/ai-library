@@ -1,0 +1,1 @@
+export { EditingPrototypeMock } from "./EditingPrototypeMock";

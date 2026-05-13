@@ -169,6 +169,8 @@ export type InChatLinkWidgetProps = {
   onOpen?: () => void;
   /** Accessible name for the "Open" affordance; defaults to `Open {title}` so SR users hear which destination. */
   openAriaLabel?: string;
+  /** When true, applies the artifact focus outline to indicate this widget is selected/active. */
+  selected?: boolean;
 };
 
 /**
@@ -182,9 +184,14 @@ export function InChatLinkWidget({
   previewBody,
   onOpen,
   openAriaLabel,
+  selected,
 }: InChatLinkWidgetProps) {
   return (
-    <article className="icw-widget icw-widget--96" aria-label={title}>
+    <article
+      className={["icw-widget icw-widget--96", selected ? "icw-widget--selected" : ""].filter(Boolean).join(" ")}
+      aria-label={title}
+      data-selected={selected || undefined}
+    >
       <div className="icw-widget-main">
         <p className="icw-widget-title">{title}</p>
         <button
@@ -203,11 +210,21 @@ export function InChatLinkWidget({
   );
 }
 
-export type InChatTableWidgetProps = InChatTablePreviewProps;
+export type InChatTableWidgetProps = InChatTablePreviewProps & {
+  /** When true, applies the artifact focus outline to indicate this widget is selected/active. */
+  selected?: boolean;
+};
 
 /** Table in-chat widget · Figma 883:13314 — grid only (no link-style title/Open chrome). */
-export function InChatTableWidget(props: InChatTableWidgetProps = {}) {
-  return <InChatTablePreview {...props} />;
+export function InChatTableWidget({ selected, ...props }: InChatTableWidgetProps = {}) {
+  return (
+    <div
+      className={["icw-table-widget-wrap", selected ? "icw-widget--selected" : ""].filter(Boolean).join(" ")}
+      data-selected={selected || undefined}
+    >
+      <InChatTablePreview {...props} />
+    </div>
+  );
 }
 
 /**
@@ -215,7 +232,7 @@ export function InChatTableWidget(props: InChatTableWidgetProps = {}) {
  * (`InChatWidgets`) and the In-context demo (`InChatWidgetDemo`) consume these
  * so a single edit propagates to both surfaces.
  */
-export function SpendLinkWidget(props: Pick<InChatLinkWidgetProps, "onOpen" | "openAriaLabel"> = {}) {
+export function SpendLinkWidget(props: Pick<InChatLinkWidgetProps, "onOpen" | "openAriaLabel" | "selected"> = {}) {
   return (
     <InChatLinkWidget
       title="View Spend Management"
@@ -228,7 +245,7 @@ export function SpendLinkWidget(props: Pick<InChatLinkWidgetProps, "onOpen" | "o
 }
 
 export function OfferLetterDocumentWidget(
-  props: Pick<InChatLinkWidgetProps, "onOpen" | "openAriaLabel"> = {},
+  props: Pick<InChatLinkWidgetProps, "onOpen" | "openAriaLabel" | "selected"> = {},
 ) {
   return (
     <InChatLinkWidget
@@ -242,7 +259,7 @@ export function OfferLetterDocumentWidget(
 }
 
 export function NewStarterDashboardWidget(
-  props: Pick<InChatLinkWidgetProps, "onOpen" | "openAriaLabel"> = {},
+  props: Pick<InChatLinkWidgetProps, "onOpen" | "openAriaLabel" | "selected"> = {},
 ) {
   return (
     <InChatLinkWidget
@@ -255,20 +272,25 @@ export function NewStarterDashboardWidget(
   );
 }
 
-export function InChatWidgets() {
+type InChatWidgetsProps = {
+  /** When true, all example widgets render in the selected/active outline state. */
+  selected?: boolean;
+};
+
+export function InChatWidgets({ selected }: InChatWidgetsProps = {}) {
   return (
     <section className="icw-showcase" aria-label="In-chat widget examples">
       <WidgetGroup category="Rippling link">
-        <SpendLinkWidget />
+        <SpendLinkWidget selected={selected} />
       </WidgetGroup>
       <WidgetGroup category="Document">
-        <OfferLetterDocumentWidget />
+        <OfferLetterDocumentWidget selected={selected} />
       </WidgetGroup>
       <WidgetGroup category="Dashboard">
-        <NewStarterDashboardWidget />
+        <NewStarterDashboardWidget selected={selected} />
       </WidgetGroup>
       <WidgetGroup category="Table">
-        <InChatTableWidget />
+        <InChatTableWidget selected={selected} />
       </WidgetGroup>
     </section>
   );

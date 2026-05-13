@@ -33,6 +33,9 @@
   gap: 8px;
   padding: 28px 32px;
   padding-right: min(460px, 48vw);
+  border: 1px solid rgb(0 0 0 / 12%);
+  border-radius: 16px;
+  overflow: hidden;
 }
 
 .artifact-tray-demo__app-label {
@@ -223,16 +226,30 @@
 /* —— Full screen —————————————————————————————————————————— */
 .artifact-tray-demo--fullscreen {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 272px;
-  gap: 0;
+  display: flex;
+  flex-direction: column;
   min-height: 640px;
   height: min(85vh, 880px);
   background: #ffffff;
   overflow: hidden;
 }
 
-/* Chat column. */
+/* Full-width header — spans the entire workspace, above both chat and tray. */
+.artifact-tray-demo__fs-header {
+  flex-shrink: 0;
+  width: 100%;
+  border-bottom: 1px solid rgb(0 0 0 / 10%);
+}
+
+/* Body: below the header — chat centered in the main column, tray on the right. */
+.artifact-tray-demo__fs-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 272px;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* Chat column — thread and composer centered within the column. */
 .artifact-tray-demo__fs-chat {
   box-sizing: border-box;
   display: flex;
@@ -240,12 +257,6 @@
   min-height: 0;
   background: #ffffff;
   border-right: 1px solid rgb(0 0 0 / 8%);
-}
-
-/* Full-screen chat head — same shared `.chat__toolbar` chrome as side chat. */
-.artifact-tray-demo__fs-chat-head {
-  flex-shrink: 0;
-  border-bottom: 1px solid rgb(0 0 0 / 10%);
 }
 
 .artifact-tray-demo__fs-thread {
@@ -256,6 +267,15 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  /* Center thread content in the column */
+  box-sizing: border-box;
+}
+
+.artifact-tray-demo__fs-thread > * {
+  max-width: 640px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .artifact-tray-demo__fs-footer {
@@ -264,14 +284,14 @@
   background: #ffffff;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: 0;
+  align-items: center;
   width: 100%;
   box-sizing: border-box;
 }
 
 .artifact-tray-demo__fs-footer .composer {
-  align-self: stretch;
+  width: 100%;
+  max-width: 640px;
 }
 
 /*
@@ -294,7 +314,7 @@
 }
 
 @media (max-width: 880px) {
-  .artifact-tray-demo--fullscreen {
+  .artifact-tray-demo__fs-body {
     grid-template-columns: 1fr;
   }
 

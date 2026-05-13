@@ -20,6 +20,7 @@ import {
   LinksTextLink,
 } from "../components/Links";
 import "../App.css";
+import { FigmaLink } from "../components/FigmaLink";
 
 const FIGMA_SPEC =
   "https://www.figma.com/design/Dvcv5Yj50PM2WuJhPj1qUH/AI-components?node-id=427-103840";
@@ -55,9 +56,7 @@ export function LinksPage() {
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Links
         </p>
-        <h1 style={{ margin: 0, fontSize: 32, fontWeight: "var(--font-weight-heading)", letterSpacing: "-0.02em" }}>
-          Links
-        </h1>
+        <h1 className="page-doc-title">Links</h1>
         <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 18, lineHeight: 1.55, color: "#716f6c" }}>
           Chat supports three link families: <strong style={{ fontWeight: "var(--font-weight-heading)", color: "#000000" }}>in the message</strong>{" "}
           (linked text or chips), <strong style={{ fontWeight: "var(--font-weight-heading)", color: "#000000" }}>below the chat</strong>{" "}
@@ -65,9 +64,7 @@ export function LinksPage() {
           (in-product routes such as approvals, Help, sales, and product entry).
         </p>
         <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 14, lineHeight: 1.5, color: "#716f6c" }}>
-          <a href={FIGMA_SPEC} target="_blank" rel="noreferrer" style={{ color: "#7a005d" }}>
-            Figma · AI-components (Links)
-          </a>
+          <FigmaLink href={FIGMA_SPEC} />
         </p>
       </header>
 
@@ -230,10 +227,9 @@ export function LinksPage() {
       </section>
 
       <hr className="page-section__divider" aria-hidden="true" />
-      <h2 className="page-section__title">Examples</h2>
 
       <section
-        className="in-context-stage demo-fullbleed"
+        className="in-context-stage"
         id="links-in-context"
         aria-labelledby="links-in-context-heading"
       >

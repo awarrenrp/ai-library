@@ -1,0 +1,87 @@
+/*
+ * Prompts — in-context demo. Two modes via `data-mode`:
+ *   - `side-chat`: app surface left, 440px chat panel right.
+ *   - `full-screen`: chat fills the viewport; app surface hidden.
+ */
+
+.prompts-ic-demo { width: 100%; }
+
+.prompts-ic-demo__surface {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  width: 100%;
+  min-height: 540px;
+  height: min(82vh, 800px);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+/* —— Side chat ——— */
+.prompts-ic-demo[data-mode="side-chat"] .prompts-ic-demo__app {
+  grid-area: 1 / 1; z-index: 0;
+  box-sizing: border-box; align-self: stretch; min-height: 0;
+  padding: 28px 32px; padding-right: min(460px, 48vw);
+  display: flex; flex-direction: column; gap: 8px;
+  border: 1px solid rgb(0 0 0 / 12%); border-radius: 16px; overflow: hidden;
+}
+.prompts-ic-demo__app-label {
+  margin: 0; font-size: 11px; font-weight: var(--font-weight-emphasis);
+  letter-spacing: 0.06em; text-transform: uppercase; color: #716f6c;
+}
+.prompts-ic-demo__app-body { margin: 0; font-size: 14px; line-height: 1.5; color: #716f6c; max-width: 420px; }
+
+.prompts-ic-demo[data-mode="side-chat"] .prompts-ic-demo__chat-wrap {
+  grid-area: 1 / 1; justify-self: end; align-self: stretch;
+  width: min(440px, 100%); display: flex; flex-direction: column; min-height: 0; z-index: 2;
+}
+.prompts-ic-demo[data-mode="side-chat"] .prompts-ic-demo__chat {
+  border-left: 1px solid rgb(0 0 0 / 10%);
+  box-shadow: -6px 0 32px rgb(0 0 0 / 8%);
+}
+
+/* —— Full screen ——— */
+.prompts-ic-demo[data-mode="full-screen"] .prompts-ic-demo__app { display: none; }
+.prompts-ic-demo[data-mode="full-screen"] .prompts-ic-demo__chat-wrap {
+  grid-area: 1 / 1; justify-self: stretch; align-self: stretch;
+  width: 100%; display: flex; flex-direction: column; min-height: 0;
+}
+.prompts-ic-demo[data-mode="full-screen"] .prompts-ic-demo__chat { border-left: none; box-shadow: none; }
+.prompts-ic-demo[data-mode="full-screen"] .prompts-ic-demo__thread,
+.prompts-ic-demo[data-mode="full-screen"] .prompts-ic-demo__footer {
+  max-width: 760px; width: 100%; margin-left: auto; margin-right: auto;
+}
+
+/* —— Shared chrome ——— */
+.prompts-ic-demo__chat {
+  box-sizing: border-box; display: flex; flex-direction: column;
+  flex: 1 1 auto; min-height: 0; height: 100%; background: #ffffff;
+}
+.prompts-ic-demo__chat-head { flex-shrink: 0; border-bottom: 1px solid rgb(0 0 0 / 10%); }
+
+.prompts-ic-demo__thread {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto;
+  padding: 20px 18px 14px; display: flex; flex-direction: column; box-sizing: border-box;
+}
+
+/* Empty state */
+.prompts-ic-demo__empty-state { display: flex; flex-direction: column; gap: 16px; }
+.prompts-ic-demo__empty-heading {
+  margin: 0; font-size: 15px; font-weight: var(--font-weight-emphasis);
+  line-height: 1.4; color: #000;
+}
+.prompts-ic-demo__prompt-grid {
+  display: flex; flex-direction: column; gap: 8px;
+}
+/* Prompts inside the chat thread: full width, no shadow or bottom border so tiles
+   don't read as having dividers between them */
+.prompts-ic-demo__prompt-grid .prompt { width: 100%; max-width: none; text-align: left; }
+.prompts-ic-demo__prompt-grid .prompt--filled { box-shadow: none; }
+.prompts-ic-demo__prompt-grid .prompt--outline { border-bottom: none; }
+
+.prompts-ic-demo__footer {
+  flex-shrink: 0; padding: 12px 14px 14px; background: #ffffff;
+  display: flex; flex-direction: column; align-items: stretch; width: 100%; box-sizing: border-box;
+}
+.prompts-ic-demo__footer .composer { align-self: stretch; }

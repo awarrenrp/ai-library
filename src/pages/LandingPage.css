@@ -46,11 +46,10 @@
 
 .landing-section-title {
   margin: 0 0 18px;
-  font-size: 13px;
+  font-size: 24px;
   font-weight: var(--font-weight-heading);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #716f6c;
+  letter-spacing: -0.02em;
+  color: #000000;
 }
 
 .landing-cards {

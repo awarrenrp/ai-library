@@ -7,7 +7,8 @@
  */
 
 import type { ReactNode } from "react";
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
+import { useDismissOnOutsidePress } from "../../hooks/useDismissOnOutsidePress";
 import "./Composer.css";
 import {
   IconAddAgents,
@@ -54,7 +55,7 @@ const COMPOSER_ADD_MENU_ITEMS: readonly ComposerAddMenuItem[] = [
 
 export type ComposerWidth = "large" | "medium" | "small" | "fill";
 
-/** Shell chrome — default border vs edit (focus-style outline + optional context chip). Edit is alternate-only; standard ignores `edit`. */
+/** Shell chrome — default border vs edit (focus-style outline + Chip - Regular context chip · 782:20530). Edit is alternate-only; standard ignores `edit`. */
 export const COMPOSER_SURFACE_STATES = ["default", "edit"] as const;
 export type ComposerSurfaceState = (typeof COMPOSER_SURFACE_STATES)[number];
 
@@ -116,7 +117,7 @@ export type ComposerProps = {
   ariaMessageLabel?: string;
   /** Styling variant (defaults to `standard`). */
   version?: ComposerVersion;
-  /** `edit` uses blue shell border (replaces gray; no duplicate outline) and Chip Regular · 865:10482. */
+  /** `edit` uses blue shell border (replaces gray; no duplicate outline) and Chip - Regular · 782:20530. */
   surfaceState?: ComposerSurfaceState;
   /** Shown in the edit chip when `surfaceState` is `edit` (e.g. artifact or thread being edited). */
   editContextLabel?: string;
@@ -207,27 +208,20 @@ export function Composer({
     else onChange?.("");
   };
 
-  useEffect(() => {
-    const anyOpen = modeMenuOpen || intentMenuOpen || speedMenuOpen || addMenuOpen;
-    if (!anyOpen) return;
-    function onDocMouseDown(e: MouseEvent) {
-      const t = e.target as Node;
-      if (fastAnchorRef.current?.contains(t)) return;
-      if (intentAnchorRef.current?.contains(t)) return;
-      if (speedAnchorRef.current?.contains(t)) return;
-      if (addAnchorRef.current?.contains(t)) return;
+  const anyComposerMenuOpen = modeMenuOpen || intentMenuOpen || speedMenuOpen || addMenuOpen;
+  useDismissOnOutsidePress(
+    anyComposerMenuOpen,
+    () => {
       closeAllMenus();
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") closeAllMenus();
-    }
-    document.addEventListener("mousedown", onDocMouseDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDocMouseDown);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [modeMenuOpen, intentMenuOpen, speedMenuOpen, addMenuOpen]);
+    },
+    (n) =>
+      Boolean(
+        fastAnchorRef.current?.contains(n) ||
+          intentAnchorRef.current?.contains(n) ||
+          speedAnchorRef.current?.contains(n) ||
+          addAnchorRef.current?.contains(n),
+      ),
+  );
 
   const fastBtnLabel = `${mode} mode, ${modeMenuOpen ? "close menu" : "open menu"}`;
 

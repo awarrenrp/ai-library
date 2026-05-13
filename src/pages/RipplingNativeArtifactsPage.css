@@ -9,13 +9,6 @@
   color: #716f6c;
 }
 
-.rna-page-title {
-  margin: 0;
-  font-size: 32px;
-  font-weight: var(--font-weight-heading);
-  letter-spacing: -0.02em;
-}
-
 .rna-page-lede {
   margin: 12px 0 0;
   max-width: 640px;
@@ -98,7 +91,8 @@
   scrollbar-width: thin;
 }
 
-.rna-chart-toolbar .demo-segment {
+/* Segments are Pebble `Button`s — preserve nowrap for long chart-type labels when the row scrolls. */
+.rna-chart-toolbar .demo-segments button {
   white-space: nowrap;
 }
 
@@ -177,4 +171,70 @@
 
 .rna-action-btn--primary:active {
   background: #2e2e2e;
+}
+
+/*
+ * Strip buttons — used in the `action-bar` variant demo.
+ * Figma 1129:19698: 52×24 buttons, 8px left/right padding, 6px radius.
+ * Ghost (no fill) and outlined (white bg, 20% black border) variants.
+ * Each may carry a navy count badge inline.
+ */
+.rna-strip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 16px;
+  color: #000000;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.rna-strip-btn:hover {
+  background: rgb(0 0 0 / 6%);
+}
+
+.rna-strip-btn:active {
+  background: rgb(0 0 0 / 10%);
+}
+
+.rna-strip-btn:focus-visible {
+  outline: 2px solid var(--artifact-outline-active);
+  outline-offset: 2px;
+}
+
+.rna-strip-btn--outlined {
+  background: #ffffff;
+  border-color: rgb(0 0 0 / 20%);
+}
+
+.rna-strip-btn--outlined:hover {
+  background: rgb(0 0 0 / 3%);
+}
+
+/*
+ * Count badge — Figma 1129:19937 Badge instance: 19×12 pill, fill #1e4aa9
+ * (navy blue), white text "1" at 10/14 Bold.
+ */
+.rna-strip-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 14px;
+  padding: 0 4px;
+  border-radius: 99px;
+  background: #1e4aa9;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 14px;
+  letter-spacing: 0;
 }

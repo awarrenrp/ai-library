@@ -10,6 +10,9 @@ import type { ComposerVersion, ComposerWidth } from "../components/Composer";
 import { IconCopy, IconSettings } from "../components/Composer/icons";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
+import { ChatExampleDemo } from "../components/Chat";
+import type { ChatExampleDemoMode } from "../components/Chat";
+import { useDismissOnOutsidePress } from "../hooks/useDismissOnOutsidePress";
 import "../App.css";
 
 const FILLED_SAMPLE = "Make me a report about sales people in SF";
@@ -123,6 +126,7 @@ export function ComposerPage() {
   const [text, setText] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [copyAck, setCopyAck] = useState(false);
+  const [contextMode, setContextMode] = useState<ChatExampleDemoMode>("side-chat");
   const settingsRef = useRef<HTMLDivElement>(null);
 
   function applyVariant(next: "default" | "filled" | "edit") {
@@ -139,22 +143,11 @@ export function ComposerPage() {
     }
   }, [composerVersion, variant]);
 
-  useEffect(() => {
-    if (!menuOpen) return;
-    function onDocMouseDown(e: MouseEvent) {
-      const el = settingsRef.current;
-      if (el && !el.contains(e.target as Node)) setMenuOpen(false);
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setMenuOpen(false);
-    }
-    document.addEventListener("mousedown", onDocMouseDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDocMouseDown);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
+  useDismissOnOutsidePress(
+    menuOpen,
+    () => setMenuOpen(false),
+    (n) => settingsRef.current?.contains(n) ?? false,
+  );
 
   return (
     <main className="demo-wrap">
@@ -212,7 +205,7 @@ export function ComposerPage() {
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components
         </p>
-        <h1 style={{ margin: 0, fontSize: 32, fontWeight: "var(--font-weight-heading)", letterSpacing: "-0.02em" }}>Composer</h1>
+        <h1 className="page-doc-title">Composer</h1>
         <p style={{ margin: "12px 0 0", maxWidth: 640, fontSize: 18, lineHeight: 1.55, color: "#716f6c" }}>
           When users open AI chat, the composer is how they use natural language to ask questions and pull in more
           information—one consistent pattern across Rippling, without pairing an inline composer with a separate side
@@ -353,6 +346,40 @@ export function ComposerPage() {
           </div>
         </div>
         <DemoHighlightedCode code={COMPOSER_MESSAGE_INPUT_EXAMPLE_SOURCE} language="tsx" />
+      </section>
+
+      <hr className="page-section__divider" aria-hidden="true" />
+
+      <section
+        className="in-context-stage"
+        id="composer-in-context"
+        aria-labelledby="composer-in-context-heading"
+      >
+        <div className="in-context-stage__head">
+          <div className="in-context-stage__copy">
+            <h2 id="composer-in-context-heading" className="in-context-stage__title">
+              In context
+            </h2>
+            <p className="in-context-stage__lede">
+              The composer lives at the bottom of every AI thread. Toggle to compare
+              how it reads in a side panel versus a full-screen workspace.
+            </p>
+          </div>
+          <div className="demo-segments" role="group" aria-label="Context view mode">
+            {(["side-chat", "full-screen"] as const).map((m) => (
+              <button
+                key={m}
+                type="button"
+                className="demo-segment"
+                aria-pressed={contextMode === m}
+                onClick={() => setContextMode(m)}
+              >
+                {m === "side-chat" ? "Side chat" : "Full screen"}
+              </button>
+            ))}
+          </div>
+        </div>
+        <ChatExampleDemo mode={contextMode} />
       </section>
     </main>
   );

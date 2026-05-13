@@ -11,6 +11,8 @@ import { LinksPage } from "./pages/LinksPage";
 import { PromptsPage } from "./pages/PromptsPage";
 import { RipplingNativeArtifactsPage } from "./pages/RipplingNativeArtifactsPage";
 import { StrongTypePage } from "./pages/StrongTypePage";
+import { TextPage } from "./pages/TextPage";
+import { ThinkingStatesPage } from "./pages/ThinkingStatesPage";
 
 export function App() {
   return (
@@ -28,6 +30,8 @@ export function App() {
         <Route path="/editing" element={<EditingPage />} />
         <Route path="/links" element={<LinksPage />} />
         <Route path="/strong-type" element={<StrongTypePage />} />
+        <Route path="/text" element={<TextPage />} />
+        <Route path="/thinking-states" element={<ThinkingStatesPage />} />
       </Routes>
     </BrowserRouter>
   );

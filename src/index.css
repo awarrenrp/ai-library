@@ -2,7 +2,8 @@
 
 :root {
   --font-sans: "Basel Grotesk", Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-weight-body: 400;
+  /* Basel Grotesk Regular axis value (variable font). */
+  --font-weight-body: 430;
 }
 
 *,

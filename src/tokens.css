@@ -20,9 +20,9 @@
  */
 
 :root {
-  /* UI chrome / labels — Medium (500); avoid Semibold for non-heading text. */
-  --font-weight-emphasis: 500;
-  /* Page & section headings — one step above emphasis (Semibold). */
+  /* UI chrome / labels — Basel Grotesk Medium axis value. */
+  --font-weight-emphasis: 535;
+  /* Page & section headings — Semibold (one step above emphasis). */
   --font-weight-heading: 600;
 
   /* Berry — primary actions (composer entry, send, etc.) */
@@ -38,7 +38,8 @@
   --color-citation-image: #512f3e;
   /**
    * Success / error container surfaces — light pastels for non-critical
-   * affordance backgrounds (e.g. Dos / Don'ts blocks). Both pass AA for
+   * affordance backgrounds (e.g. Dos / Don'ts blocks). ComponentIntentPanel
+   * mixes each with transparent at 50% for the guidelines card. Both pass AA for
    * black body text (≥14:1) and pair with the matching `on-*` colors below
    * for emphasized labels and accent glyphs.
    *

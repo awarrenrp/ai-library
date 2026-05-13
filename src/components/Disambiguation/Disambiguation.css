@@ -326,6 +326,13 @@
   border-color: rgb(0 0 0 / 20%);
 }
 
+/* ——— Design system variant — Pebble-aligned button sizing (sm: 32px × 12px h-pad) ——— */
+.disambiguation--design-system .disambiguation__btn {
+  height: 32px;
+  min-height: 32px;
+  padding: 0 12px;
+}
+
 .disambiguation--design-system .disambiguation__btn--ghost {
   border-color: rgb(0 0 0 / 20%);
 }
