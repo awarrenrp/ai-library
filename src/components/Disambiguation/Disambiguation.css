@@ -326,48 +326,60 @@
   border-color: rgb(0 0 0 / 20%);
 }
 
+.disambiguation--design-system .disambiguation__btn--ghost {
+  border-color: rgb(0 0 0 / 20%);
+}
+
+.disambiguation__btn--outline {
+  border: 1px solid rgb(0 0 0 / 20%);
+  background: #ffffff;
+  color: #000000;
+}
+
+.disambiguation__btn--outline:hover {
+  background: rgb(0 0 0 / 4%);
+}
+
 .disambiguation__ds-field {
   padding: 8px 20px 0;
   margin-top: 4px;
 }
 
 .disambiguation__ds-field-label-row {
-  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
-  min-height: 16px;
-}
-
-/*
- * Field label typography — matches Pebble Web Text field header text
- * (Figma · Pebble — Web Component Library · node-id=108398-227 · v2/Label/Small Emphasized / Label Neutral pairing).
- */
-.disambiguation__ds-label-line {
-  display: inline-flex;
-  flex-direction: row;
-  align-items: baseline;
-  gap: 2px;
-  min-width: 0;
+  gap: 4px;
+  margin-bottom: 6px;
 }
 
 .disambiguation__ds-label {
-  font-size: var(--ds-field-label-font-size);
-  font-weight: var(--ds-field-label-font-weight);
-  line-height: var(--ds-field-label-line-height);
-  letter-spacing: var(--ds-field-label-letter-spacing);
-  color: var(--ds-field-label-color);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #000000;
 }
 
 .disambiguation__ds-required {
-  font-size: var(--ds-field-label-font-size);
-  font-weight: var(--ds-field-label-font-weight);
-  line-height: var(--ds-field-label-line-height);
-  letter-spacing: var(--ds-field-label-letter-spacing);
+  font-size: 14px;
+  font-weight: 500;
   color: var(--color-primary, #7a005d);
+}
+
+.disambiguation__ds-help {
+  display: inline-flex;
+  margin: 0 0 0 4px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: rgb(0 0 0 / 45%);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.disambiguation__ds-help:focus-visible {
+  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
+  outline-offset: 2px;
 }
 
 .disambiguation__ds-input {
@@ -419,4 +431,43 @@
   flex-direction: row;
   align-items: center;
   gap: 8px;
+}
+
+.disambiguation__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 4px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.disambiguation__btn--ghost {
+  border: 1px solid rgb(0 0 0 / 12%);
+  background: #ffffff;
+  color: #000000;
+}
+
+.disambiguation__btn--ghost:hover {
+  background: rgb(0 0 0 / 4%);
+}
+
+.disambiguation__btn--primary {
+  border: none;
+  background: var(--color-primary, #7a005d);
+  color: var(--color-on-primary, #ffffff);
+}
+
+.disambiguation__btn--primary:hover {
+  filter: brightness(1.05);
+}
+
+.disambiguation__btn:focus-visible {
+  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
+  outline-offset: 2px;
 }

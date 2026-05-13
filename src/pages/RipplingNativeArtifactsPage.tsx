@@ -1,6 +1,7 @@
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useId, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
+import { IconSettings } from "../components/Composer/icons";
 import {
   CHART_VARIANT_OPTIONS,
   ReportArtifactDemo,
@@ -10,8 +11,8 @@ import {
   WorkflowArtifactDemo,
   type ChartDemoVariant,
 } from "../components/RipplingArtifact";
-import { Button, IconButton, iconTypes } from "../pebbleButton";
 import "../App.css";
+import { useDismissOnOutsidePress } from "../hooks/useDismissOnOutsidePress";
 import "./RipplingNativeArtifactsPage.css";
 
 const SHELL_VARIANTS = ["default", "with-actions"] as const satisfies readonly RipplingArtifactShellVariant[];
@@ -21,6 +22,36 @@ const SHELL_VARIANT_LABELS: Record<RipplingArtifactShellVariant, string> = {
   "with-actions": "With actions",
 };
 
+/** Open arrow — used for the demo "Open" action in the with-actions bar. */
+function IconActionOpen() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden focusable="false">
+      <path
+        d="M4.083 3.5h6.417v6.417m0-6.417L3.5 10.5"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Share arrow — used for the demo "Share" action in the with-actions bar. */
+function IconActionShare() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden focusable="false">
+      <path
+        d="M9.917 4.667a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5ZM9.917 12.833a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5ZM4.083 8.5a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5ZM5.594 6.131l2.812-1.762M5.594 7.369l2.812 1.762"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 /**
  * Sample action cluster rendered inside the `with-actions` variant of the
  * artifact shell. Each demo instance on this page gets the same cluster so
@@ -29,28 +60,14 @@ const SHELL_VARIANT_LABELS: Record<RipplingArtifactShellVariant, string> = {
 function DemoArtifactActions(): ReactNode {
   return (
     <>
-      <Button
-        type={Button.TYPES.BUTTON}
-        appearance={Button.APPEARANCES.OUTLINE}
-        size={Button.SIZES.M}
-        icon={{
-          type: iconTypes.SHARE_OUTLINE,
-          alignment: Button.ICON_ALIGNMENTS.LEFT,
-        }}
-      >
+      <button type="button" className="rna-action-btn">
+        <IconActionShare />
         Share
-      </Button>
-      <Button
-        type={Button.TYPES.BUTTON}
-        appearance={Button.APPEARANCES.PRIMARY}
-        size={Button.SIZES.M}
-        icon={{
-          type: iconTypes.ARROW_UP_RIGHT,
-          alignment: Button.ICON_ALIGNMENTS.LEFT,
-        }}
-      >
+      </button>
+      <button type="button" className="rna-action-btn rna-action-btn--primary">
+        <IconActionOpen />
         Open
-      </Button>
+      </button>
     </>
   );
 }
@@ -64,52 +81,48 @@ export function RipplingNativeArtifactsPage() {
   const settingsRef = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    if (!menuOpen) return;
-    function onDocMouseDown(e: MouseEvent) {
-      const el = settingsRef.current;
-      if (el && !el.contains(e.target as Node)) setMenuOpen(false);
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setMenuOpen(false);
-    }
-    document.addEventListener("mousedown", onDocMouseDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDocMouseDown);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
+  useDismissOnOutsidePress(
+    menuOpen,
+    () => setMenuOpen(false),
+    (n) => settingsRef.current?.contains(n) ?? false,
+  );
 
   const demoActions = shellVariant === "with-actions" ? <DemoArtifactActions /> : undefined;
 
   return (
     <main className="demo-wrap rna-page">
       <div className="composer-page-settings" ref={settingsRef}>
-        <span id={settingsBtnId} className="composer-page-settings-trigger">
-          <IconButton
-            icon={iconTypes.SETTINGS_OUTLINE}
-            aria-label="Artifact shell variant"
-            aria-haspopup="dialog"
-            aria-expanded={menuOpen}
-            aria-controls={pageMenuId}
-            appearance={IconButton.APPEARANCES.OUTLINE}
-            size={IconButton.SIZES.M}
-            onClick={() => setMenuOpen((o) => !o)}
-          />
-        </span>
+        <button
+          id={settingsBtnId}
+          type="button"
+          className="composer-page-settings-btn"
+          aria-label="Artifact shell variant"
+          aria-haspopup="menu"
+          aria-expanded={menuOpen}
+          aria-controls={pageMenuId}
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          <IconSettings />
+        </button>
         {menuOpen ? (
           <div
             id={pageMenuId}
             className="composer-page-settings-menu"
-            role="group"
-            aria-label="Artifact shell variant options"
+            role="menu"
+            aria-labelledby={settingsBtnId}
           >
             {SHELL_VARIANTS.map((v) => (
               <button
                 key={v}
                 type="button"
-                aria-pressed={shellVariant === v}
+                role="menuitemradio"
+                aria-checked={shellVariant === v}
+                className={[
+                  "composer-page-settings-option",
+                  shellVariant === v ? "composer-page-settings-option--active" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => {
                   setShellVariant(v);
                   setMenuOpen(false);
@@ -205,16 +218,15 @@ export function RipplingNativeArtifactsPage() {
               </p>
               <div className="demo-segments" role="group" aria-labelledby="rna-chart-type-label">
                 {CHART_VARIANT_OPTIONS.map(({ id, label }) => (
-                  <Button
+                  <button
                     key={id}
-                    type={Button.TYPES.BUTTON}
-                    appearance={chartVariant === id ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-                    size={Button.SIZES.M}
+                    type="button"
+                    className="demo-segment"
                     aria-pressed={chartVariant === id}
                     onClick={() => setChartVariant(id)}
                   >
                     {label}
-                  </Button>
+                  </button>
                 ))}
               </div>
             </div>

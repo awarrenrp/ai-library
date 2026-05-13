@@ -118,6 +118,59 @@
   gap: 2px;
 }
 
+.editing-prototype__ghost-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #716f6c;
+  cursor: default;
+  flex-shrink: 0;
+}
+
+.editing-prototype__ghost-icon:hover {
+  background: rgb(0 0 0 / 5%);
+  color: #000000;
+}
+
+.editing-prototype__ghost-icon:focus-visible {
+  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
+  outline-offset: 2px;
+}
+
+.editing-prototype__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 14px;
+  margin: 0;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: var(--font-weight-emphasis, 600);
+  cursor: default;
+  box-sizing: border-box;
+}
+
+.editing-prototype__btn--outline {
+  border: 1px solid rgb(0 0 0 / 18%);
+  background: #ffffff;
+  color: #000000;
+}
+
+.editing-prototype__btn--primary {
+  border: none;
+  background: var(--color-primary, #7a005d);
+  color: #ffffff;
+}
+
 .editing-prototype__profile-divider {
   width: 1px;
   height: 24px;

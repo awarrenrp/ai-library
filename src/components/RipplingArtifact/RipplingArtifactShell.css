@@ -201,21 +201,19 @@
   pointer-events: auto;
 }
 
-/* Ghost icon buttons — `<span>` wraps Pebble `<IconButton>` (props omit `className`). */
+/* Ghost icon buttons — no stroke */
 .rippling-artifact-icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
   width: 32px;
   height: 32px;
+  padding: 0;
+  border: none;
   border-radius: 6px;
   cursor: pointer;
+  background: transparent;
   color: #ffffff;
-}
-
-.rippling-artifact-icon-btn > button {
-  flex-shrink: 0;
 }
 
 .rippling-artifact-wrap:hover .rippling-artifact-icon-btn,
@@ -232,13 +230,13 @@
   box-shadow: inset 0 0 0 9999px var(--artifact-overlay-pressed);
 }
 
-.rippling-artifact-icon-btn:focus-within {
+.rippling-artifact-icon-btn:focus-visible {
   outline: 2px solid var(--artifact-outline-active);
   outline-offset: 2px;
   opacity: 1;
 }
 
-.rippling-artifact-wrap:focus-within .rippling-artifact-icon-btn:focus-within {
+.rippling-artifact-wrap:focus-within .rippling-artifact-icon-btn:focus-visible {
   color: #000000;
 }
 
@@ -416,22 +414,15 @@
  * artifact outline token so it matches the icon buttons and body controls.
  */
 .rippling-artifact-more-menu__item {
-  display: block;
-  width: 100%;
-}
-
-.rippling-artifact-more-menu__item > button {
-  display: inline-flex !important;
+  display: flex;
   align-items: center;
   gap: 8px;
   width: 100%;
   min-height: 28px;
   margin: 0;
-  padding: 4px 12px !important;
-  border-radius: 0;
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
+  padding: 4px 12px;
+  border: none;
+  background: transparent;
   color: #000000;
   font-family: inherit;
   font-size: 14px;
@@ -440,15 +431,13 @@
   text-align: left;
   cursor: pointer;
   box-sizing: border-box;
-  justify-content: flex-start;
 }
 
-.rippling-artifact-more-menu__item:hover > button,
-.rippling-artifact-more-menu__item:focus-within > button {
-  background: rgb(0 0 0 / 5%) !important;
+.rippling-artifact-more-menu__item:hover {
+  background: rgb(0 0 0 / 5%);
 }
 
-.rippling-artifact-more-menu__item > button:focus-visible {
+.rippling-artifact-more-menu__item:focus-visible {
   outline: 2px solid var(--artifact-outline-active);
   outline-offset: -2px;
 }

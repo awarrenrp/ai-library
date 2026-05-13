@@ -17,12 +17,18 @@
  *    full-screen tray pinned → 1076:16797
  */
 
-import { useEffect, useId, useRef, useState } from "react";
-import { ChatToolbar } from "../Chat";
+import { useId, useRef, useState } from "react";
+import { useDismissOnOutsidePress } from "../../hooks/useDismissOnOutsidePress";
+import {
+  ChatToolbar,
+  ChatToolbarAddCommentIcon,
+  ChatToolbarCloseIcon,
+  ChatToolbarExpandIcon,
+  ChatToolbarMenuIcon,
+} from "../Chat";
 import { Composer } from "../Composer";
-import { Button, IconButton, iconTypes } from "../../pebbleButton";
 import { ArtifactTray, type ArtifactTrayItem } from "./ArtifactTray";
-import { IconFile, IconReport, IconWorkflow } from "../../icons";
+import { IconFile, IconMoreHorizontal, IconReport, IconWorkflow } from "../../icons";
 import "./ArtifactTrayDemo.css";
 
 const TRAY_ITEMS: readonly ArtifactTrayItem[] = [
@@ -44,6 +50,7 @@ export function ArtifactTrayDemo({ mode = "side-chat" }: ArtifactTrayDemoProps) 
 
 function SideChatDemo() {
   const uid = useId();
+  const moreBtnId = `${uid}-more-btn`;
   const moreMenuId = `${uid}-more-menu`;
   const trayRegionId = `${uid}-tray`;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -51,24 +58,14 @@ function SideChatDemo() {
   const moreAnchorRef = useRef<HTMLDivElement>(null);
   const moreBtnRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    if (!menuOpen) return;
-    const onClick = (event: MouseEvent) => {
-      if (!moreAnchorRef.current?.contains(event.target as Node)) setMenuOpen(false);
-    };
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setMenuOpen(false);
-        moreBtnRef.current?.focus();
-      }
-    };
-    document.addEventListener("mousedown", onClick);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onClick);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
+  useDismissOnOutsidePress(
+    menuOpen,
+    (reason) => {
+      setMenuOpen(false);
+      if (reason === "escape") moreBtnRef.current?.focus();
+    },
+    (n) => moreAnchorRef.current?.contains(n) ?? false,
+  );
 
   return (
     <div
@@ -94,82 +91,58 @@ function SideChatDemo() {
             className="chat__toolbar artifact-tray-demo__chat-head"
           >
             <div className="chat__toolbar-cluster chat__toolbar-cluster--start">
-              <span className="chat__toolbar-btn">
-                <IconButton
-                  icon={iconTypes.HAMBURGER}
-                  appearance={IconButton.APPEARANCES.GHOST}
-                  size={IconButton.SIZES.M}
-                  aria-label="Open menu"
-                />
-              </span>
+              <button type="button" className="chat__toolbar-btn" aria-label="Open menu">
+                <ChatToolbarMenuIcon />
+              </button>
               <p className="chat__toolbar-title">Rippling AI</p>
             </div>
             <div className="chat__toolbar-cluster chat__toolbar-cluster--end">
               <div className="artifact-tray-demo__more-anchor" ref={moreAnchorRef}>
-                <span className="chat__toolbar-btn">
-                  <IconButton
-                    ref={moreBtnRef}
-                    icon={iconTypes.MORE_HORIZONTAL}
-                    appearance={IconButton.APPEARANCES.GHOST}
-                    size={IconButton.SIZES.M}
-                    aria-label={menuOpen ? "Close chat options" : "Chat options"}
-                    aria-haspopup="true"
-                    aria-expanded={menuOpen}
-                    aria-controls={menuOpen ? moreMenuId : undefined}
-                    onClick={() => setMenuOpen((open) => !open)}
-                  />
-                </span>
+                <button
+                  ref={moreBtnRef}
+                  type="button"
+                  id={moreBtnId}
+                  className="chat__toolbar-btn"
+                  aria-label={menuOpen ? "Close chat options" : "Chat options"}
+                  aria-haspopup="menu"
+                  aria-expanded={menuOpen}
+                  aria-controls={menuOpen ? moreMenuId : undefined}
+                  onClick={() => setMenuOpen((open) => !open)}
+                >
+                  <IconMoreHorizontal width={20} height={20} />
+                </button>
                 {menuOpen ? (
                   <div
                     id={moreMenuId}
-                    role="group"
-                    aria-label="Chat options"
+                    role="menu"
+                    aria-labelledby={moreBtnId}
                     className="artifact-tray-demo__more-menu"
                   >
-                    <div className="artifact-tray-demo__more-menu-item">
-                      <Button
-                        type={Button.TYPES.BUTTON}
-                        variant={Button.VARIANTS.TEXT}
-                        appearance={Button.APPEARANCES.GHOST}
-                        size={Button.SIZES.M}
-                        isFluid
-                        aria-pressed={trayOpen}
-                        onClick={() => {
-                          setTrayOpen((open) => !open);
-                          setMenuOpen(false);
-                          moreBtnRef.current?.focus();
-                        }}
-                      >
-                        {trayOpen ? "Hide artifacts" : "Show artifacts"}
-                      </Button>
-                    </div>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className="artifact-tray-demo__more-menu-item"
+                      aria-pressed={trayOpen}
+                      onClick={() => {
+                        setTrayOpen((open) => !open);
+                        setMenuOpen(false);
+                        moreBtnRef.current?.focus();
+                      }}
+                    >
+                      {trayOpen ? "Hide artifacts" : "Show artifacts"}
+                    </button>
                   </div>
                 ) : null}
               </div>
-              <span className="chat__toolbar-btn">
-                <IconButton
-                  icon={iconTypes.ADD_COMMENT_OUTLINE}
-                  appearance={IconButton.APPEARANCES.GHOST}
-                  size={IconButton.SIZES.M}
-                  aria-label="Add comment"
-                />
-              </span>
-              <span className="chat__toolbar-btn">
-                <IconButton
-                  icon={iconTypes.EXPAND}
-                  appearance={IconButton.APPEARANCES.GHOST}
-                  size={IconButton.SIZES.M}
-                  aria-label="Expand chat"
-                />
-              </span>
-              <span className="chat__toolbar-btn">
-                <IconButton
-                  icon={iconTypes.CLOSE}
-                  appearance={IconButton.APPEARANCES.GHOST}
-                  size={IconButton.SIZES.M}
-                  aria-label="Close chat"
-                />
-              </span>
+              <button type="button" className="chat__toolbar-btn" aria-label="Add comment">
+                <ChatToolbarAddCommentIcon />
+              </button>
+              <button type="button" className="chat__toolbar-btn" aria-label="Expand chat">
+                <ChatToolbarExpandIcon />
+              </button>
+              <button type="button" className="chat__toolbar-btn" aria-label="Close chat">
+                <ChatToolbarCloseIcon />
+              </button>
             </div>
           </div>
           <div className="artifact-tray-demo__thread-wrap">

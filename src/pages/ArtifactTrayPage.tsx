@@ -8,10 +8,10 @@ import {
 } from "../components/ArtifactTray";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
+import { IconCopy } from "../components/Composer/icons";
 import ARTIFACT_TRAY_EXAMPLE_SOURCE from "../examples/ArtifactTrayExample.tsx?raw";
 import { IconFile, IconReport, IconWorkflow } from "../icons";
 import { copyText } from "../utils/copyText";
-import { Button, iconTypes } from "../pebbleButton";
 import "../App.css";
 import "./ArtifactTrayPage.css";
 
@@ -124,26 +124,24 @@ export function ArtifactTrayPage() {
               role="group"
               aria-labelledby="label-tray-state"
             >
-              <Button
-                type={Button.TYPES.BUTTON}
-                appearance={state === "default" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-                size={Button.SIZES.M}
+              <button
+                type="button"
+                className="demo-segment"
                 aria-pressed={state === "default"}
                 aria-label="Default state, no row hovered"
                 onClick={() => setState("default")}
               >
                 Default
-              </Button>
-              <Button
-                type={Button.TYPES.BUTTON}
-                appearance={state === "hover" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-                size={Button.SIZES.M}
+              </button>
+              <button
+                type="button"
+                className="demo-segment"
                 aria-pressed={state === "hover"}
                 aria-label="Hover state, first row hovered"
                 onClick={() => setState("hover")}
               >
                 Hover
-              </Button>
+              </button>
             </div>
           </div>
         </div>
@@ -168,9 +166,10 @@ export function ArtifactTrayPage() {
       </div>
 
       <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Examples</h2>
 
       <section
-        className="in-context-stage"
+        className="in-context-stage demo-fullbleed"
         aria-labelledby="artifact-tray-context-heading"
       >
         <div className="in-context-stage__head">
@@ -188,24 +187,22 @@ export function ArtifactTrayPage() {
             role="group"
             aria-label="Artifact tray mode"
           >
-            <Button
-              type={Button.TYPES.BUTTON}
-              appearance={contextMode === "side-chat" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-              size={Button.SIZES.M}
+            <button
+              type="button"
+              className="demo-segment"
               aria-pressed={contextMode === "side-chat"}
               onClick={() => setContextMode("side-chat")}
             >
               Side chat
-            </Button>
-            <Button
-              type={Button.TYPES.BUTTON}
-              appearance={contextMode === "full-screen" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-              size={Button.SIZES.M}
+            </button>
+            <button
+              type="button"
+              className="demo-segment"
               aria-pressed={contextMode === "full-screen"}
               onClick={() => setContextMode("full-screen")}
             >
               Full screen
-            </Button>
+            </button>
           </div>
         </div>
         <ArtifactTrayDemo mode={contextMode} />
@@ -229,11 +226,15 @@ export function ArtifactTrayPage() {
             </p>
           </div>
           <div className="demo-segments" role="presentation">
-            <Button
-              type={Button.TYPES.BUTTON}
-              appearance={copyAck ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-              icon={iconTypes.COPY_OUTLINE}
-              size={Button.SIZES.M}
+            <button
+              type="button"
+              className={[
+                "demo-segment",
+                "demo-code-copy-btn",
+                copyAck ? "demo-code-copy-btn--active" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
               onClick={async () => {
                 const ok = await copyText(ARTIFACT_TRAY_EXAMPLE_SOURCE);
                 if (ok) {
@@ -242,8 +243,9 @@ export function ArtifactTrayPage() {
                 }
               }}
             >
+              <IconCopy className="demo-code-copy-btn__icon" />
               {copyAck ? "Copied" : "Copy code"}
-            </Button>
+            </button>
           </div>
         </div>
         <DemoHighlightedCode code={ARTIFACT_TRAY_EXAMPLE_SOURCE} language="tsx" />

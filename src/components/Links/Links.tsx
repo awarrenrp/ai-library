@@ -1,5 +1,4 @@
 import { useId, type ReactNode } from "react";
-import { Button } from "../../pebbleButton";
 import "./Links.css";
 
 export function LinksTextLink({
@@ -78,24 +77,13 @@ export function LinksFileCitationRow({
 }) {
   const Icon = variant === "image" ? IconCitationImage : IconCitationPdf;
   return (
-    <div className="links-file-row">
-      <Button
-        type={Button.TYPES.BUTTON}
-        appearance={Button.APPEARANCES.OUTLINE}
-        variant={Button.VARIANTS.NORMAL}
-        size={Button.SIZES.S}
-        isFluid
-        fontInherit
-      >
-        <>
-          <span className="links-file-icon">
-            <Icon />
-          </span>
-          <span className="links-file-name">{name}</span>
-          <span className="links-file-meta">{size}</span>
-        </>
-      </Button>
-    </div>
+    <button type="button" className="links-file-row">
+      <span className="links-file-icon">
+        <Icon />
+      </span>
+      <span className="links-file-name">{name}</span>
+      <span className="links-file-meta">{size}</span>
+    </button>
   );
 }
 
@@ -133,45 +121,37 @@ export function LinksRichArticleCard({
 }) {
   const initial = (sourceInitial ?? sourceName).trim().slice(0, 1).toUpperCase();
   return (
-    <div className={["links-rich-card", showThumbnail ? "" : "links-rich-card--text-only"].filter(Boolean).join(" ")}>
-      <Button
-        type={Button.TYPES.BUTTON}
-        appearance={Button.APPEARANCES.OUTLINE}
-        variant={Button.VARIANTS.NORMAL}
-        size={Button.SIZES.M}
-        isFluid
-        fontInherit
-      >
-        <>
-          <div className="links-rich-body">
-            <div className="links-rich-meta">
-              <span className="links-rich-meta-source">
-                <span className="links-rich-favicon" aria-hidden>
-                  {initial}
-                </span>
-                {sourceName}
-              </span>
-              <span aria-hidden>•</span>
-              <span>{dateLine}</span>
-            </div>
-            <p className="links-rich-title">{title}</p>
-            <p className="links-rich-snippet">{snippet}</p>
-          </div>
-          {showThumbnail ? (
-            <span className="links-rich-thumb" aria-hidden>
-              <span className="links-rich-thumb-visual">
-                <IconArticleThumb />
-              </span>
-              <span className="links-rich-thumb-open">
-                <span className="links-rich-thumb-open-inner">
-                  <IconRichCardOpen />
-                </span>
-              </span>
+    <button
+      type="button"
+      className={["links-rich-card", showThumbnail ? "" : "links-rich-card--text-only"].filter(Boolean).join(" ")}
+    >
+      <div className="links-rich-body">
+        <div className="links-rich-meta">
+          <span className="links-rich-meta-source">
+            <span className="links-rich-favicon" aria-hidden>
+              {initial}
             </span>
-          ) : null}
-        </>
-      </Button>
-    </div>
+            {sourceName}
+          </span>
+          <span aria-hidden>•</span>
+          <span>{dateLine}</span>
+        </div>
+        <p className="links-rich-title">{title}</p>
+        <p className="links-rich-snippet">{snippet}</p>
+      </div>
+      {showThumbnail ? (
+        <span className="links-rich-thumb" aria-hidden>
+          <span className="links-rich-thumb-visual">
+            <IconArticleThumb />
+          </span>
+          <span className="links-rich-thumb-open">
+            <span className="links-rich-thumb-open-inner">
+              <IconRichCardOpen />
+            </span>
+          </span>
+        </span>
+      ) : null}
+    </button>
   );
 }
 
@@ -187,20 +167,21 @@ export function LinksEmphasisButton({
   /** Leading icon (per destination type). */
   icon?: ReactNode;
 }) {
-  const appearance =
+  const variantClass =
     variant === "primary"
-      ? Button.APPEARANCES.PRIMARY
+      ? "links-emphasis-btn--primary"
       : variant === "info"
-        ? Button.APPEARANCES.INFO
-        : Button.APPEARANCES.OUTLINE;
+        ? "links-emphasis-btn--info"
+        : "links-emphasis-btn--secondary";
   return (
-    <Button type={Button.TYPES.BUTTON} appearance={appearance} variant={Button.VARIANTS.NORMAL} size={Button.SIZES.M}>
-      <>
-        {icon ? <span className="links-emphasis-btn__icon">{icon}</span> : null}
-        <span className="links-emphasis-btn__label">{children}</span>
-        {badge ? <span className="links-emphasis-badge">{badge}</span> : null}
-      </>
-    </Button>
+    <button
+      type="button"
+      className={["links-emphasis-btn", variantClass].join(" ")}
+    >
+      {icon ? <span className="links-emphasis-btn__icon">{icon}</span> : null}
+      <span className="links-emphasis-btn__label">{children}</span>
+      {badge ? <span className="links-emphasis-badge">{badge}</span> : null}
+    </button>
   );
 }
 

@@ -96,30 +96,25 @@
 }
 
 .workflow-artifact-demo-link {
-  display: inline-flex;
-}
-
-.workflow-artifact-demo-link > button {
-  margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
-  background: none !important;
-  box-shadow: none !important;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
   cursor: pointer;
-  font: inherit !important;
-  font-size: 13px !important;
-  line-height: 20px !important;
-  font-weight: 500 !important;
-  color: var(--color-primary, #7a005d) !important;
+  font: inherit;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--color-primary, #7a005d);
   text-decoration: none;
   text-align: left;
 }
 
-.workflow-artifact-demo-link:hover > button {
+.workflow-artifact-demo-link:hover {
   text-decoration: underline;
 }
 
-.workflow-artifact-demo-link:focus-within > button:focus-visible {
+.workflow-artifact-demo-link:focus-visible {
   outline: 2px solid var(--artifact-outline-active, #5aa5e7);
   outline-offset: 2px;
   border-radius: 2px;

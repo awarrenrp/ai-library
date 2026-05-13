@@ -1,5 +1,6 @@
-import { useEffect, useId, useRef, useState } from "react";
-import { IconButton, iconTypes } from "../pebbleButton";
+import { useId, useRef, useState } from "react";
+import { IconSettings } from "./Composer/icons";
+import { useDismissOnOutsidePress } from "../hooks/useDismissOnOutsidePress";
 
 export const ARTIFACT_HOVER_VARIANTS = ["shadow", "overlay"] as const;
 export type ArtifactHoverVariant = (typeof ARTIFACT_HOVER_VARIANTS)[number];
@@ -22,49 +23,40 @@ export function ArtifactHoverPageSettings({ variant, onVariantChange }: Artifact
   const ref = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    if (!menuOpen) return;
-    function onDocMouseDown(e: MouseEvent) {
-      const el = ref.current;
-      if (el && !el.contains(e.target as Node)) setMenuOpen(false);
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setMenuOpen(false);
-    }
-    document.addEventListener("mousedown", onDocMouseDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDocMouseDown);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
+  useDismissOnOutsidePress(
+    menuOpen,
+    () => setMenuOpen(false),
+    (n) => ref.current?.contains(n) ?? false,
+  );
 
   return (
     <div className="composer-page-settings" ref={ref}>
-      <span id={btnId} className="composer-page-settings-trigger">
-        <IconButton
-          icon={iconTypes.SETTINGS_OUTLINE}
-          aria-label="Hover style for previews"
-          aria-haspopup="dialog"
-          aria-expanded={menuOpen}
-          aria-controls={menuId}
-          appearance={IconButton.APPEARANCES.OUTLINE}
-          size={IconButton.SIZES.M}
-          onClick={() => setMenuOpen((o) => !o)}
-        />
-      </span>
+      <button
+        id={btnId}
+        type="button"
+        className="composer-page-settings-btn"
+        aria-label="Hover style for previews"
+        aria-haspopup="menu"
+        aria-expanded={menuOpen}
+        aria-controls={menuId}
+        onClick={() => setMenuOpen((o) => !o)}
+      >
+        <IconSettings />
+      </button>
       {menuOpen ? (
-        <div
-          id={menuId}
-          className="composer-page-settings-menu"
-          role="group"
-          aria-label="Hover style for previews — options"
-        >
+        <div id={menuId} className="composer-page-settings-menu" role="menu" aria-labelledby={btnId}>
           {ARTIFACT_HOVER_VARIANTS.map((v) => (
             <button
               key={v}
               type="button"
-              aria-pressed={variant === v}
+              role="menuitemradio"
+              aria-checked={variant === v}
+              className={[
+                "composer-page-settings-option",
+                variant === v ? "composer-page-settings-option--active" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
               onClick={() => {
                 onVariantChange(v);
                 setMenuOpen(false);

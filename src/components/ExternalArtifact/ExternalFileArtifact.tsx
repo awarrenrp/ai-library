@@ -1,5 +1,4 @@
 import type { ComposerWidth } from "../Composer";
-import { Button } from "../../pebbleButton";
 import "./ExternalArtifact.css";
 
 /**
@@ -147,28 +146,13 @@ export function ExternalFileArtifact({
 
         <div className="external-file-artifact-actions">
           {!compact ? (
-            <span className="external-file-artifact-icon-btn">
-              <Button
-                type={Button.TYPES.BUTTON}
-                variant={Button.VARIANTS.TEXT}
-                appearance={Button.APPEARANCES.GHOST}
-                size={Button.SIZES.M}
-                aria-label="Open in Google Drive"
-              >
-                <IconGoogleDrive />
-              </Button>
-            </span>
+            <button type="button" className="external-file-artifact-icon-btn" aria-label="Open in Google Drive">
+              <IconGoogleDrive />
+            </button>
           ) : null}
-          <span className="external-file-artifact-primary">
-            <Button
-              type={Button.TYPES.BUTTON}
-              variant={Button.VARIANTS.NORMAL}
-              appearance={Button.APPEARANCES.OUTLINE}
-              size={Button.SIZES.M}
-            >
-              Open
-            </Button>
-          </span>
+          <button type="button" className="external-file-artifact-primary">
+            Open
+          </button>
         </div>
       </article>
     </div>

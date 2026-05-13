@@ -91,29 +91,17 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  flex-shrink: 0;
-  color: #716f6c;
-}
-
-.report-th-icon-btn > button {
-  box-sizing: border-box;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100%;
-  height: 100%;
-  padding: 0 !important;
-  margin: 0;
-  border: none !important;
+  padding: 0;
+  border: none;
   border-radius: 6px;
-  background: transparent !important;
-  box-shadow: none !important;
-  color: inherit;
+  background: transparent;
+  color: #716f6c;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
-.report-th-icon-btn:hover > button {
-  background: rgb(0 0 0 / 5%) !important;
+.report-th-icon-btn:hover {
+  background: rgb(0 0 0 / 5%);
 }
 
 .report-th-chevron {
@@ -122,29 +110,17 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  flex-shrink: 0;
-  color: #716f6c;
-}
-
-.report-th-chevron > button {
-  box-sizing: border-box;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100%;
-  height: 100%;
-  padding: 0 !important;
-  margin: 0;
-  border: none !important;
+  padding: 0;
+  border: none;
   border-radius: 6px;
-  background: transparent !important;
-  box-shadow: none !important;
-  color: inherit;
+  background: transparent;
+  color: #716f6c;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
-.report-th-chevron:hover > button {
-  background: rgb(0 0 0 / 5%) !important;
+.report-th-chevron:hover {
+  background: rgb(0 0 0 / 5%);
 }
 
 .report-th-simple {

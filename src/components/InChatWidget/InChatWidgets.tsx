@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import "./InChatWidgets.css";
-import { Button } from "../../pebbleButton";
 
 function IconCreditCard({ size = 16 }: { size?: number }) {
   return (
@@ -188,19 +187,14 @@ export function InChatLinkWidget({
     <article className="icw-widget icw-widget--96" aria-label={title}>
       <div className="icw-widget-main">
         <p className="icw-widget-title">{title}</p>
-        <span className="icw-open-btn">
-          <Button
-            type={Button.TYPES.BUTTON}
-            variant={Button.VARIANTS.NORMAL}
-            appearance={Button.APPEARANCES.OUTLINE}
-            size={Button.SIZES.M}
-            isFluid
-            onClick={onOpen}
-            aria-label={openAriaLabel ?? `Open ${title}`}
-          >
-            Open
-          </Button>
-        </span>
+        <button
+          type="button"
+          className="icw-open-btn"
+          onClick={onOpen}
+          aria-label={openAriaLabel ?? `Open ${title}`}
+        >
+          Open
+        </button>
       </div>
       <PreviewChrome icon={previewIcon} caption={previewCaption}>
         {previewBody}

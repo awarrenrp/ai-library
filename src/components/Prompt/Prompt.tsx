@@ -1,5 +1,4 @@
 import "./Prompt.css";
-import { Button } from "../../pebbleButton";
 
 export type PromptSurface = "outline" | "filled";
 
@@ -61,28 +60,20 @@ export function Prompt({
   className,
 }: PromptProps) {
   return (
-    <div className={["prompt-shell", className].filter(Boolean).join(" ")}>
-      <Button
-        type={Button.TYPES.BUTTON}
-        variant={Button.VARIANTS.NORMAL}
-        appearance={
-          surface === "outline" ? Button.APPEARANCES.OUTLINE : Button.APPEARANCES.SOLID
-        }
-        size={Button.SIZES.M}
-        isFluid
-        fontInherit
-      >
-        <>
-          <span className="prompt-arrow" aria-hidden>
-            {surface === "outline" ? <PromptOutlineIcon /> : <PromptFilledIcon />}
-          </span>
-          <div className="prompt-text">
-            <p className="prompt-title">{title}</p>
-            {description ? <p className="prompt-description">{description}</p> : null}
-            {subtext ? <p className="prompt-subtext">{subtext}</p> : null}
-          </div>
-        </>
-      </Button>
-    </div>
+    <button
+      type="button"
+      className={["prompt", surface === "outline" ? "prompt--outline" : "prompt--filled", className]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <span className="prompt-arrow" aria-hidden>
+        {surface === "outline" ? <PromptOutlineIcon /> : <PromptFilledIcon />}
+      </span>
+      <div className="prompt-text">
+        <p className="prompt-title">{title}</p>
+        {description ? <p className="prompt-description">{description}</p> : null}
+        {subtext ? <p className="prompt-subtext">{subtext}</p> : null}
+      </div>
+    </button>
   );
 }

@@ -12,11 +12,88 @@ import {
   RipplingArtifactShell,
   SimpleBarChartDemo,
 } from "../RipplingArtifact";
-import { Button, IconButton, iconTypes } from "../../pebbleButton";
 import "./EditingPrototypeMock.css";
 
 const FIGMA_PROTOTYPE =
   "https://www.figma.com/design/Dvcv5Yj50PM2WuJhPj1qUH/AI-components?node-id=802-14409";
+
+function ProtoGhostIcon({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <button type="button" className="editing-prototype__ghost-icon" aria-label={label}>
+      {children}
+    </button>
+  );
+}
+
+/** Decorative 16×16 toolbar glyphs — standalone mock, not Pebble icon pack. */
+function IconProtoComment() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden focusable="false">
+      <path
+        d="M3.5 12V4.5A1 1 0 014.5 3.5h7A1 1 0 0112.5 4.5v6a1 1 0 01-1 1H6.2L3.5 14v-2z"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconProtoBell() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden focusable="false">
+      <path
+        d="M8 2.5a3.25 3.25 0 00-3.25 3.25v2.2L4 10.5h8l-.75-2.55V5.75A3.25 3.25 0 008 2.5zM6.5 12.5h3a1.5 1.5 0 01-3 0z"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconProtoUser() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden focusable="false">
+      <circle cx="8" cy="5.5" r="2.25" stroke="currentColor" strokeWidth="1.25" />
+      <path
+        d="M3.5 13.2v-.2c0-2 2-3.5 4.5-3.5s4.5 1.5 4.5 3.5v.2"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function IconProtoShare() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden focusable="false">
+      <circle cx="12" cy="4" r="1.4" fill="currentColor" />
+      <circle cx="4" cy="8" r="1.4" fill="currentColor" />
+      <circle cx="12" cy="12" r="1.4" fill="currentColor" />
+      <path d="M5.2 7.3l5.1-2.4M5.2 8.7l5.1 2.4" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconProtoPlus() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden focusable="false">
+      <path d="M8 3.5v9M3.5 8h9" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconProtoMore() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden focusable="false">
+      <circle cx="3.5" cy="8" r="1.2" fill="currentColor" />
+      <circle cx="8" cy="8" r="1.2" fill="currentColor" />
+      <circle cx="12.5" cy="8" r="1.2" fill="currentColor" />
+    </svg>
+  );
+}
 
 export function EditingPrototypeMock() {
   const [dashSelection, setDashSelection] = useState<ChartDashboardTileId>("headcount-by-dept");
@@ -40,36 +117,21 @@ export function EditingPrototypeMock() {
 
         <div className="editing-prototype__top-bar-right">
           <div className="editing-prototype__quick-actions">
-            <IconButton
-              icon={iconTypes.ADD_COMMENT_OUTLINE}
-              appearance={IconButton.APPEARANCES.GHOST}
-              size={IconButton.SIZES.M}
-              aria-label="Comments"
-            />
-            <IconButton
-              icon={iconTypes.NOTIFICATION_OUTLINE}
-              appearance={IconButton.APPEARANCES.GHOST}
-              size={IconButton.SIZES.M}
-              aria-label="Notifications"
-            />
-            <IconButton
-              icon={iconTypes.USER_OUTLINE}
-              appearance={IconButton.APPEARANCES.GHOST}
-              size={IconButton.SIZES.M}
-              aria-label="Directory"
-            />
-            <IconButton
-              icon={iconTypes.SHARE_OUTLINE}
-              appearance={IconButton.APPEARANCES.GHOST}
-              size={IconButton.SIZES.M}
-              aria-label="Share"
-            />
-            <IconButton
-              icon={iconTypes.ADD}
-              appearance={IconButton.APPEARANCES.GHOST}
-              size={IconButton.SIZES.M}
-              aria-label="Create"
-            />
+            <ProtoGhostIcon label="Comments">
+              <IconProtoComment />
+            </ProtoGhostIcon>
+            <ProtoGhostIcon label="Notifications">
+              <IconProtoBell />
+            </ProtoGhostIcon>
+            <ProtoGhostIcon label="Directory">
+              <IconProtoUser />
+            </ProtoGhostIcon>
+            <ProtoGhostIcon label="Share">
+              <IconProtoShare />
+            </ProtoGhostIcon>
+            <ProtoGhostIcon label="Create">
+              <IconProtoPlus />
+            </ProtoGhostIcon>
           </div>
           <span className="editing-prototype__profile-divider" aria-hidden />
           <div className="editing-prototype__profile">
@@ -86,12 +148,9 @@ export function EditingPrototypeMock() {
           <div className="editing-prototype__page-toolbar">
             <div className="editing-prototype__page-toolbar-start">
               <span className="editing-prototype__page-toolbar-more">
-                <IconButton
-                  icon={iconTypes.MORE_HORIZONTAL}
-                  appearance={IconButton.APPEARANCES.GHOST}
-                  size={IconButton.SIZES.M}
-                  aria-label="Page options"
-                />
+                <ProtoGhostIcon label="Page options">
+                  <IconProtoMore />
+                </ProtoGhostIcon>
               </span>
               <div className="editing-prototype__page-title-stack">
                 <p className="editing-prototype__breadcrumb">
@@ -112,24 +171,16 @@ export function EditingPrototypeMock() {
 
             <div className="editing-prototype__page-toolbar-end">
               <span className="editing-prototype__page-toolbar-actions">
-                <IconButton
-                  icon={iconTypes.ADD_COMMENT_OUTLINE}
-                  appearance={IconButton.APPEARANCES.GHOST}
-                  size={IconButton.SIZES.M}
-                  aria-label="Add content"
-                />
+                <ProtoGhostIcon label="Add content">
+                  <IconProtoComment />
+                </ProtoGhostIcon>
               </span>
-              <Button
-                type={Button.TYPES.BUTTON}
-                variant={Button.VARIANTS.NORMAL}
-                appearance={Button.APPEARANCES.OUTLINE}
-                size={Button.SIZES.M}
-              >
+              <button type="button" className="editing-prototype__btn editing-prototype__btn--outline">
                 Cancel
-              </Button>
-              <Button type={Button.TYPES.BUTTON} appearance={Button.APPEARANCES.PRIMARY} size={Button.SIZES.M}>
+              </button>
+              <button type="button" className="editing-prototype__btn editing-prototype__btn--primary">
                 Save
-              </Button>
+              </button>
             </div>
           </div>
 

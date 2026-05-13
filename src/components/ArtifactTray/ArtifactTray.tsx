@@ -18,7 +18,7 @@
 
 import type { ReactNode } from "react";
 import { useId } from "react";
-import { Button, IconButton, iconTypes } from "../../pebbleButton";
+import { IconClose } from "../../icons";
 import "./ArtifactTray.css";
 
 export type ArtifactTrayItem = {
@@ -76,25 +76,22 @@ export function ArtifactTray({
         <h3 id={headingId} className="artifact-tray__title">
           {title}
         </h3>
-        <span className="artifact-tray__close">
-          <IconButton
-            icon={iconTypes.CLOSE}
-            appearance={IconButton.APPEARANCES.GHOST}
-            size={IconButton.SIZES.M}
-            aria-label="Close artifact tray"
-            onClick={onClose}
-          />
-        </span>
+        <button
+          type="button"
+          className="artifact-tray__close"
+          aria-label="Close artifact tray"
+          onClick={onClose}
+        >
+          <IconClose className="artifact-tray__close-icon" />
+        </button>
       </header>
       <ul className="artifact-tray__list" role="list">
         {items.map((item) => (
-          <li key={item.id} data-hovered={item.id === hoveredId || undefined}>
-            <Button
-              type={Button.TYPES.BUTTON}
-              variant={Button.VARIANTS.TEXT}
-              appearance={Button.APPEARANCES.GHOST}
-              size={Button.SIZES.M}
-              isFluid
+          <li key={item.id}>
+            <button
+              type="button"
+              className="artifact-tray__item"
+              data-hovered={item.id === hoveredId || undefined}
               onClick={item.onSelect}
             >
               {item.icon ? (
@@ -103,7 +100,7 @@ export function ArtifactTray({
                 </span>
               ) : null}
               <span className="artifact-tray__item-title">{item.title}</span>
-            </Button>
+            </button>
           </li>
         ))}
       </ul>

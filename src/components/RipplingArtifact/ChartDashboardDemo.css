@@ -1,8 +1,8 @@
 /*
  * Chart dashboard preview — used in the Rippling-native artifacts Editing
  * example. Three tiles laid out in a 2-up grid (the third tile spans both
- * columns). Wrapper holds a Pebble `<Button>` fill so tiles stay clickable with
- * system button styling inside the bordered shell.
+ * columns). Each tile is a button so it can be clicked to "select" the chart
+ * during the demo flow.
  */
 .chart-dashboard-demo {
   display: grid;
@@ -31,30 +31,6 @@
   transition: border-color 0.12s ease, box-shadow 0.12s ease;
 }
 
-.chart-dashboard-demo__tile > button {
-  box-sizing: border-box;
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 10px;
-  margin: 0;
-  padding: 0 !important;
-  border: none !important;
-  border-radius: 0;
-  background: transparent !important;
-  box-shadow: none !important;
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-  text-align: left;
-}
-
-.chart-dashboard-demo__tile:focus-within {
-  outline: none;
-}
-
 .chart-dashboard-demo__tile:hover {
   border-color: rgb(0 0 0 / 24%);
 }
@@ -69,7 +45,7 @@
   box-shadow: 0 0 0 1px var(--artifact-outline-active);
 }
 
-.chart-dashboard-demo__tile > button:focus-visible {
+.chart-dashboard-demo__tile:focus-visible {
   outline: 2px solid var(--artifact-outline-active);
   outline-offset: 2px;
 }

@@ -19,7 +19,6 @@ import {
   LinksSourcesChip,
   LinksTextLink,
 } from "../components/Links";
-import { Button } from "../pebbleButton";
 import "../App.css";
 
 const FIGMA_SPEC =
@@ -231,9 +230,10 @@ export function LinksPage() {
       </section>
 
       <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Examples</h2>
 
       <section
-        className="in-context-stage"
+        className="in-context-stage demo-fullbleed"
         id="links-in-context"
         aria-labelledby="links-in-context-heading"
       >
@@ -248,24 +248,22 @@ export function LinksPage() {
             </p>
           </div>
           <div className="demo-segments" role="group" aria-label="Links surface mode">
-            <Button
-              type={Button.TYPES.BUTTON}
-              appearance={contextMode === "side-chat" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-              size={Button.SIZES.M}
+            <button
+              type="button"
+              className="demo-segment"
               aria-pressed={contextMode === "side-chat"}
               onClick={() => setContextMode("side-chat")}
             >
               Side chat
-            </Button>
-            <Button
-              type={Button.TYPES.BUTTON}
-              appearance={contextMode === "full-screen" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-              size={Button.SIZES.M}
+            </button>
+            <button
+              type="button"
+              className="demo-segment"
               aria-pressed={contextMode === "full-screen"}
               onClick={() => setContextMode("full-screen")}
             >
               Full screen
-            </Button>
+            </button>
           </div>
         </div>
         <LinksInChatDemo mode={contextMode} />

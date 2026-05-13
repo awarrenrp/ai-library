@@ -1,5 +1,5 @@
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { Button, IconButton, iconTypes } from "../../pebbleButton";
+import { useId, useRef, useState, type ReactNode } from "react";
+import { useDismissOnOutsidePress } from "../../hooks/useDismissOnOutsidePress";
 import "./RipplingArtifactShell.css";
 
 /**
@@ -45,8 +45,9 @@ export type RipplingArtifactShellProps = {
   /**
    * Custom JSX rendered below a third divider in the More menu, in a slot
    * styled to match `.rippling-artifact-body` (12 16 16 padding). Drop
-   * product-specific controls or notes here — they sit in a labelled
-   * `role="group"` so they're announced as a related set.
+   * product-specific controls or notes here — they sit inside the menu's
+   * `role="menu"` inside a labelled `role="group"` so they're announced as a
+   * related set.
    */
   moreMenuSlot?: ReactNode;
   /**
@@ -81,6 +82,87 @@ function IconEditingPencil() {
       <path
         d="M14.0755 4.7487L13.2515 3.9247C12.5355 3.2087 11.3749 3.2087 10.6589 3.9247L2.20752 12.376L1.38818 16.612L5.62418 15.7927L14.0755 7.34136C14.7915 6.62536 14.7915 5.4647 14.0755 4.7487Z"
         fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+/** Close glyph — Figma 757:10356 Cancel `Start icon`. */
+function IconClose() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden focusable="false">
+      <path
+        d="M11.5 3.5l-8 8M3.5 3.5l8 8"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+/** Check glyph — Figma 757:10357 Save `Start icon`. */
+function IconCheck() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden focusable="false">
+      <path
+        d="M2.5 7.5l3 3 6-6"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconMoreHorizontal() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <path d="M5 10h1.5M9.25 10h1.5M14 10h1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/** Expand — Figma AI-components · Icon Button instance · node 860:17473 */
+function IconExpand() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M17.8332 11.3332H16.8332V7.87384L7.87384 16.8332H11.3332V17.8332H6.1665V12.6665H7.1665V16.1258L16.1258 7.1665H12.6665V6.1665H17.8332V11.3332Z"
+      />
+    </svg>
+  );
+}
+
+/** Lucide thumbs-up (outline), scaled to 20×20 */
+function IconThumbsUp() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M7 10v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Lucide thumbs-down (outline), scaled to 20×20 */
+function IconThumbsDown() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M17 14V2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -191,30 +273,20 @@ export function RipplingArtifactShell({
   selected = false,
 }: RipplingArtifactShellProps) {
   const moreMenuId = useId();
+  const moreBtnId = useId();
   const slotGroupId = useId();
   const [moreOpen, setMoreOpen] = useState(false);
   const moreAnchorRef = useRef<HTMLDivElement>(null);
   const moreBtnRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    if (!moreOpen) return;
-    function onDocMouseDown(e: MouseEvent) {
-      if (moreAnchorRef.current?.contains(e.target as Node)) return;
+  useDismissOnOutsidePress(
+    moreOpen,
+    (reason) => {
       setMoreOpen(false);
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        setMoreOpen(false);
-        moreBtnRef.current?.focus();
-      }
-    }
-    document.addEventListener("mousedown", onDocMouseDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDocMouseDown);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [moreOpen]);
+      if (reason === "escape") moreBtnRef.current?.focus();
+    },
+    (n) => moreAnchorRef.current?.contains(n) ?? false,
+  );
 
   function runAction(fn?: () => void) {
     fn?.();
@@ -258,87 +330,77 @@ export function RipplingArtifactShell({
               role="toolbar"
               aria-label="Edit mode actions"
             >
-              <Button
-                type={Button.TYPES.BUTTON}
-                variant={Button.VARIANTS.NORMAL}
-                appearance={Button.APPEARANCES.OUTLINE}
-                size={Button.SIZES.M}
-                icon={iconTypes.CLOSE}
+              <button
+                type="button"
+                className="rippling-artifact-edit-btn rippling-artifact-edit-btn--cancel"
                 onClick={onCancelEdit}
               >
-                Cancel
-              </Button>
-              <Button
-                type={Button.TYPES.BUTTON}
-                variant={Button.VARIANTS.NORMAL}
-                appearance={Button.APPEARANCES.PRIMARY}
-                size={Button.SIZES.M}
-                icon={iconTypes.CHECK}
+                <IconClose />
+                <span>Cancel</span>
+              </button>
+              <button
+                type="button"
+                className="rippling-artifact-edit-btn rippling-artifact-edit-btn--save"
                 onClick={onSaveEdit}
               >
-                Save
-              </Button>
+                <IconCheck />
+                <span>Save</span>
+              </button>
             </div>
           ) : (
             <div className="rippling-artifact-actions" role="toolbar" aria-label="Artifact actions">
               <div className="rippling-artifact-more-anchor" ref={moreAnchorRef}>
-                <span className="rippling-artifact-icon-btn">
-                  <IconButton
-                    ref={moreBtnRef}
-                    icon={iconTypes.MORE_HORIZONTAL}
-                    appearance={IconButton.APPEARANCES.GHOST}
-                    size={IconButton.SIZES.M}
-                    aria-label={moreOpen ? "Close artifact options" : "More artifact options"}
-                    aria-haspopup="true"
-                    aria-expanded={moreOpen}
-                    aria-controls={moreOpen ? moreMenuId : undefined}
-                    onClick={() => setMoreOpen((o) => !o)}
-                  />
-                </span>
+                <button
+                  id={moreBtnId}
+                  ref={moreBtnRef}
+                  type="button"
+                  className="rippling-artifact-icon-btn"
+                  aria-label={moreOpen ? "Close artifact options" : "More artifact options"}
+                  aria-haspopup="menu"
+                  aria-expanded={moreOpen}
+                  aria-controls={moreOpen ? moreMenuId : undefined}
+                  onClick={() => setMoreOpen((o) => !o)}
+                >
+                  <IconMoreHorizontal />
+                </button>
                 {moreOpen ? (
                   <div
                     id={moreMenuId}
                     className="rippling-artifact-more-menu"
-                    role="group"
-                    aria-label="Artifact options"
+                    role="menu"
+                    aria-labelledby={moreBtnId}
                   >
                     <div className="rippling-artifact-more-menu__group" role="group">
                       {primaryRows.map((row) => (
-                        <div key={row.id} className="rippling-artifact-more-menu__item">
-                          <Button
-                            type={Button.TYPES.BUTTON}
-                            variant={Button.VARIANTS.TEXT}
-                            appearance={Button.APPEARANCES.GHOST}
-                            size={Button.SIZES.M}
-                            isFluid
-                            onClick={() => runAction(row.onClick)}
-                          >
-                            <span className="rippling-artifact-more-menu__item-icon" aria-hidden>
-                              {row.icon}
-                            </span>
-                            {row.label}
-                          </Button>
-                        </div>
+                        <button
+                          key={row.id}
+                          type="button"
+                          role="menuitem"
+                          className="rippling-artifact-more-menu__item"
+                          onClick={() => runAction(row.onClick)}
+                        >
+                          <span className="rippling-artifact-more-menu__item-icon" aria-hidden>
+                            {row.icon}
+                          </span>
+                          {row.label}
+                        </button>
                       ))}
                     </div>
                     <hr className="rippling-artifact-more-menu__separator" role="separator" />
                     <div className="rippling-artifact-more-menu__group" role="group">
                       {secondaryRows.map((row) => (
-                        <div key={row.id} className="rippling-artifact-more-menu__item">
-                          <Button
-                            type={Button.TYPES.BUTTON}
-                            variant={Button.VARIANTS.TEXT}
-                            appearance={Button.APPEARANCES.GHOST}
-                            size={Button.SIZES.M}
-                            isFluid
-                            onClick={() => runAction(row.onClick)}
-                          >
-                            <span className="rippling-artifact-more-menu__item-icon" aria-hidden>
-                              {row.icon}
-                            </span>
-                            {row.label}
-                          </Button>
-                        </div>
+                        <button
+                          key={row.id}
+                          type="button"
+                          role="menuitem"
+                          className="rippling-artifact-more-menu__item"
+                          onClick={() => runAction(row.onClick)}
+                        >
+                          <span className="rippling-artifact-more-menu__item-icon" aria-hidden>
+                            {row.icon}
+                          </span>
+                          {row.label}
+                        </button>
                       ))}
                     </div>
                     {moreMenuSlot ? (
@@ -357,14 +419,9 @@ export function RipplingArtifactShell({
                   </div>
                 ) : null}
               </div>
-              <span className="rippling-artifact-icon-btn">
-                <IconButton
-                  icon={iconTypes.EXPAND}
-                  appearance={IconButton.APPEARANCES.GHOST}
-                  size={IconButton.SIZES.M}
-                  aria-label="Expand"
-                />
-              </span>
+              <button type="button" className="rippling-artifact-icon-btn" aria-label="Expand">
+                <IconExpand />
+              </button>
             </div>
           )}
         </header>
@@ -384,22 +441,12 @@ export function RipplingArtifactShell({
 
       <div className="rippling-artifact-foot" aria-label="Feedback and timestamp">
         <div className="rippling-artifact-reactions" role="toolbar" aria-label="Feedback">
-          <span className="rippling-artifact-icon-btn">
-            <IconButton
-              icon={iconTypes.THUMB_UP_OUTLINE}
-              appearance={IconButton.APPEARANCES.GHOST}
-              size={IconButton.SIZES.M}
-              aria-label="Thumbs up"
-            />
-          </span>
-          <span className="rippling-artifact-icon-btn">
-            <IconButton
-              icon={iconTypes.THUMB_DOWN_OUTLINE}
-              appearance={IconButton.APPEARANCES.GHOST}
-              size={IconButton.SIZES.M}
-              aria-label="Thumbs down"
-            />
-          </span>
+          <button type="button" className="rippling-artifact-icon-btn" aria-label="Thumbs up">
+            <IconThumbsUp />
+          </button>
+          <button type="button" className="rippling-artifact-icon-btn" aria-label="Thumbs down">
+            <IconThumbsDown />
+          </button>
         </div>
         <span className="rippling-artifact-timestamp">{footerTimestamp}</span>
       </div>

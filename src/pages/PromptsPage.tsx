@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { Prompt } from "../components/Prompt";
 import type { PromptSurface } from "../components/Prompt";
-import { Button } from "../pebbleButton";
 import "../App.css";
 
 const PROMPTS_WHEN = [
@@ -62,24 +61,22 @@ export function PromptsPage() {
             Surface
           </p>
           <div className="demo-segments" role="group" aria-labelledby="label-prompt-surface">
-            <Button
-              type={Button.TYPES.BUTTON}
-              appearance={surface === "outline" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-              size={Button.SIZES.M}
+            <button
+              type="button"
+              className="demo-segment"
               aria-pressed={surface === "outline"}
               onClick={() => setSurface("outline")}
             >
               Outlined
-            </Button>
-            <Button
-              type={Button.TYPES.BUTTON}
-              appearance={surface === "filled" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-              size={Button.SIZES.M}
+            </button>
+            <button
+              type="button"
+              className="demo-segment"
               aria-pressed={surface === "filled"}
               onClick={() => setSurface("filled")}
             >
               Filled
-            </Button>
+            </button>
           </div>
         </div>
 
@@ -88,24 +85,22 @@ export function PromptsPage() {
             Subtext
           </p>
           <div className="demo-segments" role="group" aria-labelledby="label-prompt-subtext">
-            <Button
-              type={Button.TYPES.BUTTON}
-              appearance={subtextOn ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-              size={Button.SIZES.M}
+            <button
+              type="button"
+              className="demo-segment"
               aria-pressed={subtextOn}
               onClick={() => setSubtextOn(true)}
             >
               On
-            </Button>
-            <Button
-              type={Button.TYPES.BUTTON}
-              appearance={!subtextOn ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-              size={Button.SIZES.M}
+            </button>
+            <button
+              type="button"
+              className="demo-segment"
               aria-pressed={!subtextOn}
               onClick={() => setSubtextOn(false)}
             >
               Off
-            </Button>
+            </button>
           </div>
         </div>
       </div>

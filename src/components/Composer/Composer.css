@@ -370,16 +370,6 @@
   flex-direction: column;
 }
 
-.composer-add-menu__pebble-wrap > button {
-  width: 100%;
-  justify-content: flex-start;
-}
-
-.composer-mode-menu > button {
-  width: 100%;
-  justify-content: flex-start;
-}
-
 .composer-add-menu__sep {
   display: block;
   height: 1px;

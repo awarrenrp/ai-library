@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
+import { IconCopy } from "../components/Composer/icons";
 import { StrongTypeComposerExample } from "../examples/StrongTypeExample";
 import STRONG_TYPE_EXAMPLE_SOURCE from "../examples/StrongTypeExample.tsx?raw";
 import { copyText } from "../utils/copyText";
-import { Button, iconTypes } from "../pebbleButton";
 import "../App.css";
 import "./StrongTypePage.css";
 
@@ -144,19 +144,20 @@ export function StrongTypePage() {
             </p>
           </div>
           <div className="demo-segments" role="presentation">
-            <Button
-              type={Button.TYPES.BUTTON}
-              appearance={copyAck ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-              icon={iconTypes.COPY_OUTLINE}
-              size={Button.SIZES.M}
+            <button
+              type="button"
+              className={["demo-segment", "demo-code-copy-btn", copyAck ? "demo-code-copy-btn--active" : ""]
+                .filter(Boolean)
+                .join(" ")}
               onClick={async () => {
                 await copyText(STRONG_TYPE_EXAMPLE_SOURCE);
                 setCopyAck(true);
                 window.setTimeout(() => setCopyAck(false), 2000);
               }}
             >
+              <IconCopy className="demo-code-copy-btn__icon" />
               {copyAck ? "Copied" : "Copy code"}
-            </Button>
+            </button>
           </div>
         </div>
         <DemoHighlightedCode code={STRONG_TYPE_EXAMPLE_SOURCE} language="tsx" />

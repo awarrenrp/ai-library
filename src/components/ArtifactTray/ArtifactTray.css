@@ -98,12 +98,14 @@
  * Row — 4px padding, 8px icon/title gap, 8px radius.
  * Color (#716f6c) matches the body-text muted token used across artifacts.
  */
-.artifact-tray__list > li > button {
+.artifact-tray__item {
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
   margin: 0;
   padding: 4px;
+  border: none;
   border-radius: 8px;
   background: transparent;
   text-align: left;
@@ -115,19 +117,19 @@
   cursor: pointer;
 }
 
-.artifact-tray__list > li:hover > button,
-.artifact-tray__list > li > button:focus-visible,
-.artifact-tray__list > li[data-hovered] > button {
+.artifact-tray__item:hover,
+.artifact-tray__item:focus-visible,
+.artifact-tray__item[data-hovered] {
   background: var(--artifact-overlay-hover, rgb(0 0 0 / 10%));
   color: #000000;
 }
 
-.artifact-tray__list > li > button:active {
+.artifact-tray__item:active {
   background: var(--artifact-overlay-pressed, rgb(0 0 0 / 20%));
   color: #000000;
 }
 
-.artifact-tray__list > li > button:focus-visible {
+.artifact-tray__item:focus-visible {
   outline: 2px solid var(--color-focus-input, #5aa5e7);
   outline-offset: 2px;
 }

@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { Disambiguation, DisambiguationInChatDemo } from "../components/Disambiguation";
@@ -8,7 +8,8 @@ import type {
   DisambiguationOption,
   DisambiguationVariant,
 } from "../components/Disambiguation";
-import { Button, IconButton, iconTypes } from "../pebbleButton";
+import { IconSettings } from "../components/Composer/icons";
+import { useDismissOnOutsidePress } from "../hooks/useDismissOnOutsidePress";
 import "../App.css";
 
 const FIGMA_SPEC =
@@ -82,22 +83,11 @@ export function DisambiguationPage() {
   const [showStep, setShowStep] = useState(true);
   const [contextMode, setContextMode] = useState<DisambiguationInChatDemoMode>("side-chat");
 
-  useEffect(() => {
-    if (!menuOpen) return;
-    function onDocMouseDown(e: MouseEvent) {
-      const el = settingsRef.current;
-      if (el && !el.contains(e.target as Node)) setMenuOpen(false);
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setMenuOpen(false);
-    }
-    document.addEventListener("mousedown", onDocMouseDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDocMouseDown);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
+  useDismissOnOutsidePress(
+    menuOpen,
+    () => setMenuOpen(false),
+    (n) => settingsRef.current?.contains(n) ?? false,
+  );
 
   const subtitle =
     inputType === "radio" ? "Select one to continue" : "Select any that apply";
@@ -106,30 +96,37 @@ export function DisambiguationPage() {
   return (
     <main className="demo-wrap">
       <div className="composer-page-settings" ref={settingsRef}>
-        <span id={settingsBtnId} className="composer-page-settings-trigger">
-          <IconButton
-            icon={iconTypes.SETTINGS_OUTLINE}
-            aria-label="Disambiguation presentation"
-            aria-haspopup="dialog"
-            aria-expanded={menuOpen}
-            aria-controls={pageMenuId}
-            appearance={IconButton.APPEARANCES.OUTLINE}
-            size={IconButton.SIZES.M}
-            onClick={() => setMenuOpen((o) => !o)}
-          />
-        </span>
+        <button
+          id={settingsBtnId}
+          type="button"
+          className="composer-page-settings-btn"
+          aria-label="Disambiguation presentation"
+          aria-haspopup="menu"
+          aria-expanded={menuOpen}
+          aria-controls={pageMenuId}
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          <IconSettings />
+        </button>
         {menuOpen ? (
           <div
             id={pageMenuId}
             className="composer-page-settings-menu"
-            role="group"
-            aria-label="Disambiguation presentation options"
+            role="menu"
+            aria-labelledby={settingsBtnId}
           >
             {DISAMBIG_VARIANTS.map((v) => (
               <button
                 key={v}
                 type="button"
-                aria-pressed={variant === v}
+                role="menuitemradio"
+                aria-checked={variant === v}
+                className={[
+                  "composer-page-settings-option",
+                  variant === v ? "composer-page-settings-option--active" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 onClick={() => {
                   setVariant(v);
                   setMenuOpen(false);
@@ -209,24 +206,22 @@ export function DisambiguationPage() {
               Input type
             </p>
             <div className="demo-segments" role="group" aria-labelledby="label-dis-input">
-              <Button
-                type={Button.TYPES.BUTTON}
-                appearance={inputType === "radio" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-                size={Button.SIZES.M}
+              <button
+                type="button"
+                className="demo-segment"
                 aria-pressed={inputType === "radio"}
                 onClick={() => setInputType("radio")}
               >
                 Radio
-              </Button>
-              <Button
-                type={Button.TYPES.BUTTON}
-                appearance={inputType === "checkbox" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-                size={Button.SIZES.M}
+              </button>
+              <button
+                type="button"
+                className="demo-segment"
                 aria-pressed={inputType === "checkbox"}
                 onClick={() => setInputType("checkbox")}
               >
                 Checkbox
-              </Button>
+              </button>
             </div>
           </div>
 
@@ -235,24 +230,22 @@ export function DisambiguationPage() {
               Multi-step
             </p>
             <div className="demo-segments" role="group" aria-labelledby="label-dis-step">
-              <Button
-                type={Button.TYPES.BUTTON}
-                appearance={showStep ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-                size={Button.SIZES.M}
+              <button
+                type="button"
+                className="demo-segment"
                 aria-pressed={showStep}
                 onClick={() => setShowStep(true)}
               >
                 On
-              </Button>
-              <Button
-                type={Button.TYPES.BUTTON}
-                appearance={!showStep ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-                size={Button.SIZES.M}
+              </button>
+              <button
+                type="button"
+                className="demo-segment"
                 aria-pressed={!showStep}
                 onClick={() => setShowStep(false)}
               >
                 Off
-              </Button>
+              </button>
             </div>
           </div>
         </div>
@@ -287,9 +280,10 @@ export function DisambiguationPage() {
       </div>
 
       <hr className="page-section__divider" aria-hidden="true" />
+      <h2 className="page-section__title">Examples</h2>
 
       <section
-        className="in-context-stage"
+        className="in-context-stage demo-fullbleed"
         id="disambig-in-context"
         aria-labelledby="disambig-in-context-heading"
       >
@@ -304,24 +298,22 @@ export function DisambiguationPage() {
             </p>
           </div>
           <div className="demo-segments" role="group" aria-label="Disambiguation surface mode">
-            <Button
-              type={Button.TYPES.BUTTON}
-              appearance={contextMode === "side-chat" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-              size={Button.SIZES.M}
+            <button
+              type="button"
+              className="demo-segment"
               aria-pressed={contextMode === "side-chat"}
               onClick={() => setContextMode("side-chat")}
             >
               Side chat
-            </Button>
-            <Button
-              type={Button.TYPES.BUTTON}
-              appearance={contextMode === "full-screen" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
-              size={Button.SIZES.M}
+            </button>
+            <button
+              type="button"
+              className="demo-segment"
               aria-pressed={contextMode === "full-screen"}
               onClick={() => setContextMode("full-screen")}
             >
               Full screen
-            </Button>
+            </button>
           </div>
         </div>
         <DisambiguationInChatDemo

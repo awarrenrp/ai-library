@@ -25,16 +25,6 @@
   /* Page & section headings — one step above emphasis (Semibold). */
   --font-weight-heading: 600;
 
-  /*
-   * Pebble Web · Text field · label stack (matches v2 typography + Label Neutral).
-   * See: https://www.figma.com/design/nhtRzieeGFf1tGVWnRxSK3/Pebble---Web-Component-Library
-   */
-  --ds-field-label-font-size: 12px;
-  --ds-field-label-line-height: 16px;
-  --ds-field-label-font-weight: 600;
-  --ds-field-label-letter-spacing: -0.01em;
-  --ds-field-label-color: #242428;
-
   /* Berry — primary actions (composer entry, send, etc.) */
   --color-primary: #7a005d;
   --color-on-primary: #ffffff;
