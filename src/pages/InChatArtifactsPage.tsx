@@ -65,15 +65,6 @@ export function InChatArtifactsPage() {
       <hr className="page-section__divider" aria-hidden="true" />
       <h2 className="page-section__title">Specs</h2>
 
-      <nav className="links-spec-toc" aria-label="On this page">
-        <p className="links-spec-toc-label">On this page</p>
-        <ul className="links-spec-toc-list">
-          <li>
-            <a href="#ic-artifacts-widgets">Widget previews</a>
-          </li>
-        </ul>
-      </nav>
-
       <section className="links-spec-section" id="ic-artifacts-widgets" aria-labelledby="ic-artifacts-widgets-heading">
         <h2
           id="ic-artifacts-widgets-heading"
@@ -87,38 +78,35 @@ export function InChatArtifactsPage() {
         >
           Widget previews
         </h2>
-        <div style={{ display: "flex", alignItems: "baseline", gap: 16, margin: "0 0 24px", flexWrap: "wrap" }}>
-          <p
-            style={{
-              margin: 0,
-              maxWidth: 560,
-              fontSize: 15,
-              lineHeight: 1.55,
-              color: "#716f6c",
-              flex: "1 1 auto",
-            }}
+        <p
+          style={{
+            margin: "0 0 16px",
+            maxWidth: 640,
+            fontSize: 15,
+            lineHeight: 1.55,
+            color: "#716f6c",
+          }}
+        >
+          Standalone rows for each widget category—the Table pattern is the grid only (no title/Open strip like the link
+          widgets). The side-chat example below embeds the same table.
+        </p>
+        <div className="demo-segments" role="group" aria-label="Widget state" style={{ marginBottom: 20 }}>
+          <button
+            type="button"
+            className="demo-segment"
+            aria-pressed={!widgetSelected}
+            onClick={() => setWidgetSelected(false)}
           >
-            Standalone rows for each widget category—the Table pattern is the grid only (no title/Open strip like the link
-            widgets). The side-chat example below embeds the same table.
-          </p>
-          <div className="demo-segments" role="group" aria-label="Widget state">
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={!widgetSelected}
-              onClick={() => setWidgetSelected(false)}
-            >
-              Default
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={widgetSelected}
-              onClick={() => setWidgetSelected(true)}
-            >
-              Selected
-            </button>
-          </div>
+            Default
+          </button>
+          <button
+            type="button"
+            className="demo-segment"
+            aria-pressed={widgetSelected}
+            onClick={() => setWidgetSelected(true)}
+          >
+            Selected
+          </button>
         </div>
         <InChatWidgets selected={widgetSelected} />
       </section>

@@ -203,31 +203,29 @@ export function RipplingNativeArtifactsPage() {
         <h3 id="rna-shell-heading" className="rna-section-title">
           Shell
         </h3>
-        <div style={{ display: "flex", alignItems: "baseline", gap: 16, margin: "0 0 16px", flexWrap: "wrap" }}>
-          <p className="rna-section-lede" style={{ margin: 0, flex: "1 1 auto" }}>
-            Container, header (artifact title + hover actions), body slot, and an optional hover
-            action bar pinned to the bottom edge. Use the gear (upper right) to switch between{" "}
-            <strong>Default</strong> and <strong>With actions</strong>. Hover the artifact to reveal
-            the bar plus the existing <strong>…</strong> menu.
-          </p>
-          <div className="demo-segments" role="group" aria-label="Artifact state">
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={!artifactSelected}
-              onClick={() => setArtifactSelected(false)}
-            >
-              Default
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={artifactSelected}
-              onClick={() => setArtifactSelected(true)}
-            >
-              Selected
-            </button>
-          </div>
+        <p className="rna-section-lede">
+          Container, header (artifact title + hover actions), body slot, and an optional hover
+          action bar pinned to the bottom edge. Use the gear (upper right) to switch between{" "}
+          <strong>Default</strong> and <strong>With actions</strong>. Hover the artifact to reveal
+          the bar plus the existing <strong>…</strong> menu.
+        </p>
+        <div className="demo-segments" role="group" aria-label="Artifact state" style={{ marginBottom: 16 }}>
+          <button
+            type="button"
+            className="demo-segment"
+            aria-pressed={!artifactSelected}
+            onClick={() => setArtifactSelected(false)}
+          >
+            Default
+          </button>
+          <button
+            type="button"
+            className="demo-segment"
+            aria-pressed={artifactSelected}
+            onClick={() => setArtifactSelected(true)}
+          >
+            Selected
+          </button>
         </div>
         <div className="rna-showcase">
           <RipplingArtifactShell

@@ -123,30 +123,25 @@ export function ExternalArtifactsPage() {
             ))}
           </div>
         </div>
+      </div>
 
-        <div className="demo-group">
-          <p className="demo-label" id="ea-label-state">
-            State
-          </p>
-          <div className="demo-segments" role="group" aria-labelledby="ea-label-state">
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={!artifactSelected}
-              onClick={() => setArtifactSelected(false)}
-            >
-              Default
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={artifactSelected}
-              onClick={() => setArtifactSelected(true)}
-            >
-              Selected
-            </button>
-          </div>
-        </div>
+      <div className="demo-segments" role="group" aria-label="Artifact state" style={{ padding: "0 16px 12px" }}>
+        <button
+          type="button"
+          className="demo-segment"
+          aria-pressed={!artifactSelected}
+          onClick={() => setArtifactSelected(false)}
+        >
+          Default
+        </button>
+        <button
+          type="button"
+          className="demo-segment"
+          aria-pressed={artifactSelected}
+          onClick={() => setArtifactSelected(true)}
+        >
+          Selected
+        </button>
       </div>
 
       <div className="demo-stage" role="region" aria-label="External artifact preview">

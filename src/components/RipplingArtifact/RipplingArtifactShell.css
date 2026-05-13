@@ -344,27 +344,22 @@
 }
 
 /*
- * Row below card — thumbs + timestamp (out of flow so hover doesn’t shift page content)
+ * Row below card — thumbs + timestamp. Always in-flow so its reserved height
+ * prevents hover content from overlapping chat messages below. Opacity fades
+ * in on hover/focus — no layout shift because the space is always there.
  */
 .rippling-artifact-foot {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(100% + 8px);
-  z-index: 2;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   padding: 0 4px;
+  margin-top: 8px;
   min-height: 32px;
   opacity: 0;
-  visibility: hidden;
   pointer-events: none;
-  transition:
-    opacity 0.15s ease,
-    visibility 0.15s ease;
+  transition: opacity 0.15s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -376,7 +371,6 @@
 .rippling-artifact-wrap:hover .rippling-artifact-foot,
 .rippling-artifact-wrap:focus-within .rippling-artifact-foot {
   opacity: 1;
-  visibility: visible;
   pointer-events: auto;
 }
 
