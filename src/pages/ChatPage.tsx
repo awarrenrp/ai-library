@@ -155,21 +155,17 @@ export function ChatPage() {
             aria-label="Chat panel version options"
           >
             {CHAT_PANEL_VERSIONS.map((v) => (
-              <Button
+              <button
                 key={v}
-                type={Button.TYPES.BUTTON}
-                variant={Button.VARIANTS.TEXT}
-                appearance={panelVersion === v ? Button.APPEARANCES.ACTIVE : Button.APPEARANCES.GHOST}
-                isFluid
-                fontInherit
-                size={Button.SIZES.M}
+                type="button"
+                aria-pressed={panelVersion === v}
                 onClick={() => {
                   setPanelVersion(v);
                   setMenuOpen(false);
                 }}
               >
                 {CHAT_PANEL_VERSION_LABELS[v]}
-              </Button>
+              </button>
             ))}
           </div>
         ) : null}

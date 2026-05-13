@@ -274,10 +274,43 @@
   box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
 }
 
+/*
+ * Gear dropdown rows — use native <button>, not Pebble <Button>. Mounting Pebble TEXT/ACTIVE
+ * buttons in this absolutely-positioned popover has been observed to white-screen the app
+ * (runtime exception inside Emotion/Pebble before optional chaining is reliable here).
+ */
 .composer-page-settings-menu > button {
   display: flex;
+  box-sizing: border-box;
   width: 100%;
+  margin: 0;
+  padding: 8px 10px;
   justify-content: flex-start;
+  align-items: center;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: var(--font-weight-body);
+  line-height: 20px;
+  color: #000000;
+  text-align: left;
+  cursor: pointer;
+}
+
+.composer-page-settings-menu > button:hover {
+  background: rgb(0 0 0 / 6%);
+}
+
+.composer-page-settings-menu > button[aria-pressed="true"] {
+  background: rgb(0 0 0 / 9%);
+  font-weight: var(--font-weight-emphasis);
+}
+
+.composer-page-settings-menu > button:focus-visible {
+  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
+  outline-offset: 2px;
 }
 
 /* Shared: optional code sample blocks on spec pages */

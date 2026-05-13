@@ -179,21 +179,17 @@ export function ComposerPage() {
             aria-label="Composer version options"
           >
             {COMPOSER_VERSIONS.map((v) => (
-              <Button
+              <button
                 key={v}
-                type={Button.TYPES.BUTTON}
-                variant={Button.VARIANTS.TEXT}
-                appearance={composerVersion === v ? Button.APPEARANCES.ACTIVE : Button.APPEARANCES.GHOST}
-                isFluid
-                fontInherit
-                size={Button.SIZES.M}
+                type="button"
+                aria-pressed={composerVersion === v}
                 onClick={() => {
                   setComposerVersion(v);
                   setMenuOpen(false);
                 }}
               >
                 {COMPOSER_VERSION_LABELS[v]}
-              </Button>
+              </button>
             ))}
           </div>
         ) : null}

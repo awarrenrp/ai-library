@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { Button, IconButton, iconTypes } from "../pebbleButton";
+import { IconButton, iconTypes } from "../pebbleButton";
 
 export const ARTIFACT_HOVER_VARIANTS = ["shadow", "overlay"] as const;
 export type ArtifactHoverVariant = (typeof ARTIFACT_HOVER_VARIANTS)[number];
@@ -61,21 +61,17 @@ export function ArtifactHoverPageSettings({ variant, onVariantChange }: Artifact
           aria-label="Hover style for previews — options"
         >
           {ARTIFACT_HOVER_VARIANTS.map((v) => (
-            <Button
+            <button
               key={v}
-              type={Button.TYPES.BUTTON}
-              variant={Button.VARIANTS.TEXT}
-              appearance={variant === v ? Button.APPEARANCES.ACTIVE : Button.APPEARANCES.GHOST}
-              isFluid
-              fontInherit
-              size={Button.SIZES.M}
+              type="button"
+              aria-pressed={variant === v}
               onClick={() => {
                 onVariantChange(v);
                 setMenuOpen(false);
               }}
             >
               {ARTIFACT_HOVER_LABELS[v]}
-            </Button>
+            </button>
           ))}
         </div>
       ) : null}

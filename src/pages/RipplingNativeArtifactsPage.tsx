@@ -106,21 +106,17 @@ export function RipplingNativeArtifactsPage() {
             aria-label="Artifact shell variant options"
           >
             {SHELL_VARIANTS.map((v) => (
-              <Button
+              <button
                 key={v}
-                type={Button.TYPES.BUTTON}
-                variant={Button.VARIANTS.TEXT}
-                appearance={shellVariant === v ? Button.APPEARANCES.ACTIVE : Button.APPEARANCES.GHOST}
-                isFluid
-                fontInherit
-                size={Button.SIZES.M}
+                type="button"
+                aria-pressed={shellVariant === v}
                 onClick={() => {
                   setShellVariant(v);
                   setMenuOpen(false);
                 }}
               >
                 {SHELL_VARIANT_LABELS[v]}
-              </Button>
+              </button>
             ))}
           </div>
         ) : null}

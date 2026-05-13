@@ -126,21 +126,17 @@ export function DisambiguationPage() {
             aria-label="Disambiguation presentation options"
           >
             {DISAMBIG_VARIANTS.map((v) => (
-              <Button
+              <button
                 key={v}
-                type={Button.TYPES.BUTTON}
-                variant={Button.VARIANTS.TEXT}
-                appearance={variant === v ? Button.APPEARANCES.ACTIVE : Button.APPEARANCES.GHOST}
-                isFluid
-                fontInherit
-                size={Button.SIZES.M}
+                type="button"
+                aria-pressed={variant === v}
                 onClick={() => {
                   setVariant(v);
                   setMenuOpen(false);
                 }}
               >
                 {VARIANT_LABELS[v]}
-              </Button>
+              </button>
             ))}
           </div>
         ) : null}
