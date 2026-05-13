@@ -30,6 +30,7 @@ import {
 import type { ChatHatPhase, ChatPanelVersion } from "./Chat";
 import { Composer } from "../Composer";
 import { IconArrowUpMini } from "../Composer/icons";
+import { Button } from "../../pebbleButton";
 import "./ChatExampleDemo.css";
 
 export type ChatExampleDemoMode = "side-chat" | "full-screen";
@@ -281,31 +282,47 @@ export function ChatExampleDemo({
           </div>
           <div className="chat-demo__phase-segments" role="group" aria-label="Hat phase">
             {CHAT_HAT_PHASES.map((p) => (
-              <button
-                key={p}
-                type="button"
-                className="chat-demo__phase-segment"
-                aria-pressed={controlledPhase === p}
-                onClick={() => setControlledPhase((current) => (current === p ? null : p))}
-              >
-                {CHAT_HAT_PHASE_LABELS[p]}
-              </button>
+              <span key={p} className="chat-demo__phase-segment">
+                <Button
+                  type={Button.TYPES.BUTTON}
+                  variant={Button.VARIANTS.NORMAL}
+                  appearance={
+                    controlledPhase === p ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE
+                  }
+                  size={Button.SIZES.M}
+                  isFluid
+                  aria-pressed={controlledPhase === p}
+                  onClick={() => setControlledPhase((current) => (current === p ? null : p))}
+                >
+                  {CHAT_HAT_PHASE_LABELS[p]}
+                </Button>
+              </span>
             ))}
-            <button
-              type="button"
-              className="chat-demo__phase-segment chat-demo__phase-segment--clear"
-              onClick={() => setControlledPhase(null)}
-              disabled={controlledPhase === null}
-            >
-              Clear
-            </button>
-            <button
-              type="button"
-              className="chat-demo__phase-segment chat-demo__phase-segment--reset"
-              onClick={handleResetThread}
-            >
-              Reset thread
-            </button>
+            <span className="chat-demo__phase-segment chat-demo__phase-segment--clear">
+              <Button
+                type={Button.TYPES.BUTTON}
+                variant={Button.VARIANTS.NORMAL}
+                appearance={Button.APPEARANCES.OUTLINE}
+                size={Button.SIZES.M}
+                isFluid
+                onClick={() => setControlledPhase(null)}
+                isDisabled={controlledPhase === null}
+              >
+                Clear
+              </Button>
+            </span>
+            <span className="chat-demo__phase-segment chat-demo__phase-segment--reset">
+              <Button
+                type={Button.TYPES.BUTTON}
+                variant={Button.VARIANTS.NORMAL}
+                appearance={Button.APPEARANCES.OUTLINE}
+                size={Button.SIZES.M}
+                isFluid
+                onClick={handleResetThread}
+              >
+                Reset thread
+              </Button>
+            </span>
           </div>
         </div>
       ) : (
@@ -317,13 +334,18 @@ export function ChatExampleDemo({
               as it would in product.
             </p>
           </div>
-          <button
-            type="button"
-            className="chat-demo__phase-segment chat-demo__phase-segment--reset"
-            onClick={handleResetThread}
-          >
-            Reset thread
-          </button>
+          <span className="chat-demo__phase-segment chat-demo__phase-segment--reset">
+            <Button
+              type={Button.TYPES.BUTTON}
+              variant={Button.VARIANTS.NORMAL}
+              appearance={Button.APPEARANCES.OUTLINE}
+              size={Button.SIZES.M}
+              isFluid
+              onClick={handleResetThread}
+            >
+              Reset thread
+            </Button>
+          </span>
         </div>
       )}
     </div>

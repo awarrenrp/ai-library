@@ -1,4 +1,5 @@
 import "./ChartDashboardDemo.css";
+import { Button } from "../../pebbleButton";
 
 /**
  * Tile IDs callers can pass as `selectedTileId` to highlight one chart in the
@@ -32,18 +33,25 @@ export function ChartDashboardDemo({ selectedTileId, onSelectTile }: ChartDashbo
       {CHART_DASHBOARD_TILES.map((tile) => {
         const isSelected = selectedTileId === tile.id;
         return (
-          <button
+          <div
             key={tile.id}
-            type="button"
             className="chart-dashboard-demo__tile"
             data-selected={isSelected || undefined}
-            aria-pressed={isSelected}
-            aria-label={`Open ${tile.title}`}
-            onClick={() => onSelectTile?.(tile.id)}
           >
-            <p className="chart-dashboard-demo__title">{tile.title}</p>
-            <MiniBarChart series={tile.series} ariaLabel={`Trend for ${tile.title}`} />
-          </button>
+            <Button
+              type={Button.TYPES.BUTTON}
+              variant={Button.VARIANTS.TEXT}
+              appearance={Button.APPEARANCES.GHOST}
+              size={Button.SIZES.M}
+              isFluid
+              aria-pressed={isSelected}
+              aria-label={`Open ${tile.title}`}
+              onClick={() => onSelectTile?.(tile.id)}
+            >
+              <p className="chart-dashboard-demo__title">{tile.title}</p>
+              <MiniBarChart series={tile.series} ariaLabel={`Trend for ${tile.title}`} />
+            </Button>
+          </div>
         );
       })}
     </div>

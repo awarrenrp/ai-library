@@ -8,6 +8,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useId, useRef, useState } from "react";
+import { Button, IconButton, iconTypes } from "../../pebbleButton";
 import "./Composer.css";
 import {
   IconAddAgents,
@@ -17,11 +18,8 @@ import {
   IconAddPlugins,
   IconAddSkills,
   IconArrowUp,
-  IconChevronDown,
   IconChevronRight,
   IconComposerChipLead,
-  IconMic,
-  IconPlus,
 } from "./icons";
 
 /**
@@ -301,45 +299,51 @@ export function Composer({
           aria-label="Composer actions"
         >
           <div className="composer-add-anchor" ref={addAnchorRef}>
-            <button
-              type="button"
-              className="composer-icon-btn"
+            <IconButton
+              icon={iconTypes.ADD}
               aria-label={addMenuOpen ? "Close add menu" : "Add attachment"}
               aria-expanded={addMenuOpen}
-              aria-haspopup="menu"
+              aria-haspopup="dialog"
               aria-controls={addMenuOpen ? addMenuId : undefined}
+              appearance={IconButton.APPEARANCES.OUTLINE}
+              size={IconButton.SIZES.M}
               onClick={() => {
                 setAddMenuOpen((o) => !o);
                 setModeMenuOpen(false);
               }}
-            >
-              <IconPlus />
-            </button>
+            />
             {addMenuOpen ? (
-              <div id={addMenuId} className="composer-add-menu" role="menu" aria-label="Add to message">
+              <div id={addMenuId} className="composer-add-menu" role="group" aria-label="Add to message">
                 <ul className="composer-add-menu__list" role="none">
                   {COMPOSER_ADD_MENU_ITEMS.map((item) => (
                     <li key={item.id} className="composer-add-menu__group" role="none">
                       {item.separatorBefore ? (
                         <hr className="composer-add-menu__sep" role="separator" aria-hidden />
                       ) : null}
-                      <button
-                        type="button"
-                        role="menuitem"
-                        className="composer-add-menu__row"
-                        aria-haspopup={item.hasSubmenu ? "menu" : undefined}
-                        onClick={() => setAddMenuOpen(false)}
-                      >
-                        <span className="composer-add-menu__row-icon" aria-hidden>
-                          {item.icon}
-                        </span>
-                        <span className="composer-add-menu__row-label">{item.label}</span>
-                        {item.hasSubmenu ? (
-                          <span className="composer-add-menu__row-chevron" aria-hidden>
-                            <IconChevronRight />
-                          </span>
-                        ) : null}
-                      </button>
+                      <div className="composer-add-menu__pebble-wrap">
+                        <Button
+                          type={Button.TYPES.BUTTON}
+                          variant={Button.VARIANTS.TEXT}
+                          appearance={Button.APPEARANCES.GHOST}
+                          isFluid
+                          fontInherit
+                          size={Button.SIZES.M}
+                          aria-haspopup={item.hasSubmenu ? "dialog" : undefined}
+                          onClick={() => setAddMenuOpen(false)}
+                        >
+                          <>
+                            <span className="composer-add-menu__row-icon" aria-hidden>
+                              {item.icon}
+                            </span>
+                            <span className="composer-add-menu__row-label">{item.label}</span>
+                            {item.hasSubmenu ? (
+                              <span className="composer-add-menu__row-chevron" aria-hidden>
+                                <IconChevronRight />
+                              </span>
+                            ) : null}
+                          </>
+                        </Button>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -349,12 +353,19 @@ export function Composer({
 
           {showIntentControl ? (
             <div className="composer-intent-anchor" ref={intentAnchorRef}>
-              <button
-                type="button"
-                className="composer-ghost-btn composer-intent-trigger"
+              <Button
+                type={Button.TYPES.BUTTON}
+                variant={Button.VARIANTS.TEXT}
+                appearance={Button.APPEARANCES.GHOST}
+                fontInherit
+                size={Button.SIZES.M}
+                icon={{
+                  type: iconTypes.V2_CHEVRON_DOWN,
+                  alignment: Button.ICON_ALIGNMENTS.RIGHT,
+                }}
                 aria-label={`Composer intent: ${COMPOSER_INTENT_LABELS[intent]}, ${intentMenuOpen ? "close menu" : "open menu"}`}
                 aria-expanded={intentMenuOpen}
-                aria-haspopup="menu"
+                aria-haspopup="dialog"
                 aria-controls={intentMenuOpen ? intentMenuId : undefined}
                 onClick={() => {
                   setIntentMenuOpen((o) => !o);
@@ -363,77 +374,76 @@ export function Composer({
                   setSpeedMenuOpen(false);
                 }}
               >
-                <span className="composer-ghost-btn__label">{COMPOSER_INTENT_LABELS[intent]}</span>
-                <IconChevronDown />
-              </button>
+                {COMPOSER_INTENT_LABELS[intent]}
+              </Button>
               {intentMenuOpen ? (
                 <div
                   id={intentMenuId}
                   className="composer-mode-menu composer-mode-menu--up"
-                  role="menu"
+                  role="group"
                   aria-label="Composer intent"
                 >
                   {COMPOSER_INTENTS.map((id) => (
-                    <button
+                    <Button
                       key={id}
-                      type="button"
-                      role="menuitemradio"
-                      aria-checked={intent === id}
-                      className={[
-                        "composer-mode-option",
-                        intent === id ? "composer-mode-option--active" : "",
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
+                      type={Button.TYPES.BUTTON}
+                      variant={Button.VARIANTS.TEXT}
+                      appearance={intent === id ? Button.APPEARANCES.ACTIVE : Button.APPEARANCES.GHOST}
+                      isFluid
+                      fontInherit
+                      size={Button.SIZES.M}
                       onClick={() => {
                         setIntent(id);
                         setIntentMenuOpen(false);
                       }}
                     >
                       {COMPOSER_INTENT_LABELS[id]}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               ) : null}
             </div>
           ) : (
             <div className="composer-fast-anchor" ref={fastAnchorRef}>
-              <button
-                type="button"
-                className="composer-fast"
+              <Button
+                type={Button.TYPES.BUTTON}
+                variant={Button.VARIANTS.TEXT}
+                appearance={Button.APPEARANCES.GHOST}
+                fontInherit
+                size={Button.SIZES.M}
+                icon={{
+                  type: iconTypes.V2_CHEVRON_DOWN,
+                  alignment: Button.ICON_ALIGNMENTS.RIGHT,
+                }}
                 aria-label={fastBtnLabel}
                 aria-expanded={modeMenuOpen}
-                aria-haspopup="menu"
+                aria-haspopup="dialog"
                 aria-controls={modeMenuOpen ? modeMenuId : undefined}
                 onClick={() => {
                   setModeMenuOpen((o) => !o);
                   setAddMenuOpen(false);
                 }}
               >
-                <span className="composer-fast-label">{mode}</span>
-                <IconChevronDown />
-              </button>
+                {mode}
+              </Button>
               {modeMenuOpen && (
-                <div id={modeMenuId} className="composer-mode-menu" role="menu" aria-label="Response mode">
+                <div id={modeMenuId} className="composer-mode-menu" role="group" aria-label="Response mode">
                   {COMPOSER_MODES.map((m) => (
-                    <button
+                    <Button
                       key={m}
-                      type="button"
-                      role="menuitemradio"
-                      aria-checked={mode === m}
-                      className={[
-                        "composer-mode-option",
-                        mode === m ? "composer-mode-option--active" : "",
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
+                      type={Button.TYPES.BUTTON}
+                      variant={Button.VARIANTS.TEXT}
+                      appearance={mode === m ? Button.APPEARANCES.ACTIVE : Button.APPEARANCES.GHOST}
+                      isFluid
+                      fontInherit
+                      size={Button.SIZES.M}
                       onClick={() => {
                         setMode(m);
                         setModeMenuOpen(false);
                       }}
                     >
                       {m}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               )}
@@ -442,31 +452,42 @@ export function Composer({
 
           <div className="composer-spacer" aria-hidden />
 
-          <button type="button" className="composer-icon-btn composer-voice" aria-label="Voice input">
-            <IconMic />
-          </button>
+          <IconButton
+            icon={iconTypes.MICROPHONE_OUTLINE}
+            aria-label="Voice input"
+            appearance={IconButton.APPEARANCES.OUTLINE}
+            size={IconButton.SIZES.M}
+          />
 
-          <button
-            type="button"
-            className="composer-send"
-            disabled={!canSend}
+          <Button
+            type={Button.TYPES.BUTTON}
+            appearance={Button.APPEARANCES.PRIMARY}
+            size={Button.SIZES.M}
+            isDisabled={!canSend}
             aria-label={canSend ? "Send message" : "Send message (enter text to enable)"}
             onClick={submit}
           >
             {sendIcon ?? <IconArrowUp />}
-          </button>
+          </Button>
         </div>
       </div>
 
       {isAlternate ? (
         <div className="composer-speed-row">
           <div className="composer-speed-anchor" ref={speedAnchorRef}>
-            <button
-              type="button"
-              className="composer-ghost-btn composer-ghost-btn--xs composer-speed-trigger"
+            <Button
+              type={Button.TYPES.BUTTON}
+              variant={Button.VARIANTS.TEXT}
+              appearance={Button.APPEARANCES.GHOST}
+              fontInherit
+              size={Button.SIZES.S}
+              icon={{
+                type: iconTypes.V2_CHEVRON_DOWN,
+                alignment: Button.ICON_ALIGNMENTS.RIGHT,
+              }}
               aria-label={`Response speed: ${mode}, ${speedMenuOpen ? "close menu" : "open menu"}`}
               aria-expanded={speedMenuOpen}
-              aria-haspopup="menu"
+              aria-haspopup="dialog"
               aria-controls={speedMenuOpen ? speedMenuId : undefined}
               onClick={() => {
                 setSpeedMenuOpen((o) => !o);
@@ -475,35 +496,31 @@ export function Composer({
                 setAddMenuOpen(false);
               }}
             >
-              <span className="composer-ghost-btn__label">{mode}</span>
-              <IconChevronDown />
-            </button>
+              {mode}
+            </Button>
             {speedMenuOpen ? (
               <div
                 id={speedMenuId}
                 className="composer-mode-menu composer-mode-menu--up composer-mode-menu--xs"
-                role="menu"
+                role="group"
                 aria-label="Response speed"
               >
                 {COMPOSER_MODES.map((m) => (
-                  <button
+                  <Button
                     key={m}
-                    type="button"
-                    role="menuitemradio"
-                    aria-checked={mode === m}
-                    className={[
-                      "composer-mode-option",
-                      mode === m ? "composer-mode-option--active" : "",
-                    ]
-                      .filter(Boolean)
-                      .join(" ")}
+                    type={Button.TYPES.BUTTON}
+                    variant={Button.VARIANTS.TEXT}
+                    appearance={mode === m ? Button.APPEARANCES.ACTIVE : Button.APPEARANCES.GHOST}
+                    isFluid
+                    fontInherit
+                    size={Button.SIZES.S}
                     onClick={() => {
                       setMode(m);
                       setSpeedMenuOpen(false);
                     }}
                   >
                     {m}
-                  </button>
+                  </Button>
                 ))}
               </div>
             ) : null}

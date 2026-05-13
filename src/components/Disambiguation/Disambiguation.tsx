@@ -1,4 +1,5 @@
 import { useId, useState } from "react";
+import { Button, IconButton, iconTypes } from "../../pebbleButton";
 import "./Disambiguation.css";
 
 export type DisambiguationInputType = "radio" | "checkbox";
@@ -190,13 +191,18 @@ export function Disambiguation({
       {isDesignSystem ? (
         <div className="disambiguation__ds-field">
           <div className="disambiguation__ds-field-label-row">
-            <span className="disambiguation__ds-label">Other context</span>
-            <span className="disambiguation__ds-required" aria-hidden>
-              *
+            <span className="disambiguation__ds-label-line">
+              <span className="disambiguation__ds-label">Other context</span>
+              <span className="disambiguation__ds-required" aria-hidden>
+                *
+              </span>
             </span>
-            <button type="button" className="disambiguation__ds-help" aria-label="Help for other context">
-              <IconHelpCircle />
-            </button>
+            <IconButton
+              icon={iconTypes.HELP_OUTLINE}
+              appearance={IconButton.APPEARANCES.GHOST}
+              size={IconButton.SIZES.M}
+              aria-label="Help for other context"
+            />
           </div>
           <div
             className="disambiguation__ds-input"
@@ -212,18 +218,18 @@ export function Disambiguation({
       ) : null}
 
       <footer className="disambiguation__footer">
-        <button type="button" className="disambiguation__btn disambiguation__btn--ghost">
+        <Button type={Button.TYPES.BUTTON} variant={Button.VARIANTS.TEXT} appearance={Button.APPEARANCES.GHOST}>
           Cancel
-        </button>
+        </Button>
         <div className="disambiguation__footer-right">
           {isDesignSystem ? (
-            <button type="button" className="disambiguation__btn disambiguation__btn--outline">
+            <Button type={Button.TYPES.BUTTON} appearance={Button.APPEARANCES.OUTLINE}>
               Skip for now
-            </button>
+            </Button>
           ) : null}
-          <button type="button" className="disambiguation__btn disambiguation__btn--primary">
+          <Button type={Button.TYPES.BUTTON} appearance={Button.APPEARANCES.PRIMARY}>
             Continue
-          </button>
+          </Button>
         </div>
       </footer>
     </section>

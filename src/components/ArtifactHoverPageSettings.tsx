@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { IconSettings } from "./Composer/icons";
+import { Button, IconButton, iconTypes } from "../pebbleButton";
 
 export const ARTIFACT_HOVER_VARIANTS = ["shadow", "overlay"] as const;
 export type ArtifactHoverVariant = (typeof ARTIFACT_HOVER_VARIANTS)[number];
@@ -41,39 +41,41 @@ export function ArtifactHoverPageSettings({ variant, onVariantChange }: Artifact
 
   return (
     <div className="composer-page-settings" ref={ref}>
-      <button
-        id={btnId}
-        type="button"
-        className="composer-page-settings-btn"
-        aria-label="Hover style for previews"
-        aria-haspopup="menu"
-        aria-expanded={menuOpen}
-        aria-controls={menuId}
-        onClick={() => setMenuOpen((o) => !o)}
-      >
-        <IconSettings />
-      </button>
+      <span id={btnId} className="composer-page-settings-trigger">
+        <IconButton
+          icon={iconTypes.SETTINGS_OUTLINE}
+          aria-label="Hover style for previews"
+          aria-haspopup="dialog"
+          aria-expanded={menuOpen}
+          aria-controls={menuId}
+          appearance={IconButton.APPEARANCES.OUTLINE}
+          size={IconButton.SIZES.M}
+          onClick={() => setMenuOpen((o) => !o)}
+        />
+      </span>
       {menuOpen ? (
-        <div id={menuId} className="composer-page-settings-menu" role="menu" aria-labelledby={btnId}>
+        <div
+          id={menuId}
+          className="composer-page-settings-menu"
+          role="group"
+          aria-label="Hover style for previews — options"
+        >
           {ARTIFACT_HOVER_VARIANTS.map((v) => (
-            <button
+            <Button
               key={v}
-              type="button"
-              role="menuitemradio"
-              aria-checked={variant === v}
-              className={[
-                "composer-page-settings-option",
-                variant === v ? "composer-page-settings-option--active" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
+              type={Button.TYPES.BUTTON}
+              variant={Button.VARIANTS.TEXT}
+              appearance={variant === v ? Button.APPEARANCES.ACTIVE : Button.APPEARANCES.GHOST}
+              isFluid
+              fontInherit
+              size={Button.SIZES.M}
               onClick={() => {
                 onVariantChange(v);
                 setMenuOpen(false);
               }}
             >
               {ARTIFACT_HOVER_LABELS[v]}
-            </button>
+            </Button>
           ))}
         </div>
       ) : null}

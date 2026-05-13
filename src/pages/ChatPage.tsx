@@ -15,10 +15,10 @@ import type {
   ChatThreadPreset,
 } from "../components/Chat";
 import { Composer } from "../components/Composer";
-import { IconArrowUpMini, IconSettings } from "../components/Composer/icons";
-import { IconCopy } from "../components/Composer/icons";
+import { IconArrowUpMini } from "../components/Composer/icons";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
+import { Button, IconButton, iconTypes } from "../pebbleButton";
 import "../App.css";
 
 const CHAT_WHEN = [
@@ -135,44 +135,41 @@ export function ChatPage() {
   return (
     <main className="demo-wrap">
       <div className="composer-page-settings" ref={settingsRef}>
-        <button
-          id={settingsBtnId}
-          type="button"
-          className="composer-page-settings-btn"
+        <span id={settingsBtnId} className="composer-page-settings-trigger">
+          <IconButton
+            icon={iconTypes.SETTINGS_OUTLINE}
           aria-label="Chat panel version"
-          aria-haspopup="menu"
+          aria-haspopup="dialog"
           aria-expanded={menuOpen}
           aria-controls={pageMenuId}
-          onClick={() => setMenuOpen((o) => !o)}
-        >
-          <IconSettings />
-        </button>
+          appearance={IconButton.APPEARANCES.OUTLINE}
+          size={IconButton.SIZES.M}
+            onClick={() => setMenuOpen((o) => !o)}
+          />
+        </span>
         {menuOpen ? (
           <div
             id={pageMenuId}
             className="composer-page-settings-menu"
-            role="menu"
-            aria-labelledby={settingsBtnId}
+            role="group"
+            aria-label="Chat panel version options"
           >
             {CHAT_PANEL_VERSIONS.map((v) => (
-              <button
+              <Button
                 key={v}
-                type="button"
-                role="menuitemradio"
-                aria-checked={panelVersion === v}
-                className={[
-                  "composer-page-settings-option",
-                  panelVersion === v ? "composer-page-settings-option--active" : "",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
+                type={Button.TYPES.BUTTON}
+                variant={Button.VARIANTS.TEXT}
+                appearance={panelVersion === v ? Button.APPEARANCES.ACTIVE : Button.APPEARANCES.GHOST}
+                isFluid
+                fontInherit
+                size={Button.SIZES.M}
                 onClick={() => {
                   setPanelVersion(v);
                   setMenuOpen(false);
                 }}
               >
                 {CHAT_PANEL_VERSION_LABELS[v]}
-              </button>
+              </Button>
             ))}
           </div>
         ) : null}
@@ -212,15 +209,16 @@ export function ChatPage() {
           </p>
           <div className="demo-segments" role="group" aria-labelledby="label-chat-layout">
             {CHAT_LAYOUT_VARIANTS.map((id) => (
-              <button
+              <Button
                 key={id}
-                type="button"
-                className="demo-segment"
+                type={Button.TYPES.BUTTON}
+                appearance={layout === id ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+                size={Button.SIZES.M}
                 aria-pressed={layout === id}
                 onClick={() => setLayout(id)}
               >
                 {LAYOUT_LABELS[id]}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -231,15 +229,16 @@ export function ChatPage() {
           </p>
           <div className="demo-segments" role="group" aria-labelledby="label-chat-thread">
             {CHAT_THREAD_PRESETS.map((id) => (
-              <button
+              <Button
                 key={id}
-                type="button"
-                className="demo-segment"
+                type={Button.TYPES.BUTTON}
+                appearance={thread === id ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+                size={Button.SIZES.M}
                 aria-pressed={thread === id}
                 onClick={() => setThread(id)}
               >
                 {THREAD_LABELS[id]}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -277,10 +276,9 @@ export function ChatPage() {
       </div>
 
       <hr className="page-section__divider" aria-hidden="true" />
-      <h2 className="page-section__title">Examples</h2>
 
       <section
-        className="in-context-stage demo-fullbleed"
+        className="in-context-stage"
         id="chat-example-in-context"
         aria-labelledby="chat-example-in-context-heading"
       >
@@ -298,22 +296,24 @@ export function ChatPage() {
             </p>
           </div>
           <div className="demo-segments" role="group" aria-label="Chat example surface mode">
-            <button
-              type="button"
-              className="demo-segment"
+            <Button
+              type={Button.TYPES.BUTTON}
+              appearance={exampleMode === "side-chat" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+              size={Button.SIZES.M}
               aria-pressed={exampleMode === "side-chat"}
               onClick={() => setExampleMode("side-chat")}
             >
               Side chat
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
+            </Button>
+            <Button
+              type={Button.TYPES.BUTTON}
+              appearance={exampleMode === "full-screen" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+              size={Button.SIZES.M}
               aria-pressed={exampleMode === "full-screen"}
               onClick={() => setExampleMode("full-screen")}
             >
               Full screen
-            </button>
+            </Button>
           </div>
         </div>
         <ChatExampleDemo
@@ -335,20 +335,19 @@ export function ChatPage() {
             </p>
           </div>
           <div className="demo-segments" role="presentation">
-            <button
-              type="button"
-              className={["demo-segment", "demo-code-copy-btn", copyAck ? "demo-code-copy-btn--active" : ""]
-                .filter(Boolean)
-                .join(" ")}
+            <Button
+              type={Button.TYPES.BUTTON}
+              appearance={copyAck ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+              icon={iconTypes.COPY_OUTLINE}
+              size={Button.SIZES.M}
               onClick={async () => {
                 await copyChatAssistantExample();
                 setCopyAck(true);
                 window.setTimeout(() => setCopyAck(false), 2000);
               }}
             >
-              <IconCopy className="demo-code-copy-btn__icon" />
               {copyAck ? "Copied" : "Copy code"}
-            </button>
+            </Button>
           </div>
         </div>
         <DemoHighlightedCode code={CHAT_ASSISTANT_EXAMPLE_SOURCE} language="tsx" />

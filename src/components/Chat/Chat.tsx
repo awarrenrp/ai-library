@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { useEffect, useId, useRef, useState } from "react";
+import { Button, IconButton, iconTypes } from "../../pebbleButton";
 import "./Chat.css";
 
 /** Shell width / chrome — swap via Chat page toolbar. */
@@ -150,16 +151,22 @@ function ChatThinkingAnimated({
         <p id={regionId} className="chat__thinking-title">
           {title}
         </p>
-        <button
-          type="button"
-          className="chat__thinking-collapse"
-          aria-expanded={!collapsed}
-          aria-controls={`${regionId}-steps`}
-          onClick={() => setCollapsed((c) => !c)}
-        >
-          <span className="visually-hidden">{collapsed ? "Expand thinking steps" : "Collapse thinking steps"}</span>
-          <IconChevronToggle contentExpanded={!collapsed} />
-        </button>
+        <div className="chat__thinking-collapse">
+          <Button
+            type={Button.TYPES.BUTTON}
+            variant={Button.VARIANTS.TEXT}
+            appearance={Button.APPEARANCES.GHOST}
+            size={Button.SIZES.XS}
+            aria-expanded={!collapsed}
+            aria-controls={`${regionId}-steps`}
+            onClick={() => setCollapsed((c) => !c)}
+          >
+            <>
+              <span className="visually-hidden">{collapsed ? "Expand thinking steps" : "Collapse thinking steps"}</span>
+              <IconChevronToggle contentExpanded={!collapsed} />
+            </>
+          </Button>
+        </div>
       </div>
       {phase === "running" && active ? (
         <ul
@@ -242,16 +249,22 @@ export function ChatThinkingBlock({
         <p id={regionId} className="chat__thinking-title">
           {title}
         </p>
-        <button
-          type="button"
-          className="chat__thinking-collapse"
-          aria-expanded={!collapsed}
-          aria-controls={`${regionId}-steps`}
-          onClick={() => setCollapsed((c) => !c)}
-        >
-          <span className="visually-hidden">{collapsed ? "Expand thinking steps" : "Collapse thinking steps"}</span>
-          <IconChevronToggle contentExpanded={!collapsed} />
-        </button>
+        <div className="chat__thinking-collapse">
+          <Button
+            type={Button.TYPES.BUTTON}
+            variant={Button.VARIANTS.TEXT}
+            appearance={Button.APPEARANCES.GHOST}
+            size={Button.SIZES.XS}
+            aria-expanded={!collapsed}
+            aria-controls={`${regionId}-steps`}
+            onClick={() => setCollapsed((c) => !c)}
+          >
+            <>
+              <span className="visually-hidden">{collapsed ? "Expand thinking steps" : "Collapse thinking steps"}</span>
+              <IconChevronToggle contentExpanded={!collapsed} />
+            </>
+          </Button>
+        </div>
       </div>
       <ul
         id={`${regionId}-steps`}
@@ -368,21 +381,6 @@ function defaultThread(
   );
 }
 
-function IconReplay() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M4 12a8 8 0 1 1 3 6.3"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path d="M4 16V12h4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 /*
  * Composer hat icons — sourced from Figma `AI-components` chat animation states.
  * Each renders inside a 16×16 box, centered in a 20×20 frame in the hat. Vector
@@ -433,18 +431,6 @@ function IconHatCheckCircle() {
           d="M6.833 0C3.06 0 0 3.06 0 6.833c0 3.774 3.06 6.834 6.833 6.834 3.775 0 6.834-3.06 6.834-6.834C13.667 3.06 10.608 0 6.833 0ZM1 6.833A5.833 5.833 0 1 1 12.667 6.834 5.833 5.833 0 0 1 1 6.833Z"
         />
       </g>
-    </svg>
-  );
-}
-
-/** Close X glyph — V2 Close instance used at the trailing edge of every hat state. */
-function IconHatClose() {
-  return (
-    <svg className="chat__hat-close-svg" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
-      <path
-        fill="currentColor"
-        d="M5 4.293 8.646.646l.708.708L5.707 5l3.647 3.646-.708.708L5 5.707 1.354 9.354l-.708-.708L4.293 5 .646 1.354l.708-.708L5 4.293Z"
-      />
     </svg>
   );
 }
@@ -677,15 +663,16 @@ export function ChatComposerHat({
         </span>
         <span className="chat__hat-text-slot">{label}</span>
       </div>
-      <button
-        type="button"
-        className="chat__hat-close"
-        tabIndex={-1}
-        aria-label="Dismiss context"
-        onClick={handleDismiss}
-      >
-        <IconHatClose />
-      </button>
+      <div className="chat__hat-close">
+        <IconButton
+          icon={iconTypes.CLOSE}
+          appearance={IconButton.APPEARANCES.GHOST}
+          size={IconButton.SIZES.S}
+          tabIndex={-1}
+          aria-label="Dismiss context"
+          onClick={handleDismiss}
+        />
+      </div>
     </div>
   );
 }
@@ -801,12 +788,6 @@ export function ChatToolbarCollapsePebbleIcon() {
   );
 }
 
-/* Internal aliases — keep the in-file usages stable. */
-const IconHamburger = ChatToolbarMenuIcon;
-const IconAddComment = ChatToolbarAddCommentIcon;
-const IconExpand = ChatToolbarExpandIcon;
-const IconClose = ChatToolbarCloseIcon;
-
 export type ChatToolbarProps = {
   title?: string;
   /** When omitted, the button is hidden. */
@@ -851,14 +832,13 @@ export function ChatToolbar({
     >
       <div className="chat__toolbar-cluster chat__toolbar-cluster--start">
         {onMenuClick ? (
-          <button
-            type="button"
-            className="chat__toolbar-btn"
+          <IconButton
+            icon={iconTypes.HAMBURGER}
+            appearance={IconButton.APPEARANCES.GHOST}
+            size={IconButton.SIZES.M}
             aria-label="Open menu"
             onClick={onMenuClick}
-          >
-            <IconHamburger />
-          </button>
+          />
         ) : null}
         {title ? (
           <p className="chat__toolbar-title" aria-live="polite">
@@ -868,34 +848,44 @@ export function ChatToolbar({
       </div>
       <div className="chat__toolbar-cluster chat__toolbar-cluster--end">
         {onAddCommentClick ? (
-          <button
-            type="button"
-            className="chat__toolbar-btn"
+          <IconButton
+            icon={iconTypes.ADD_COMMENT_OUTLINE}
+            appearance={IconButton.APPEARANCES.GHOST}
+            size={IconButton.SIZES.M}
             aria-label="Add comment"
             onClick={onAddCommentClick}
-          >
-            <IconAddComment />
-          </button>
+          />
         ) : null}
         {onExpandClick ? (
-          <button
-            type="button"
-            className="chat__toolbar-btn"
-            aria-label={expandLabel ?? "Expand chat"}
-            onClick={onExpandClick}
-          >
-            {expandIcon ?? <IconExpand />}
-          </button>
+          expandIcon ? (
+            <Button
+              type={Button.TYPES.BUTTON}
+              variant={Button.VARIANTS.TEXT}
+              appearance={Button.APPEARANCES.GHOST}
+              size={Button.SIZES.M}
+              aria-label={expandLabel ?? "Expand chat"}
+              onClick={onExpandClick}
+            >
+              {expandIcon}
+            </Button>
+          ) : (
+            <IconButton
+              icon={iconTypes.EXPAND}
+              appearance={IconButton.APPEARANCES.GHOST}
+              size={IconButton.SIZES.M}
+              aria-label={expandLabel ?? "Expand chat"}
+              onClick={onExpandClick}
+            />
+          )
         ) : null}
         {onCloseClick ? (
-          <button
-            type="button"
-            className="chat__toolbar-btn"
+          <IconButton
+            icon={iconTypes.CLOSE}
+            appearance={IconButton.APPEARANCES.GHOST}
+            size={IconButton.SIZES.M}
             aria-label="Close chat"
             onClick={onCloseClick}
-          >
-            <IconClose />
-          </button>
+          />
         ) : null}
       </div>
     </div>
@@ -976,17 +966,18 @@ export function Chat({
     >
       {toolbarVisible && resolvedToolbar ? <ChatToolbar {...resolvedToolbar} /> : null}
       {panelVersion === "animated" && thinkingAnimComplete ? (
-        <button
-          type="button"
-          className="chat__panel-replay"
-          aria-label="Replay thinking animation"
-          onClick={() => {
-            setThinkingAnimComplete(false);
-            setThinkingReplayKey((k) => k + 1);
-          }}
-        >
-          <IconReplay />
-        </button>
+        <div className="chat__panel-replay">
+          <IconButton
+            icon={iconTypes.REFRESH_OUTLINE}
+            appearance={IconButton.APPEARANCES.OUTLINE}
+            size={IconButton.SIZES.M}
+            aria-label="Replay thinking animation"
+            onClick={() => {
+              setThinkingAnimComplete(false);
+              setThinkingReplayKey((k) => k + 1);
+            }}
+          />
+        </div>
       ) : null}
       <div
         className="chat__thread"

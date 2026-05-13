@@ -276,24 +276,35 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  padding: 0;
+  flex-shrink: 0;
   border: 1px solid rgb(0 0 0 / 20%);
   border-radius: 6px;
   background: #ffffff;
   color: inherit;
   cursor: pointer;
-  flex-shrink: 0;
 }
 
-.external-file-artifact-icon-btn:hover {
-  box-shadow: inset 0 0 0 9999px var(--artifact-overlay-hover);
+.external-file-artifact-icon-btn > button {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: inherit !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
-.external-file-artifact-icon-btn:active {
-  box-shadow: inset 0 0 0 9999px var(--artifact-overlay-pressed);
+.external-file-artifact-icon-btn:hover > button {
+  box-shadow: inset 0 0 0 9999px var(--artifact-overlay-hover) !important;
 }
 
-.external-file-artifact-icon-btn:focus-visible {
+.external-file-artifact-icon-btn:active > button {
+  box-shadow: inset 0 0 0 9999px var(--artifact-overlay-pressed) !important;
+}
+
+.external-file-artifact-icon-btn:focus-within {
   outline: 2px solid var(--artifact-outline-active);
   outline-offset: 2px;
 }
@@ -311,29 +322,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 32px;
-  padding: 0 14px;
-  border: 1px solid rgb(0 0 0 / 20%);
-  border-radius: 8px;
-  background: #ffffff;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 20px;
-  color: #000000;
-  cursor: pointer;
   flex-shrink: 0;
 }
 
-.external-file-artifact-primary:hover {
-  box-shadow: inset 0 0 0 9999px var(--artifact-overlay-hover);
-}
-
-.external-file-artifact-primary:active {
-  box-shadow: inset 0 0 0 9999px var(--artifact-overlay-pressed);
-}
-
-.external-file-artifact-primary:focus-visible {
-  outline: 2px solid var(--artifact-outline-active);
-  outline-offset: 2px;
+.external-file-artifact-primary > button {
+  min-height: 32px !important;
+  padding: 0 14px !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 20px !important;
 }

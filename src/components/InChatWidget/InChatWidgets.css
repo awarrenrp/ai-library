@@ -121,7 +121,7 @@
   line-height: 22px;
 }
 
-.icw-widget--96 .icw-open-btn {
+.icw-widget--96 .icw-open-btn > button {
   min-height: 28px;
   padding: 4px 14px;
   font-size: 13px;
@@ -177,29 +177,20 @@
 .icw-open-btn {
   box-sizing: border-box;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   align-self: flex-start;
   margin: 0;
+}
+
+.icw-open-btn > button {
+  box-sizing: border-box;
   min-height: 32px;
-  padding: 6px 14px;
-  /* Boundary contrast — WCAG 1.4.11. Composited #8c8c8c on white ≈ 3.3:1. */
-  border: 1px solid rgb(0 0 0 / 45%);
-  border-radius: 6px;
-  background: #ffffff;
   font-family: inherit;
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
-  color: #000000;
-  cursor: pointer;
 }
 
-.icw-open-btn:hover {
-  background: rgb(0 0 0 / 4%);
-}
-
-.icw-open-btn:focus-visible {
+.icw-open-btn:focus-within {
   outline: 2px solid var(--artifact-outline-active, #5aa5e7);
   outline-offset: 2px;
 }

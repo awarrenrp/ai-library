@@ -61,74 +61,16 @@
   text-overflow: ellipsis;
 }
 
-.chat__toolbar-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  /* Hit target 32×32, 20×20 inner glyph (Figma 7164:61241 spec). */
-  width: 32px;
-  height: 32px;
-  padding: 6px;
-  margin: 0;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: #000000;
-  cursor: pointer;
-  font: inherit;
-}
-
-.chat__toolbar-btn:hover {
-  background: rgb(0 0 0 / 5%);
-}
-
-.chat__toolbar-btn:active {
-  background: rgb(0 0 0 / 8%);
-}
-
-.chat__toolbar-btn:focus-visible {
-  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
-  outline-offset: 2px;
-}
-
-.chat__toolbar-btn > svg {
-  display: block;
-}
-
 /* Animations panel — replay thinking sequence (top-right of chat shell) */
 .chat__panel-replay {
   position: absolute;
   top: 10px;
   right: 10px;
   z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border: 1px solid rgb(0 0 0 / 12%);
-  border-radius: 8px;
-  background: #ffffff;
-  color: #716f6c;
-  cursor: pointer;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 6%);
 }
 
-/* When the toolbar is present, drop the replay button below it so it doesn't overlap. */
 .chat[data-chat-has-toolbar="true"] .chat__panel-replay {
   top: 56px;
-}
-
-.chat__panel-replay:hover {
-  background: #fafafa;
-  color: #000000;
-}
-
-.chat__panel-replay:focus-visible {
-  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
-  outline-offset: 2px;
 }
 
 .chat--side-panel {
@@ -256,27 +198,15 @@
 
 .chat__thinking-collapse {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  margin: 0;
-  padding: 0;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
+}
+
+.chat__thinking-collapse > button {
   color: #716f6c;
-  cursor: pointer;
 }
 
-.chat__thinking-collapse:hover {
+.chat__thinking-collapse > button:hover {
   background: rgb(0 0 0 / 5%);
-}
-
-.chat__thinking-collapse:focus-visible {
-  outline: 2px solid var(--color-ring, rgb(0 0 0 / 25%));
-  outline-offset: 2px;
 }
 
 .chat__thinking-chevron-svg {
@@ -592,28 +522,6 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  padding: 0;
-  margin: 0;
-  border: none;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--color-primary);
-  cursor: pointer;
-}
-
-.chat__hat-close:hover {
-  background: rgb(122 0 93 / 8%);
-}
-
-.chat__hat-close:focus-visible {
-  outline: 2px solid var(--color-ring);
-  outline-offset: 2px;
-}
-
-.chat__hat-close-svg {
-  display: block;
 }
 
 @keyframes chat-hat-icon-fade {

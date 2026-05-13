@@ -9,12 +9,12 @@ import type { ComposerWidth } from "../components/Composer";
 
 /** Outer demo width — fixed-width tracks only; `"fill"` isn’t valid for the outer preview shell. */
 type DemoOuterWidth = Exclude<ComposerWidth, "fill">;
-import { IconCopy } from "../components/Composer/icons";
 import type { ExternalFileKind } from "../components/ExternalArtifact";
 import { ExternalFileArtifact } from "../components/ExternalArtifact";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
 import EXTERNAL_ARTIFACT_EXAMPLE_SOURCE from "../examples/ExternalArtifactExample.tsx?raw";
+import { Button, iconTypes } from "../pebbleButton";
 import { copyText } from "../utils/copyText";
 import "../App.css";
 
@@ -87,16 +87,17 @@ export function ExternalArtifactsPage() {
           </p>
           <div className="demo-segments" role="group" aria-labelledby="ea-label-width">
             {(["large", "medium", "small"] as const).map((w) => (
-              <button
+              <Button
                 key={w}
-                type="button"
-                className="demo-segment"
+                type={Button.TYPES.BUTTON}
+                appearance={width === w ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+                size={Button.SIZES.M}
                 aria-pressed={width === w}
                 aria-label={`${w} width, ${WIDTH_PX[w]} pixels`}
                 onClick={() => setWidth(w)}
               >
                 {w.charAt(0).toUpperCase() + w.slice(1)}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -107,16 +108,17 @@ export function ExternalArtifactsPage() {
           </p>
           <div className="demo-segments" role="group" aria-labelledby="ea-label-kind">
             {FILE_KINDS.map((k) => (
-              <button
+              <Button
                 key={k}
-                type="button"
-                className="demo-segment"
+                type={Button.TYPES.BUTTON}
+                appearance={kind === k ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+                size={Button.SIZES.M}
                 aria-pressed={kind === k}
                 aria-label={`${FILE_LABEL[k]} row`}
                 onClick={() => setKind(k)}
               >
                 {k.toUpperCase()}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -156,20 +158,19 @@ export function ExternalArtifactsPage() {
             </p>
           </div>
           <div className="demo-segments" role="presentation">
-            <button
-              type="button"
-              className={["demo-segment", "demo-code-copy-btn", copyAck ? "demo-code-copy-btn--active" : ""]
-                .filter(Boolean)
-                .join(" ")}
+            <Button
+              type={Button.TYPES.BUTTON}
+              appearance={copyAck ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+              icon={iconTypes.COPY_OUTLINE}
+              size={Button.SIZES.M}
               onClick={async () => {
                 await copyText(EXTERNAL_ARTIFACT_EXAMPLE_SOURCE);
                 setCopyAck(true);
                 window.setTimeout(() => setCopyAck(false), 2000);
               }}
             >
-              <IconCopy className="demo-code-copy-btn__icon" />
               {copyAck ? "Copied" : "Copy code"}
-            </button>
+            </Button>
           </div>
         </div>
         <DemoHighlightedCode code={EXTERNAL_ARTIFACT_EXAMPLE_SOURCE} language="tsx" />

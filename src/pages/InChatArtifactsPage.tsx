@@ -4,7 +4,6 @@ import {
   ArtifactHoverPageSettings,
   type ArtifactHoverVariant,
 } from "../components/ArtifactHoverPageSettings";
-import { IconCopy } from "../components/Composer/icons";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
 import {
@@ -13,6 +12,7 @@ import {
   InChatWidgets,
 } from "../components/InChatWidget";
 import IN_CHAT_WIDGET_EXAMPLE_SOURCE from "../examples/InChatWidgetExample.tsx?raw";
+import { Button, iconTypes } from "../pebbleButton";
 import { copyText } from "../utils/copyText";
 import "../App.css";
 import "../components/Links/Links.css";
@@ -112,10 +112,9 @@ export function InChatArtifactsPage() {
       </section>
 
       <hr className="page-section__divider" aria-hidden="true" />
-      <h2 className="page-section__title">Examples</h2>
 
       <section
-        className="in-context-stage demo-fullbleed"
+        className="in-context-stage"
         id="ic-artifacts-context"
         aria-labelledby="ic-artifacts-context-heading"
       >
@@ -131,22 +130,24 @@ export function InChatArtifactsPage() {
             </p>
           </div>
           <div className="demo-segments" role="group" aria-label="In-chat widget surface mode">
-            <button
-              type="button"
-              className="demo-segment"
+            <Button
+              type={Button.TYPES.BUTTON}
+              appearance={contextMode === "side-chat" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+              size={Button.SIZES.M}
               aria-pressed={contextMode === "side-chat"}
               onClick={() => setContextMode("side-chat")}
             >
               Side chat
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
+            </Button>
+            <Button
+              type={Button.TYPES.BUTTON}
+              appearance={contextMode === "full-screen" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+              size={Button.SIZES.M}
               aria-pressed={contextMode === "full-screen"}
               onClick={() => setContextMode("full-screen")}
             >
               Full screen
-            </button>
+            </Button>
           </div>
         </div>
         <InChatWidgetDemo mode={contextMode} />
@@ -169,20 +170,19 @@ export function InChatArtifactsPage() {
             </p>
           </div>
           <div className="demo-segments" role="presentation">
-            <button
-              type="button"
-              className={["demo-segment", "demo-code-copy-btn", copyAck ? "demo-code-copy-btn--active" : ""]
-                .filter(Boolean)
-                .join(" ")}
+            <Button
+              type={Button.TYPES.BUTTON}
+              appearance={copyAck ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+              icon={iconTypes.COPY_OUTLINE}
+              size={Button.SIZES.M}
               onClick={async () => {
                 await copyText(IN_CHAT_WIDGET_EXAMPLE_SOURCE);
                 setCopyAck(true);
                 window.setTimeout(() => setCopyAck(false), 2000);
               }}
             >
-              <IconCopy className="demo-code-copy-btn__icon" />
               {copyAck ? "Copied" : "Copy code"}
-            </button>
+            </Button>
           </div>
         </div>
         <DemoHighlightedCode code={IN_CHAT_WIDGET_EXAMPLE_SOURCE} language="tsx" />

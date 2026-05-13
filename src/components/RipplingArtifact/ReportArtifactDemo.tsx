@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import "./ReportArtifactDemo.css";
+import { Button } from "../../pebbleButton";
 
 function IconTip() {
   return (
@@ -111,12 +112,28 @@ export function ReportArtifactDemo({ embed = "artifact-shell" }: ReportArtifactD
                     <span className="report-th-title">Employee</span>
                     <span className="report-th-sub">Legal name</span>
                   </div>
-                  <button type="button" className="report-th-icon-btn" aria-label="Column info">
-                    <IconTip />
-                  </button>
-                  <button type="button" className="report-th-chevron" aria-label="Column options">
-                    <IconChevronDownMini />
-                  </button>
+                  <span className="report-th-icon-btn">
+                    <Button
+                      type={Button.TYPES.BUTTON}
+                      variant={Button.VARIANTS.TEXT}
+                      appearance={Button.APPEARANCES.GHOST}
+                      size={Button.SIZES.M}
+                      aria-label="Column info"
+                    >
+                      <IconTip />
+                    </Button>
+                  </span>
+                  <span className="report-th-chevron">
+                    <Button
+                      type={Button.TYPES.BUTTON}
+                      variant={Button.VARIANTS.TEXT}
+                      appearance={Button.APPEARANCES.GHOST}
+                      size={Button.SIZES.M}
+                      aria-label="Column options"
+                    >
+                      <IconChevronDownMini />
+                    </Button>
+                  </span>
                 </div>
               </th>
               <th className="report-artifact-th" scope="col">

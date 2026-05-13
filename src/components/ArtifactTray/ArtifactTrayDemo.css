@@ -93,6 +93,15 @@
   display: inline-flex;
 }
 
+/*
+ * Icon slot — aligns Pebble toolbar icon buttons with the legacy 32px hit target.
+ */
+.artifact-tray-demo .chat__toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .artifact-tray-demo__more-menu {
   position: absolute;
   top: calc(100% + 6px);
@@ -109,24 +118,29 @@
 .artifact-tray-demo__more-menu-item {
   display: block;
   width: 100%;
-  padding: 8px 10px;
-  border: 0;
+}
+
+.artifact-tray-demo__more-menu-item > button {
+  box-sizing: border-box;
+  display: inline-flex !important;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 8px 10px !important;
   border-radius: 6px;
-  background: transparent;
   text-align: left;
   font-size: 13px;
   line-height: 1.4;
-  color: #000000;
-  cursor: pointer;
 }
 
-.artifact-tray-demo__more-menu-item:hover,
-.artifact-tray-demo__more-menu-item:focus-visible {
+.artifact-tray-demo__more-menu-item:hover > button,
+.artifact-tray-demo__more-menu-item:focus-within > button {
   background: rgb(0 0 0 / 6%);
   outline: none;
 }
 
-.artifact-tray-demo__more-menu-item:focus-visible {
+.artifact-tray-demo__more-menu-item > button:focus-visible {
+  outline: none;
   box-shadow: 0 0 0 2px var(--color-focus-input, #5aa5e7);
 }
 

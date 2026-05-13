@@ -1,4 +1,5 @@
 import "./WorkflowArtifactDemo.css";
+import { Button } from "../../pebbleButton";
 
 /** Block IDs callers can mark as the focused/selected node in edit mode. */
 export type WorkflowArtifactBlockId = "when" | "what";
@@ -59,9 +60,17 @@ export function WorkflowArtifactDemo({ selectedBlock }: WorkflowArtifactDemoProp
         <hr className="workflow-artifact-demo-rule" />
 
         <div className="workflow-artifact-demo-footer">
-          <button type="button" className="workflow-artifact-demo-link">
-            View workflow →
-          </button>
+          <span className="workflow-artifact-demo-link">
+            <Button
+              type={Button.TYPES.BUTTON}
+              variant={Button.VARIANTS.TEXT}
+              appearance={Button.APPEARANCES.GHOST}
+              size={Button.SIZES.M}
+              fontInherit
+            >
+              View workflow →
+            </Button>
+          </span>
         </div>
       </div>
     </div>

@@ -7,9 +7,9 @@ import {
   WIDTH_PX,
 } from "../components/Composer";
 import type { ComposerVersion, ComposerWidth } from "../components/Composer";
-import { IconCopy, IconSettings } from "../components/Composer/icons";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
+import { Button, IconButton, iconTypes } from "../pebbleButton";
 import "../App.css";
 
 const FILLED_SAMPLE = "Make me a report about sales people in SF";
@@ -159,47 +159,44 @@ export function ComposerPage() {
   return (
     <main className="demo-wrap">
       <div className="composer-page-settings" ref={settingsRef}>
-        <button
-          id={settingsBtnId}
-          type="button"
-          className="composer-page-settings-btn"
-          aria-label="Composer version"
-          aria-haspopup="menu"
-          aria-expanded={menuOpen}
-          aria-controls={pageMenuId}
-          onClick={() => setMenuOpen((o) => !o)}
-        >
-          <IconSettings />
-        </button>
-        {menuOpen && (
+        <span id={settingsBtnId} className="composer-page-settings-trigger">
+          <IconButton
+            icon={iconTypes.SETTINGS_OUTLINE}
+            aria-label="Composer version"
+            aria-haspopup="dialog"
+            aria-expanded={menuOpen}
+            aria-controls={pageMenuId}
+            appearance={IconButton.APPEARANCES.OUTLINE}
+            size={IconButton.SIZES.M}
+            onClick={() => setMenuOpen((o) => !o)}
+          />
+        </span>
+        {menuOpen ? (
           <div
             id={pageMenuId}
             className="composer-page-settings-menu"
-            role="menu"
-            aria-labelledby={settingsBtnId}
+            role="group"
+            aria-label="Composer version options"
           >
             {COMPOSER_VERSIONS.map((v) => (
-              <button
+              <Button
                 key={v}
-                type="button"
-                role="menuitemradio"
-                aria-checked={composerVersion === v}
-                className={[
-                  "composer-page-settings-option",
-                  composerVersion === v ? "composer-page-settings-option--active" : "",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
+                type={Button.TYPES.BUTTON}
+                variant={Button.VARIANTS.TEXT}
+                appearance={composerVersion === v ? Button.APPEARANCES.ACTIVE : Button.APPEARANCES.GHOST}
+                isFluid
+                fontInherit
+                size={Button.SIZES.M}
                 onClick={() => {
                   setComposerVersion(v);
                   setMenuOpen(false);
                 }}
               >
                 {COMPOSER_VERSION_LABELS[v]}
-              </button>
+              </Button>
             ))}
           </div>
-        )}
+        ) : null}
       </div>
 
       <nav style={{ marginBottom: 24 }}>
@@ -242,16 +239,17 @@ export function ComposerPage() {
           </p>
           <div className="demo-segments" role="group" aria-labelledby="label-width">
             {(["large", "medium", "small"] as const).map((w) => (
-              <button
+              <Button
                 key={w}
-                type="button"
-                className="demo-segment"
+                type={Button.TYPES.BUTTON}
+                appearance={width === w ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+                size={Button.SIZES.M}
                 aria-pressed={width === w}
                 aria-label={`${w} width, ${WIDTH_PX[w]} pixels`}
                 onClick={() => setWidth(w)}
               >
                 {w.charAt(0).toUpperCase() + w.slice(1)}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -261,34 +259,37 @@ export function ComposerPage() {
             State
           </p>
           <div className="demo-segments" role="group" aria-labelledby="label-state">
-            <button
-              type="button"
-              className="demo-segment"
+            <Button
+              type={Button.TYPES.BUTTON}
+              appearance={variant === "default" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+              size={Button.SIZES.M}
               aria-pressed={variant === "default"}
               aria-label="Default state, empty message field"
               onClick={() => applyVariant("default")}
             >
               Default
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
+            </Button>
+            <Button
+              type={Button.TYPES.BUTTON}
+              appearance={variant === "filled" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+              size={Button.SIZES.M}
               aria-pressed={variant === "filled"}
               aria-label="Filled state, sample message"
               onClick={() => applyVariant("filled")}
             >
               Filled
-            </button>
+            </Button>
             {composerVersion === "alternate" ? (
-              <button
-                type="button"
-                className="demo-segment"
+              <Button
+                type={Button.TYPES.BUTTON}
+                appearance={variant === "edit" ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+                size={Button.SIZES.M}
                 aria-pressed={variant === "edit"}
                 aria-label="Edit state, focus outline and edit chip (alternate only)"
                 onClick={() => applyVariant("edit")}
               >
                 Edit
-              </button>
+              </Button>
             ) : null}
           </div>
         </div>
@@ -336,20 +337,19 @@ export function ComposerPage() {
             </p>
           </div>
           <div className="demo-segments" role="presentation">
-            <button
-              type="button"
-              className={["demo-segment", "demo-code-copy-btn", copyAck ? "demo-code-copy-btn--active" : ""]
-                .filter(Boolean)
-                .join(" ")}
+            <Button
+              type={Button.TYPES.BUTTON}
+              appearance={copyAck ? Button.APPEARANCES.PRIMARY : Button.APPEARANCES.OUTLINE}
+              icon={iconTypes.COPY_OUTLINE}
+              size={Button.SIZES.M}
               onClick={async () => {
                 await copyComposerMessageInputExample();
                 setCopyAck(true);
                 window.setTimeout(() => setCopyAck(false), 2000);
               }}
             >
-              <IconCopy className="demo-code-copy-btn__icon" />
               {copyAck ? "Copied" : "Copy code"}
-            </button>
+            </Button>
           </div>
         </div>
         <DemoHighlightedCode code={COMPOSER_MESSAGE_INPUT_EXAMPLE_SOURCE} language="tsx" />
