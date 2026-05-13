@@ -98,7 +98,8 @@
   scrollbar-width: thin;
 }
 
-.rna-chart-toolbar .demo-segment {
+/* Segments are Pebble `Button`s — preserve nowrap for long chart-type labels when the row scrolls. */
+.rna-chart-toolbar .demo-segments button {
   white-space: nowrap;
 }
 

@@ -1,3 +1,4 @@
+import "./processPolyfill";
 import GlobalStyles from "@rippling/pebble/GlobalStyle";
 import { ThemeProvider } from "@rippling/pebble/theme";
 import { StrictMode } from "react";

@@ -229,7 +229,13 @@
 .demo-segments {
   display: inline-flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
+}
+
+/* Pebble `Button` in segment groups — keep row alignment when heights differ (outline vs primary). */
+.demo-segments > button {
+  flex-shrink: 0;
 }
 
 .demo-stage {

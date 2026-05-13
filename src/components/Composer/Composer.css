@@ -229,7 +229,8 @@
   flex-direction: row;
   align-items: center;
   gap: var(--composer-action-gap);
-  height: 32px;
+  /* Pebble IconButton + Button size M are taller than the old 32px native icon row; fixed height clipped controls. */
+  min-height: 40px;
   overflow: visible;
 }
 
