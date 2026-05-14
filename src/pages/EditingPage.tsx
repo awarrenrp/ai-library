@@ -25,6 +25,7 @@ const EDITING_DESIGN_INTENT = [
 export function EditingPage() {
   const [protoVariant, setProtoVariant] = useState<"default" | "animated">("default");
   const [contentType, setContentType] = useState<"dashboards" | "forms">("dashboards");
+  const [resetKey, setResetKey] = useState(0);
 
   return (
     <main className="demo-wrap">
@@ -104,9 +105,18 @@ export function EditingPage() {
                 ))}
               </div>
             </div>
+
+            <button
+              type="button"
+              className="editing-page__reset-btn"
+              aria-label="Reset prototype to initial state"
+              onClick={() => setResetKey((k) => k + 1)}
+            >
+              Reset
+            </button>
           </div>
           <EditingPrototypeMock
-            key={`${protoVariant}-${contentType}`}
+            key={`${protoVariant}-${contentType}-${resetKey}`}
             variant={protoVariant}
             contentType={contentType}
           />

@@ -25,6 +25,9 @@ const SHELL_VARIANT_LABELS: Record<RipplingArtifactShellVariant, string> = {
   "with-actions": "With actions",
 };
 
+type ArtifactState = "default" | "hover" | "selected";
+type ArtifactType = "default" | "with-actions";
+
 /** Open arrow — used for the demo "Open" action in the with-actions bar. */
 function IconActionOpen() {
   return (
@@ -99,7 +102,8 @@ export function RipplingNativeArtifactsPage() {
   const [chartVariant, setChartVariant] = useState<ChartDemoVariant>("bar");
   const [shellVariant, setShellVariant] = useState<RipplingArtifactShellVariant>("default");
   const [contextMode, setContextMode] = useState<RipplingNativeArtifactInChatDemoMode>("side-chat");
-  const [artifactSelected, setArtifactSelected] = useState(false);
+  const [artifactState, setArtifactState] = useState<ArtifactState>("default");
+  const [artifactType, setArtifactType] = useState<ArtifactType>("default");
 
   const pageMenuId = useId();
   const settingsBtnId = `rna-page-settings-btn-${pageMenuId}`;
@@ -112,9 +116,16 @@ export function RipplingNativeArtifactsPage() {
     (n) => settingsRef.current?.contains(n) ?? false,
   );
 
-  const demoActions = shellVariant === "with-actions" ? <DemoArtifactActions />
+  const demoActions = (shellVariant === "with-actions" || artifactType === "with-actions") ? <DemoArtifactActions />
     : shellVariant === "action-bar" ? <DemoActionBarContent />
     : undefined;
+
+  const effectiveVariant: RipplingArtifactShellVariant =
+    artifactType === "with-actions" ? "with-actions"
+    : shellVariant;
+
+  const artifactHover = artifactState === "hover";
+  const artifactSelected = artifactState === "selected";
 
   return (
     <main className="demo-wrap rna-page">
@@ -209,30 +220,65 @@ export function RipplingNativeArtifactsPage() {
           <strong>Default</strong> and <strong>With actions</strong>. Hover the artifact to reveal
           the bar plus the existing <strong>…</strong> menu.
         </p>
-        <div className="demo-segments" role="group" aria-label="Artifact state" style={{ marginBottom: 16 }}>
-          <button
-            type="button"
-            className="demo-segment"
-            aria-pressed={!artifactSelected}
-            onClick={() => setArtifactSelected(false)}
-          >
-            Default
-          </button>
-          <button
-            type="button"
-            className="demo-segment"
-            aria-pressed={artifactSelected}
-            onClick={() => setArtifactSelected(true)}
-          >
-            Selected
-          </button>
+        <div className="rna-shell-controls">
+          <div className="demo-group">
+            <p className="demo-label" id="rna-state-label">State</p>
+            <div className="demo-segments" role="group" aria-labelledby="rna-state-label">
+              <button
+                type="button"
+                className="demo-segment"
+                aria-pressed={artifactState === "default"}
+                onClick={() => setArtifactState("default")}
+              >
+                Default
+              </button>
+              <button
+                type="button"
+                className="demo-segment"
+                aria-pressed={artifactState === "hover"}
+                onClick={() => setArtifactState("hover")}
+              >
+                Hover
+              </button>
+              <button
+                type="button"
+                className="demo-segment"
+                aria-pressed={artifactState === "selected"}
+                onClick={() => setArtifactState("selected")}
+              >
+                Selected
+              </button>
+            </div>
+          </div>
+          <div className="demo-group">
+            <p className="demo-label" id="rna-type-label">Type</p>
+            <div className="demo-segments" role="group" aria-labelledby="rna-type-label">
+              <button
+                type="button"
+                className="demo-segment"
+                aria-pressed={artifactType === "default"}
+                onClick={() => setArtifactType("default")}
+              >
+                Default
+              </button>
+              <button
+                type="button"
+                className="demo-segment"
+                aria-pressed={artifactType === "with-actions"}
+                onClick={() => setArtifactType("with-actions")}
+              >
+                With actions
+              </button>
+            </div>
+          </div>
         </div>
         <div className="rna-showcase">
           <RipplingArtifactShell
             title="Artifact title"
-            variant={shellVariant}
+            variant={effectiveVariant}
             actions={demoActions}
             selected={artifactSelected}
+            hover={artifactHover}
             moreMenuSlot={
               <p className="rna-slot-placeholder rna-slot-placeholder--menu">
                 Custom slot — any JSX, styled like the body slot.
@@ -284,7 +330,7 @@ export function RipplingNativeArtifactsPage() {
             </div>
           </div>
           <div className="rna-showcase">
-            <RipplingArtifactShell title="Artifact title" variant={shellVariant} actions={demoActions} selected={artifactSelected}>
+            <RipplingArtifactShell title="Artifact title" variant={effectiveVariant} actions={demoActions} selected={artifactSelected} hover={artifactHover}>
               <SimpleBarChartDemo variant={chartVariant} />
             </RipplingArtifactShell>
           </div>
@@ -304,7 +350,7 @@ export function RipplingNativeArtifactsPage() {
           </p>
           <div className="demo-preview-surface" role="region" aria-label="Report preview">
             <div className="rna-showcase">
-              <RipplingArtifactShell title="Report title" variant={shellVariant} actions={demoActions} selected={artifactSelected}>
+              <RipplingArtifactShell title="Report title" variant={effectiveVariant} actions={demoActions} selected={artifactSelected} hover={artifactHover}>
                 <ReportArtifactDemo />
               </RipplingArtifactShell>
             </div>
@@ -318,7 +364,7 @@ export function RipplingNativeArtifactsPage() {
           <p className="rna-section-lede rna-example-lede">Workflow preview.</p>
           <div className="demo-preview-surface" role="region" aria-label="Workflow preview">
             <div className="rna-showcase">
-              <RipplingArtifactShell title="Workflow" variant={shellVariant} actions={demoActions} selected={artifactSelected}>
+              <RipplingArtifactShell title="Workflow" variant={effectiveVariant} actions={demoActions} selected={artifactSelected} hover={artifactHover}>
                 <WorkflowArtifactDemo />
               </RipplingArtifactShell>
             </div>

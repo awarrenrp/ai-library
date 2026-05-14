@@ -2,6 +2,14 @@
   margin-bottom: 36px;
 }
 
+.rna-shell-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
 .rna-page-kicker {
   margin: 0 0 8px;
   font-size: 12px;
@@ -161,16 +169,17 @@
 }
 
 .rna-action-btn--primary {
-  background: #000000;
-  color: #ffffff;
+  background: #ffffff;
+  border-color: rgb(0 0 0 / 20%);
+  color: #000000;
 }
 
 .rna-action-btn--primary:hover {
-  background: #1a1a1a;
+  background: rgb(0 0 0 / 4%);
 }
 
 .rna-action-btn--primary:active {
-  background: #2e2e2e;
+  background: rgb(0 0 0 / 8%);
 }
 
 /*

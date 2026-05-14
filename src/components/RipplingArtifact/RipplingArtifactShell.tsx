@@ -83,6 +83,13 @@ export type RipplingArtifactShellProps = {
    * artifacts that aren't yet in full edit mode.
    */
   selected?: boolean;
+  /**
+   * When true, forces the hover visual state — shows the action bar,
+   * foot row, and header icon cluster as if the pointer were over the card.
+   * Useful for demos and design-spec pages that need to snapshot the hover
+   * appearance without relying on an actual pointer hover.
+   */
+  hover?: boolean;
 };
 
 /** Pencil/edit glyph used in the "Editing" pill — Figma 757:10345 `Left icon`. */
@@ -296,6 +303,7 @@ export function RipplingArtifactShell({
   onCancelEdit,
   onSaveEdit,
   selected = false,
+  hover = false,
 }: RipplingArtifactShellProps) {
   const moreMenuId = useId();
   const moreBtnId = useId();
@@ -350,6 +358,7 @@ export function RipplingArtifactShell({
       data-variant={variant}
       data-editing={editing || undefined}
       data-selected={selected || undefined}
+      data-hover={hover || undefined}
     >
       <article className="rippling-artifact">
         <header className="rippling-artifact-header">

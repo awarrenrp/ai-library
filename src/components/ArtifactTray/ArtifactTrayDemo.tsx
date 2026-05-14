@@ -150,6 +150,59 @@ function SideChatDemo() {
               <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
                 Pull Q3 attendance and draft an in-office policy refresh.
               </p>
+              <div className="artifact-tray-demo__bubble artifact-tray-demo__bubble--assistant">
+                <p className="artifact-tray-demo__bubble-heading">Q3 Attendance Summary</p>
+                <p>
+                  Blue whales, the largest animals to have ever existed on Earth, are
+                  awe-inspiring creatures that continue to captivate scientists and nature
+                  enthusiasts alike. These magnificent mammals command attention not only due
+                  to their immense size but also because of their critical role in the marine
+                  ecosystem.
+                </p>
+              </div>
+              <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
+                Great — can you break it down by department and flag anyone under 60%?
+              </p>
+              <div className="artifact-tray-demo__bubble artifact-tray-demo__bubble--assistant">
+                <p className="artifact-tray-demo__bubble-heading">Breakdown by department</p>
+                <p>
+                  Blue whales, the largest animals to have ever existed on Earth, are
+                  awe-inspiring creatures that continue to captivate scientists and nature
+                  enthusiasts alike.
+                </p>
+                <p>
+                  Blue whales, the largest animals to have ever existed on Earth, are
+                  awe-inspiring creatures that continue to captivate scientists and nature
+                  enthusiasts alike.
+                </p>
+                <ul className="artifact-tray-demo__bubble-list">
+                  <li>Here&rsquo;s an item as it would appear in a bulleted list</li>
+                  <li>Another item from a list</li>
+                  <li>And a final item</li>
+                </ul>
+              </div>
+              <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
+                Now draft the in-office policy based on that data.
+              </p>
+              <div className="artifact-tray-demo__bubble artifact-tray-demo__bubble--assistant">
+                <p className="artifact-tray-demo__bubble-heading">In-office policy draft</p>
+                <p>
+                  Blue whales, the largest animals to have ever existed on Earth, are
+                  awe-inspiring creatures that continue to captivate scientists and nature
+                  enthusiasts alike. These magnificent mammals command attention not only due
+                  to their immense size but also because of their critical role in the marine
+                  ecosystem. This essay explores the biological characteristics, ecological
+                  significance, and conservation challenges of blue whales.
+                </p>
+                <ul className="artifact-tray-demo__bubble-list">
+                  <li>Here&rsquo;s an item as it would appear in a bulleted list</li>
+                  <li>Another item from a list</li>
+                  <li>And a final item</li>
+                </ul>
+              </div>
+              <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
+                Route the policy through approvals and set up a workflow.
+              </p>
               <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--assistant">
                 Done — three artifacts are ready in this conversation. Open the More menu to view
                 them.
@@ -209,6 +262,59 @@ function FullScreenDemo() {
           <div className="artifact-tray-demo__fs-thread">
             <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
               Pull Q3 attendance, draft an in-office policy refresh, and route it through approvals.
+            </p>
+            <div className="artifact-tray-demo__bubble artifact-tray-demo__bubble--assistant">
+              <p className="artifact-tray-demo__bubble-heading">Q3 Attendance Summary</p>
+              <p>
+                Blue whales, the largest animals to have ever existed on Earth, are
+                awe-inspiring creatures that continue to captivate scientists and nature
+                enthusiasts alike. These magnificent mammals command attention not only due
+                to their immense size but also because of their critical role in the marine
+                ecosystem.
+              </p>
+            </div>
+            <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
+              Great — can you break it down by department and flag anyone under 60%?
+            </p>
+            <div className="artifact-tray-demo__bubble artifact-tray-demo__bubble--assistant">
+              <p className="artifact-tray-demo__bubble-heading">Breakdown by department</p>
+              <p>
+                Blue whales, the largest animals to have ever existed on Earth, are
+                awe-inspiring creatures that continue to captivate scientists and nature
+                enthusiasts alike.
+              </p>
+              <p>
+                Blue whales, the largest animals to have ever existed on Earth, are
+                awe-inspiring creatures that continue to captivate scientists and nature
+                enthusiasts alike.
+              </p>
+              <ul className="artifact-tray-demo__bubble-list">
+                <li>Here&rsquo;s an item as it would appear in a bulleted list</li>
+                <li>Another item from a list</li>
+                <li>And a final item</li>
+              </ul>
+            </div>
+            <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
+              Now draft the in-office policy based on that data.
+            </p>
+            <div className="artifact-tray-demo__bubble artifact-tray-demo__bubble--assistant">
+              <p className="artifact-tray-demo__bubble-heading">In-office policy draft</p>
+              <p>
+                Blue whales, the largest animals to have ever existed on Earth, are
+                awe-inspiring creatures that continue to captivate scientists and nature
+                enthusiasts alike. These magnificent mammals command attention not only due
+                to their immense size but also because of their critical role in the marine
+                ecosystem. This essay explores the biological characteristics, ecological
+                significance, and conservation challenges of blue whales.
+              </p>
+              <ul className="artifact-tray-demo__bubble-list">
+                <li>Here&rsquo;s an item as it would appear in a bulleted list</li>
+                <li>Another item from a list</li>
+                <li>And a final item</li>
+              </ul>
+            </div>
+            <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--user">
+              Route the policy through approvals and set up a workflow.
             </p>
             <p className="artifact-tray-demo__bubble artifact-tray-demo__bubble--assistant">
               Done — three artifacts generated for this conversation. They&rsquo;ll stay in the tray

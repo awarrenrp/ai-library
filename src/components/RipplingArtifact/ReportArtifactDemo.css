@@ -1,4 +1,4 @@
-/* Report artifact — AI-components / Report card · Figma 250:9964 */
+/* Report artifact — AI-components / Report card · Figma 1331:34122 */
 
 .report-artifact-demo {
   box-sizing: border-box;
@@ -12,6 +12,28 @@
   margin: 0;
 }
 
+/* —— Source info section — Figma "Text section" 1331:34125 —— */
+.report-artifact-source {
+  padding: 10px 16px 12px;
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
+}
+
+.report-artifact-source__label {
+  margin: 0 0 2px;
+  font-size: 12px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 16px;
+  color: #000000;
+}
+
+.report-artifact-source__body {
+  margin: 0;
+  font-size: 12px;
+  font-weight: var(--font-weight-body);
+  line-height: 16px;
+  color: #716f6c;
+}
+
 /* —— Table —— */
 .report-artifact-table-wrap {
   width: 100%;
@@ -21,7 +43,7 @@
 
 .report-artifact-table {
   width: 100%;
-  min-width: 320px;
+  min-width: 520px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 14px;
@@ -29,30 +51,21 @@
   color: #000000;
 }
 
+/* Header cells */
 .report-artifact-th {
-  padding: 1px 8px 1px 12px;
-  height: 34px;
+  padding: 4px 8px 4px 12px;
+  height: 40px;
   box-sizing: border-box;
   text-align: left;
   vertical-align: middle;
-  font-weight: var(--font-weight-heading);
-  background: var(--color-surface);
+  background: #fafafa;
   border-bottom: 1px solid rgb(0 0 0 / 10%);
+  border-right: 1px solid rgb(0 0 0 / 10%);
+  white-space: nowrap;
 }
 
-.report-artifact-th--numeric {
-  text-align: right;
-}
-
-.report-artifact-th--numeric .report-th-simple {
-  justify-content: flex-end;
-}
-
-.report-th-rich {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  min-width: 0;
+.report-artifact-th:last-child {
+  border-right: none;
 }
 
 .report-th-required {
@@ -63,64 +76,14 @@
   color: #bc2c00;
 }
 
-.report-th-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  min-width: 0;
-  flex: 1 1 auto;
-}
-
 .report-th-title {
-  font-size: 14px;
-  font-weight: var(--font-weight-heading);
-  line-height: 20px;
-  color: #716f6c;
-}
-
-.report-th-sub {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: var(--font-weight-emphasis);
-  line-height: 14px;
+  line-height: 16px;
   color: #716f6c;
-}
-
-.report-th-icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: #716f6c;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.report-th-icon-btn:hover {
-  background: rgb(0 0 0 / 5%);
-}
-
-.report-th-chevron {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: #716f6c;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.report-th-chevron:hover {
-  background: rgb(0 0 0 / 5%);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .report-th-simple {
@@ -128,53 +91,71 @@
   align-items: center;
   gap: 4px;
   min-height: 20px;
+  color: #716f6c;
 }
 
-.report-th-simple .report-th-title {
-  margin: 0;
-}
-
+/* Data cells */
 .report-artifact-td {
-  padding: 0 12px 1px;
-  min-height: 33px;
+  padding: 0 12px;
+  height: 48px;
   box-sizing: border-box;
   font-weight: var(--font-weight-body);
   font-size: 14px;
   line-height: 20px;
   vertical-align: middle;
   background: #ffffff;
-  border-bottom: 1px solid rgb(0 0 0 / 10%);
-  overflow-wrap: break-word;
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
+  border-right: 1px solid rgb(0 0 0 / 8%);
 }
 
-.report-artifact-td--numeric {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
+.report-artifact-td:last-child {
+  border-right: none;
 }
 
 .report-artifact-table tbody tr:last-child .report-artifact-td {
   border-bottom: none;
 }
 
-/* Column widths — person column flexible */
-.report-artifact-th:nth-child(1),
-.report-artifact-td:nth-child(1) {
-  width: 42%;
+/* Column widths */
+.report-artifact-th--check,
+.report-artifact-td--check {
+  width: 36px;
+  padding: 0 0 0 12px;
+  text-align: center;
 }
 
-.report-artifact-th:nth-child(2),
-.report-artifact-td:nth-child(2) {
-  width: 20%;
+.report-artifact-th--person,
+.report-artifact-td--person {
+  width: 160px;
 }
 
-.report-artifact-th:nth-child(3),
-.report-artifact-td:nth-child(3) {
-  width: 20%;
+.report-artifact-th--task,
+.report-artifact-td--task {
+  width: 170px;
 }
 
-.report-artifact-th:nth-child(4),
-.report-artifact-td:nth-child(4) {
-  width: 18%;
+.report-artifact-th--status,
+.report-artifact-td--status {
+  width: 110px;
+}
+
+.report-artifact-th--employees,
+.report-artifact-td--employees {
+  width: 120px;
+}
+
+.report-artifact-th--actions,
+.report-artifact-td--actions {
+  width: auto;
+}
+
+/* Checkbox */
+.report-artifact-checkbox {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: #1d4ac8;
 }
 
 /* Person cell */
@@ -182,7 +163,6 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 0;
   min-height: 33px;
   box-sizing: border-box;
 }
@@ -216,20 +196,107 @@
 .report-person-cell__text {
   display: flex;
   flex-direction: column;
-  gap: 0;
   min-width: 0;
 }
 
 .report-person-cell__name {
+  font-size: 13px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 18px;
+  color: #000000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.report-person-cell__sub {
+  font-size: 11px;
+  font-weight: var(--font-weight-body);
+  line-height: 14px;
+  color: #716f6c;
+}
+
+/* Task cell */
+.report-artifact-td--task {
+  display: table-cell;
+}
+
+.report-task-cell__name {
+  display: block;
+  font-size: 14px;
+  font-weight: var(--font-weight-body);
+  line-height: 20px;
+  color: #000000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.report-task-cell__sub {
+  display: block;
+  font-size: 11px;
+  font-weight: var(--font-weight-body);
+  line-height: 14px;
+  color: #716f6c;
+}
+
+/* Status */
+.report-status {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.report-status--in-progress {
+  color: #1d4ac8;
+}
+
+.report-status--not-started {
+  color: #716f6c;
+}
+
+.report-status--complete {
+  color: #1a7a4a;
+}
+
+/* Employee count link */
+.report-employee-link {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: var(--font-weight-body);
+  line-height: 20px;
+  color: #1d4ac8;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
+
+.report-employee-link:hover {
+  color: #1138a8;
+}
+
+/* Action button */
+.report-action-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid rgb(0 0 0 / 20%);
+  border-radius: 6px;
+  background: #ffffff;
+  font-family: inherit;
   font-size: 12px;
   font-weight: var(--font-weight-emphasis);
   line-height: 16px;
   color: #000000;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
-.report-person-cell__sub {
-  font-size: 12px;
-  font-weight: var(--font-weight-body);
-  line-height: 16px;
-  color: #716f6c;
+.report-action-btn:hover {
+  background: rgb(0 0 0 / 4%);
 }

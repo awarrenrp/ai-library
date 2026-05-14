@@ -236,3 +236,15 @@ export function IconSettings(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+/** Small X — dismiss button inside the edit context chip (Composer surfaceState="edit"). */
+export function IconComposerChipClose(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden {...props}>
+      <path
+        fill="currentColor"
+        d="M5 4.293 8.646.646l.708.708L5.707 5l3.647 3.646-.708.708L5 5.707 1.354 9.354l-.708-.708L4.293 5 .646 1.354l.708-.708L5 4.293Z"
+      />
+    </svg>
+  );
+}

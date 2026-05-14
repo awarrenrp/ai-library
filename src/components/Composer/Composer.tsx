@@ -20,6 +20,7 @@ import {
   IconArrowUp,
   IconChevronDown,
   IconChevronRight,
+  IconComposerChipClose,
   IconComposerChipLead,
   IconMic,
   IconPlus,
@@ -142,6 +143,12 @@ export type ComposerProps = {
    * field), so this prop only affects `version="standard"`.
    */
   controls?: "speed" | "intent";
+  /**
+   * Called when the user clicks the × inside the edit context chip.
+   * When provided, the chip renders a dismiss button. Only used when
+   * `surfaceState="edit"` on the `alternate` variant.
+   */
+  onDismissEditContext?: () => void;
 };
 
 export function Composer({
@@ -162,6 +169,7 @@ export function Composer({
   editContextLabel,
   sendIcon,
   controls = "speed",
+  onDismissEditContext,
 }: ComposerProps) {
   const autoId = useId();
   const modeMenuId = useId();
@@ -264,6 +272,16 @@ export function Composer({
                 <IconComposerChipLead />
               </span>
               <span className="composer-edit-chip__label">{editContextLabel ?? "Editing"}</span>
+              {onDismissEditContext ? (
+                <button
+                  type="button"
+                  className="composer-edit-chip__dismiss"
+                  aria-label="Dismiss edit context"
+                  onClick={onDismissEditContext}
+                >
+                  <IconComposerChipClose />
+                </button>
+              ) : null}
             </span>
           ) : null}
         </div>

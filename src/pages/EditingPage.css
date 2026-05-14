@@ -48,6 +48,32 @@
   padding: 12px 20px 10px;
 }
 
+/* Push the Reset button to the far right */
+.editing-page__reset-btn {
+  margin-left: auto;
+  align-self: flex-end;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  line-height: 1;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  background: transparent;
+  color: #000000;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.editing-page__reset-btn:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+.editing-page__reset-btn:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
 .editing-page__control-group {
   display: flex;
   flex-direction: column;
@@ -61,4 +87,9 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #716f6c;
+}
+
+/* Forms content has fewer elements — give it a taller body so it doesn't feel cramped. */
+.editing-page__example-inner[data-content="forms"] .editing-prototype__body {
+  min-height: 800px;
 }

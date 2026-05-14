@@ -55,17 +55,25 @@ export function ExternalArtifactInChatDemo({
 
               <div className="ea-ic-demo__assistant-turn">
                 <p className="ea-ic-demo__assistant-msg">
-                  Found both — here&apos;s the Q1 sales presentation from your Google Drive:
+                  Found both. Here&apos;s the Q1 sales presentation from your Google Drive — it was
+                  last updated by the Revenue team on March 14th and includes the regional
+                  breakdown and pipeline forecasts for H1.
                 </p>
                 <div className="ea-ic-demo__artifact-embed">
                   <ExternalFileArtifact kind="ppt" layoutWidth="large" />
                 </div>
                 <p className="ea-ic-demo__assistant-msg">
-                  And the benefits overview for FY26:
+                  And here&apos;s the FY26 benefits overview from the People team. This version was
+                  shared company-wide in January and covers medical, dental, and the updated
+                  401(k) match policy.
                 </p>
                 <div className="ea-ic-demo__artifact-embed">
                   <ExternalFileArtifact kind="pdf" layoutWidth="large" />
                 </div>
+                <p className="ea-ic-demo__assistant-msg">
+                  Let me know if you want a summary of either, or if you need me to pull a
+                  specific section.
+                </p>
               </div>
 
               <p className="ea-ic-demo__bubble ea-ic-demo__bubble--user">
@@ -74,11 +82,17 @@ export function ExternalArtifactInChatDemo({
 
               <div className="ea-ic-demo__assistant-turn">
                 <p className="ea-ic-demo__assistant-msg">
-                  Here it is — last updated last week:
+                  Found it. This is the Q2 headcount model owned by Finance — last edited
+                  Tuesday. It has tabs for each department with approved headcount, open reqs,
+                  and the projected end-of-year number.
                 </p>
                 <div className="ea-ic-demo__artifact-embed">
                   <ExternalFileArtifact kind="xls" layoutWidth="large" />
                 </div>
+                <p className="ea-ic-demo__assistant-msg">
+                  The Engineering and Product tabs were updated most recently. Want me to pull
+                  the delta from Q1 or flag any departments that are over budget?
+                </p>
               </div>
             </div>
 

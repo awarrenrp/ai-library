@@ -195,6 +195,34 @@
   white-space: nowrap;
 }
 
+.composer-edit-chip__dismiss {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin-left: 2px;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: #05142e;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.1s ease, background 0.1s ease;
+}
+
+.composer-edit-chip__dismiss:hover {
+  opacity: 1;
+  background: rgb(0 0 0 / 10%);
+}
+
+.composer-edit-chip__dismiss:focus-visible {
+  outline: 2px solid var(--color-focus-input, #5aa5e7);
+  outline-offset: 1px;
+}
+
 .composer-field {
   flex-shrink: 0;
   min-height: 20px;
