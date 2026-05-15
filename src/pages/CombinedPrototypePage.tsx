@@ -263,7 +263,16 @@ function DisambiguationPanel() {
   return (
     <>
       <ControlsBar><ModeToggle mode={mode} setMode={setMode} /></ControlsBar>
-      <DisambiguationInChatDemo mode={mode} />
+      <DisambiguationInChatDemo
+        mode={mode}
+        question="Which Jordan do you want to update?"
+        inputType="radio"
+        options={[
+          { id: "jordan-lee", title: "Jordan Lee", description: "Software engineer · San Francisco", label: "Engineering" },
+          { id: "jordan-chen", title: "Jordan Chen", description: "Account executive · Austin", label: "Sales" },
+          { id: "jordan-patel", title: "Jordan Patel", description: "HR specialist · New York", label: "People" },
+        ]}
+      />
     </>
   );
 }
