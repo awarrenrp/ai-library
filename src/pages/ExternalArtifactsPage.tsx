@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import {
   ArtifactHoverPageSettings,
   type ArtifactHoverVariant,
@@ -11,8 +11,7 @@ import type { ComposerWidth } from "../components/Composer";
 type DemoOuterWidth = Exclude<ComposerWidth, "fill">;
 import { IconCopy } from "../components/Composer/icons";
 import type { ExternalFileKind } from "../components/ExternalArtifact";
-import { ExternalFileArtifact, ExternalArtifactInChatDemo } from "../components/ExternalArtifact";
-import type { ExternalArtifactInChatDemoMode } from "../components/ExternalArtifact";
+import { ExternalFileArtifact } from "../components/ExternalArtifact";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
 import EXTERNAL_ARTIFACT_EXAMPLE_SOURCE from "../examples/ExternalArtifactExample.tsx?raw";
@@ -43,7 +42,6 @@ export function ExternalArtifactsPage() {
   const [hoverVariant, setHoverVariant] = useState<ArtifactHoverVariant>("shadow");
   const [width, setWidth] = useState<DemoOuterWidth>("large");
   const [kind, setKind] = useState<ExternalFileKind>("ppt");
-  const [contextMode, setContextMode] = useState<ExternalArtifactInChatDemoMode>("side-chat");
   const [copyAck, setCopyAck] = useState(false);
   const [artifactSelected, setArtifactSelected] = useState(false);
 
@@ -51,14 +49,14 @@ export function ExternalArtifactsPage() {
   const outerPx = WIDTH_PX[width] - 8;
 
   return (
-    <main className="demo-wrap" data-artifact-hover-style={hoverVariant}>
+    <>
+      <SpecPageHeader
+        componentName="External artifacts"
+        specPath="/external-artifacts"
+        examplePath="/external-artifacts/example"
+      />
+      <main className="demo-wrap" data-artifact-hover-style={hoverVariant}>
       <ArtifactHoverPageSettings variant={hoverVariant} onVariantChange={setHoverVariant} />
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
       <header style={{ marginBottom: 32 }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Artifacts
@@ -73,7 +71,6 @@ export function ExternalArtifactsPage() {
       <ComponentIntentPanel
         when={EXTERNAL_ARTIFACT_WHEN}
         designIntent={EXTERNAL_ARTIFACT_DESIGN_INTENT}
-        exampleHref="/external-artifacts/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />
@@ -166,34 +163,6 @@ export function ExternalArtifactsPage() {
       </div>
 
       <section
-        className="in-context-stage"
-        id="external-artifact-in-context"
-        aria-labelledby="ea-in-context-heading"
-      >
-        <div className="in-context-stage__head">
-          <h2 id="ea-in-context-heading" className="in-context-stage__title">
-            Example in chat
-          </h2>
-          <div className="demo-segments" role="group" aria-label="Context view mode">
-            {(["side-chat", "full-screen"] as const).map((m) => (
-              <button
-                key={m}
-                type="button"
-                className="demo-segment"
-                aria-pressed={contextMode === m}
-                onClick={() => setContextMode(m)}
-              >
-                {m === "side-chat" ? "Side chat" : "Full screen"}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="in-context-stage__demo">
-          <ExternalArtifactInChatDemo mode={contextMode} />
-        </div>
-      </section>
-
-      <section
         className="demo-code-section"
         id="external-artifact-example"
         aria-labelledby="external-artifact-example-heading"
@@ -229,5 +198,6 @@ export function ExternalArtifactsPage() {
         <DemoHighlightedCode code={EXTERNAL_ARTIFACT_EXAMPLE_SOURCE} language="tsx" />
       </section>
     </main>
+    </>
   );
 }

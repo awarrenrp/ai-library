@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { useId } from "react";
-import { Link } from "react-router-dom";
 import "./ComponentIntentPanel.css";
 
 /**
@@ -28,8 +27,6 @@ export type ComponentIntentPanelProps = {
    * one `<li>` with a disc bullet; the column heading shows a red X.
    */
   donts?: ReactNode[];
-  /** Route for the standalone example page. When provided, an "Open example →" button appears on the right of the "Usage" heading. */
-  exampleHref?: string;
 };
 
 const DEFAULT_WHEN = [
@@ -71,7 +68,6 @@ export function ComponentIntentPanel({
   designIntent = DEFAULT_DESIGN_INTENT,
   dos,
   donts,
-  exampleHref,
 }: ComponentIntentPanelProps) {
   const usageHeadingId = useId();
   const hasGuidelines = Boolean(dos?.length || donts?.length);
@@ -82,14 +78,6 @@ export function ComponentIntentPanel({
         <h2 id={usageHeadingId} className="page-section__title page-section__title--lead">
           Usage
         </h2>
-        {exampleHref ? (
-          <Link to={exampleHref} className="component-intent-reference__example-btn">
-            Open example
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-              <path d="M3.5 1H11M11 1V8.5M11 1L1 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </Link>
-        ) : null}
       </div>
 
       <div

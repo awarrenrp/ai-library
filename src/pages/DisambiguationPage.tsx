@@ -1,9 +1,8 @@
 import { useId, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { Disambiguation, DisambiguationInChatDemo } from "../components/Disambiguation";
 import type {
-  DisambiguationInChatDemoMode,
   DisambiguationInputType,
   DisambiguationOption,
   DisambiguationVariant,
@@ -79,7 +78,6 @@ export function DisambiguationPage() {
   const [variant, setVariant] = useState<DisambiguationVariant>("default");
   const [inputType, setInputType] = useState<DisambiguationInputType>("radio");
   const [showStep, setShowStep] = useState(true);
-  const [contextMode, setContextMode] = useState<DisambiguationInChatDemoMode>("side-chat");
 
   useDismissOnOutsidePress(
     menuOpen,
@@ -92,7 +90,13 @@ export function DisambiguationPage() {
   const step = showStep ? { current: 1, total: 2 } : undefined;
 
   return (
-    <main className="demo-wrap">
+    <>
+      <SpecPageHeader
+        componentName="Disambiguation"
+        specPath="/disambiguation"
+        examplePath="/disambiguation/example"
+      />
+      <main className="demo-wrap">
       <div className="composer-page-settings" ref={settingsRef}>
         <button
           id={settingsBtnId}
@@ -137,12 +141,6 @@ export function DisambiguationPage() {
         ) : null}
       </div>
 
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
       <header style={{ marginBottom: 32 }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Disambiguation
@@ -182,7 +180,6 @@ export function DisambiguationPage() {
         designIntent={DISAMBIGUATION_DESIGN_INTENT}
         dos={DISAMBIGUATION_DOS}
         donts={DISAMBIGUATION_DONTS}
-        exampleHref="/disambiguation/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />
@@ -272,53 +269,7 @@ export function DisambiguationPage() {
 
       </div>
 
-      <hr className="page-section__divider" aria-hidden="true" />
-
-      <section
-        className="in-context-stage"
-        id="disambig-in-context"
-        aria-labelledby="disambig-in-context-heading"
-      >
-        <div className="in-context-stage__head">
-          <div className="in-context-stage__copy">
-            <h2 id="disambig-in-context-heading" className="in-context-stage__title">
-              Example in chat
-            </h2>
-            <p className="in-context-stage__lede">
-              Same props, two surface modes. The disambiguation sheet rises over the composer in
-              both — toggle to compare side panel against a full-screen workspace.
-            </p>
-          </div>
-          <div className="demo-segments" role="group" aria-label="Disambiguation surface mode">
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={contextMode === "side-chat"}
-              onClick={() => setContextMode("side-chat")}
-            >
-              Side chat
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={contextMode === "full-screen"}
-              onClick={() => setContextMode("full-screen")}
-            >
-              Full screen
-            </button>
-          </div>
-        </div>
-        <DisambiguationInChatDemo
-          key={`${inputType}-${showStep}-${variant}-${contextMode}`}
-          question={DEMO_QUESTION}
-          subtitle={subtitle}
-          step={step}
-          inputType={inputType}
-          variant={variant}
-          options={DEMO_OPTIONS}
-          mode={contextMode}
-        />
-      </section>
     </main>
+    </>
   );
 }

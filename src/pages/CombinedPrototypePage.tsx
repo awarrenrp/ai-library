@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArtifactTrayDemo } from "../components/ArtifactTray";
-import type { ArtifactTrayDemoMode } from "../components/ArtifactTray";
 import {
   Chat,
   ChatExampleDemo,
@@ -346,11 +345,10 @@ function ThinkingStatesPanel() {
 }
 
 function ArtifactTrayPanel() {
-  const [mode, setMode] = useState<ArtifactTrayDemoMode>("side-chat");
   return (
     <>
-      <ControlsBar><ModeToggle mode={mode} setMode={setMode} /></ControlsBar>
-      <ArtifactTrayDemo mode={mode} />
+      <ControlsBar />
+      <ArtifactTrayDemo />
     </>
   );
 }

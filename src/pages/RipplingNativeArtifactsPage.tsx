@@ -1,18 +1,16 @@
 import { useId, useRef, useState, type ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { IconSettings } from "../components/Composer/icons";
 import {
   CHART_VARIANT_OPTIONS,
   ReportArtifactDemo,
   RipplingArtifactShell,
-  RipplingNativeArtifactInChatDemo,
   type RipplingArtifactShellVariant,
   SimpleBarChartDemo,
   WorkflowArtifactDemo,
   type ChartDemoVariant,
 } from "../components/RipplingArtifact";
-import type { RipplingNativeArtifactInChatDemoMode } from "../components/RipplingArtifact";
 import "../App.css";
 import { useDismissOnOutsidePress } from "../hooks/useDismissOnOutsidePress";
 import "./RipplingNativeArtifactsPage.css";
@@ -101,7 +99,6 @@ function DemoActionBarContent(): ReactNode {
 export function RipplingNativeArtifactsPage() {
   const [chartVariant, setChartVariant] = useState<ChartDemoVariant>("bar");
   const [shellVariant, setShellVariant] = useState<RipplingArtifactShellVariant>("default");
-  const [contextMode, setContextMode] = useState<RipplingNativeArtifactInChatDemoMode>("side-chat");
   const [artifactState, setArtifactState] = useState<ArtifactState>("default");
   const [artifactType, setArtifactType] = useState<ArtifactType>("default");
   const [reportsTab, setReportsTab] = useState<"chart" | "report">("chart");
@@ -129,7 +126,13 @@ export function RipplingNativeArtifactsPage() {
   const artifactSelected = artifactState === "selected";
 
   return (
-    <main className="demo-wrap rna-page">
+    <>
+      <SpecPageHeader
+        componentName="Rippling native artifacts"
+        specPath="/rippling-native-artifacts"
+        examplePath="/rippling-native-artifacts/example"
+      />
+      <main className="demo-wrap rna-page">
       <div className="composer-page-settings" ref={settingsRef}>
         <button
           id={settingsBtnId}
@@ -174,12 +177,6 @@ export function RipplingNativeArtifactsPage() {
         ) : null}
       </div>
 
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
       <header className="rna-page-intro">
         <p className="rna-page-kicker">Rippling | In partnership with Pebble · AI-components · Artifacts</p>
         <h1 className="page-doc-title">Rippling-native artifacts</h1>
@@ -212,7 +209,6 @@ export function RipplingNativeArtifactsPage() {
         donts={[
           "Use as an ephemeral part of Rippling — artifacts should link back to persisted product objects.",
         ]}
-        exampleHref="/rippling-native-artifacts/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />
@@ -390,40 +386,7 @@ export function RipplingNativeArtifactsPage() {
         </div>
       </section>
 
-      <hr className="page-section__divider" aria-hidden="true" />
-
-      <section
-        className="in-context-stage"
-        id="rna-in-context"
-        aria-labelledby="rna-in-context-heading"
-      >
-        <div className="in-context-stage__head">
-          <div className="in-context-stage__copy">
-            <h2 id="rna-in-context-heading" className="in-context-stage__title">
-              In context
-            </h2>
-            <p className="in-context-stage__lede">
-              Rippling-native artifacts land inline in the thread — preview them in a side panel
-              or see how they sit in a full-screen workspace.
-            </p>
-          </div>
-          <div className="demo-segments" role="group" aria-label="Context view mode">
-            {(["side-chat", "full-screen"] as const).map((m) => (
-              <button
-                key={m}
-                type="button"
-                className="demo-segment"
-                aria-pressed={contextMode === m}
-                onClick={() => setContextMode(m)}
-              >
-                {m === "side-chat" ? "Side chat" : "Full screen"}
-              </button>
-            ))}
-          </div>
-        </div>
-        <RipplingNativeArtifactInChatDemo mode={contextMode} />
-      </section>
-
     </main>
+    </>
   );
 }

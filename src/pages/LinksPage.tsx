@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import {
   IconApproveCheck,
@@ -13,8 +12,6 @@ import {
   LinksFileBlock,
   LinksFileCitationRow,
   LinksHandoffCard,
-  LinksInChatDemo,
-  type LinksInChatDemoMode,
   LinksRichArticleCard,
   LinksSourcesChip,
   LinksTextLink,
@@ -43,15 +40,14 @@ const LINKS_DOS = [
 const LINKS_DONTS = ["Crowd responses with multiple paths. We don\u2019t want to confuse users."];
 
 export function LinksPage() {
-  const [contextMode, setContextMode] = useState<LinksInChatDemoMode>("side-chat");
   return (
-    <main className="demo-wrap">
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
+    <>
+      <SpecPageHeader
+        componentName="Links"
+        specPath="/links"
+        examplePath="/links/example"
+      />
+      <main className="demo-wrap">
       <header style={{ marginBottom: 32 }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Links
@@ -73,7 +69,6 @@ export function LinksPage() {
         designIntent={LINKS_DESIGN_INTENT}
         dos={LINKS_DOS}
         donts={LINKS_DONTS}
-        exampleHref="/links/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />
@@ -227,44 +222,7 @@ export function LinksPage() {
         </div>
       </section>
 
-      <hr className="page-section__divider" aria-hidden="true" />
-
-      <section
-        className="in-context-stage"
-        id="links-in-context"
-        aria-labelledby="links-in-context-heading"
-      >
-        <div className="in-context-stage__head">
-          <div className="in-context-stage__copy">
-            <h2 id="links-in-context-heading" className="in-context-stage__title">
-              In context
-            </h2>
-            <p className="in-context-stage__lede">
-              Same conversation, two surface modes. Toggle to compare how the link patterns sit in a
-              side panel versus a full-screen workspace.
-            </p>
-          </div>
-          <div className="demo-segments" role="group" aria-label="Links surface mode">
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={contextMode === "side-chat"}
-              onClick={() => setContextMode("side-chat")}
-            >
-              Side chat
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={contextMode === "full-screen"}
-              onClick={() => setContextMode("full-screen")}
-            >
-              Full screen
-            </button>
-          </div>
-        </div>
-        <LinksInChatDemo mode={contextMode} />
-      </section>
     </main>
+    </>
   );
 }

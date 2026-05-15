@@ -5,51 +5,26 @@
   background: var(--color-surface, #f9f8f6);
 }
 
-.example-page__nav {
+/* Toolbar — sits below the sticky header, holds mode toggles and other controls */
+.example-page__toolbar {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 32px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  gap: 8px;
+  padding: 10px 32px;
   background: #ffffff;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.example-page__back {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #716f6c;
-  text-decoration: none;
-}
-
-.example-page__back:hover {
-  color: #3d3a36;
-}
-
-.example-page__badge {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #ffffff;
-  background: #3d3a36;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-.example-page__header-actions {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
+  flex-wrap: wrap;
 }
 
 .example-page__content {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+}
+
+/* in-context-stage used as the full page content — no top gap needed */
+.example-page__content .in-context-stage {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
 }

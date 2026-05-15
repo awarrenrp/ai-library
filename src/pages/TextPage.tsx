@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import { Chat } from "../components/Chat";
 import { Composer } from "../components/Composer";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
@@ -35,13 +35,13 @@ export function TextPage() {
   const [textSize, setTextSize] = useState<TextSizeVariant>("default");
 
   return (
-    <main className="demo-wrap">
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
+    <>
+      <SpecPageHeader
+        componentName="Text"
+        specPath="/text"
+        examplePath="/text/example"
+      />
+      <main className="demo-wrap">
       <header style={{ marginBottom: 32 }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Text
@@ -58,7 +58,6 @@ export function TextPage() {
         designIntent={TEXT_DESIGN_INTENT}
         dos={TEXT_DOS}
         donts={TEXT_DONTS}
-        exampleHref="/text/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />
@@ -151,5 +150,6 @@ export function TextPage() {
         </div>
       </div>
     </main>
+    </>
   );
 }

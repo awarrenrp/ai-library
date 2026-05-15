@@ -259,10 +259,10 @@
 
 /* Body: below the header — chat centered in the main column, tray on the right. */
 .artifact-tray-demo__fs-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 272px;
+  display: flex;
   flex: 1 1 auto;
   min-height: 0;
+  overflow: hidden;
 }
 
 /* Chat column — thread and composer centered within the column. */
@@ -272,36 +272,32 @@
   flex-direction: column;
   min-height: 0;
   background: #ffffff;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .artifact-tray-demo__fs-thread {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
-  padding: 16px 18px;
+  /*
+   * Center content at a 712px track — same width as the composer.
+   * When the column is wider than 712px + 2×18px the padding grows
+   * to keep messages centred; below that it falls back to 18px gutters.
+   */
+  padding: 24px max(18px, calc((100% - 712px) / 2));
   display: flex;
   flex-direction: column;
   gap: 12px;
-  /* Center thread content in the column */
   box-sizing: border-box;
 }
 
-.artifact-tray-demo__fs-thread > * {
-  max-width: 640px;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.artifact-tray-demo__fs-thread .artifact-tray-demo__bubble--user {
-  max-width: 75%;
-  margin-left: auto;
-  margin-right: 0;
-}
+/* Bubbles keep their natural align-self from the shared styles —
+ * user is flex-end (right), assistant is flex-start (left). */
 
 .artifact-tray-demo__fs-footer {
   flex-shrink: 0;
-  padding: 12px 14px 14px;
+  padding: 12px max(14px, calc((100% - 712px) / 2)) 14px;
   background: #ffffff;
   display: flex;
   flex-direction: column;
@@ -311,40 +307,121 @@
 }
 
 .artifact-tray-demo__fs-footer .composer {
-  width: 100%;
-  max-width: 640px;
+  width: 712px;
+  max-width: 100%;
 }
 
 /*
- * Tray pinned to the right-hand side of the workspace — a consistent place
- * the user can find it (Figma 1076:16797). 260px card + 12px breathing room
- * inside the 272px rail.
+ * Tray rail — right column in full-screen mode.
+ *
+ * data-tray-visible="true"  → full 350px rail, tray always visible.
+ * data-tray-visible="false" → 20px collapsed rail showing the sliver.
+ *   :hover on the rail       → slides the full tray out via CSS transition
+ *                               with no React re-render needed.
  */
 .artifact-tray-demo__fs-tray-rail {
   box-sizing: border-box;
-  padding: 16px 12px;
+  flex-shrink: 0;
+  position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
+  padding: 16px 12px;
   min-height: 0;
+  width: 350px;
+  transition: width 240ms cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* Collapsed state ────────────────────────────────────── */
+.artifact-tray-demo__fs-tray-rail[data-tray-visible="false"] {
+  width: 20px;
+  padding: 16px 6px;
+}
+
+/* On hover while collapsed → expand to full width */
+.artifact-tray-demo__fs-tray-rail[data-tray-visible="false"]:hover {
+  width: 350px;
+  padding: 16px 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .artifact-tray-demo__fs-tray-rail {
+    transition: none;
+  }
+}
+
+/*
+ * Sliver — visible only when collapsed (data-tray-visible="false").
+ * Figma 1376:10803: 8px wide, bg #e1d8d2, radius 16.
+ * Hidden when rail is expanded (tray-visible=true or hovered while collapsed).
+ */
+.artifact-tray-demo__fs-tray-sliver {
+  position: absolute;
+  top: 16px;
+  left: 6px;
+  width: 8px;
+  min-height: 158px;
+  border-radius: 16px;
+  background: #e1d8d2;
+  pointer-events: none;
+  /* Fades out when the tray slides in */
+  opacity: 1;
+  transition: opacity 160ms ease;
+}
+
+/* Tray is always rendered — hide it when collapsed */
+.artifact-tray-demo__fs-tray-rail[data-tray-visible="false"] .artifact-tray-demo__tray {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+/* On hover while collapsed → show tray, hide sliver */
+.artifact-tray-demo__fs-tray-rail[data-tray-visible="false"]:hover .artifact-tray-demo__tray {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.artifact-tray-demo__fs-tray-rail[data-tray-visible="false"]:hover .artifact-tray-demo__fs-tray-sliver {
+  opacity: 0;
+}
+
+/* When tray is permanently shown, sliver is hidden */
+.artifact-tray-demo__fs-tray-rail[data-tray-visible="true"] .artifact-tray-demo__fs-tray-sliver {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .artifact-tray-demo__fs-tray-sliver,
+  .artifact-tray-demo__fs-tray-rail[data-tray-visible="false"] .artifact-tray-demo__tray {
+    transition: none;
+  }
 }
 
 .artifact-tray-demo__fs-tray-rail .artifact-tray-demo__tray {
-  width: 248px;
+  width: 318px;
+  flex-shrink: 0;
 }
 
 @media (max-width: 880px) {
   .artifact-tray-demo__fs-body {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 
   .artifact-tray-demo__fs-tray-rail {
+    flex-shrink: 0;
+    width: 100% !important;
     border-top: 1px solid rgb(0 0 0 / 10%);
     align-items: stretch;
     padding: 12px 16px 16px;
+    overflow: visible;
   }
 
   .artifact-tray-demo__fs-tray-rail .artifact-tray-demo__tray {
     width: 100%;
+  }
+
+  .artifact-tray-demo__fs-tray-sliver {
+    display: none;
   }
 }

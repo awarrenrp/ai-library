@@ -1,15 +1,13 @@
 import { useId, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import {
   Chat,
-  ChatExampleDemo,
   CHAT_LAYOUT_VARIANTS,
   CHAT_PANEL_VERSION_LABELS,
   CHAT_PANEL_VERSIONS,
   CHAT_THREAD_PRESETS,
 } from "../components/Chat";
 import type {
-  ChatExampleDemoMode,
   ChatLayoutVariant,
   ChatPanelVersion,
   ChatThreadPreset,
@@ -113,7 +111,6 @@ export function ChatPage() {
   const [layout, setLayout] = useState<ChatLayoutVariant>("side-panel");
   const [thread, setThread] = useState<ChatThreadPreset>("conversation");
   const [panelVersion, setPanelVersion] = useState<ChatPanelVersion>("default");
-  const [exampleMode, setExampleMode] = useState<ChatExampleDemoMode>("side-chat");
   const [copyAck, setCopyAck] = useState(false);
 
   useDismissOnOutsidePress(
@@ -123,7 +120,13 @@ export function ChatPage() {
   );
 
   return (
-    <main className="demo-wrap">
+    <>
+      <SpecPageHeader
+        componentName="Chat"
+        specPath="/chat"
+        examplePath="/chat/example"
+      />
+      <main className="demo-wrap">
       <div className="composer-page-settings" ref={settingsRef}>
         <button
           id={settingsBtnId}
@@ -168,12 +171,6 @@ export function ChatPage() {
         ) : null}
       </div>
 
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
       <header style={{ marginBottom: 32 }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Chat
@@ -185,7 +182,7 @@ export function ChatPage() {
         </p>
       </header>
 
-      <ComponentIntentPanel when={CHAT_WHEN} designIntent={CHAT_DESIGN_INTENT} exampleHref="/chat/example" />
+      <ComponentIntentPanel when={CHAT_WHEN} designIntent={CHAT_DESIGN_INTENT} />
 
       <hr className="page-section__divider" aria-hidden="true" />
       <h2 className="page-section__title">Specs</h2>
@@ -266,53 +263,6 @@ export function ChatPage() {
       </div>
       </div>
 
-      <hr className="page-section__divider" aria-hidden="true" />
-
-      <section
-        className="in-context-stage"
-        id="chat-example-in-context"
-        aria-labelledby="chat-example-in-context-heading"
-      >
-        <div className="in-context-stage__head">
-          <div className="in-context-stage__copy">
-            <h2 id="chat-example-in-context-heading" className="in-context-stage__title">
-              Example in chat — {CHAT_PANEL_VERSION_LABELS[panelVersion]}
-            </h2>
-            <p className="in-context-stage__lede">
-              A working chat using the real composer. Send a message — the inline thinking block
-              lands with the assistant's reply, just as it would in product. Toggle between the
-              Default (with step glyphs) and No glyphs variants via the gear above.{" "}
-              <Link to="/thinking-states" style={{ color: "#7a005d" }}>
-                See the animated hat on the Thinking states page →
-              </Link>
-            </p>
-          </div>
-          <div className="demo-segments" role="group" aria-label="Chat example surface mode">
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={exampleMode === "side-chat"}
-              onClick={() => setExampleMode("side-chat")}
-            >
-              Side chat
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={exampleMode === "full-screen"}
-              onClick={() => setExampleMode("full-screen")}
-            >
-              Full screen
-            </button>
-          </div>
-        </div>
-        <ChatExampleDemo
-          key={`${exampleMode}-${panelVersion}`}
-          mode={exampleMode}
-          panelVersion={panelVersion}
-        />
-      </section>
-
       <section className="demo-code-section" id="chat-assistant-example" aria-labelledby="chat-assistant-example-heading">
         <div className="demo-code-section__top">
           <div>
@@ -344,5 +294,6 @@ export function ChatPage() {
         <DemoHighlightedCode code={CHAT_ASSISTANT_EXAMPLE_SOURCE} language="tsx" />
       </section>
     </main>
+    </>
   );
 }

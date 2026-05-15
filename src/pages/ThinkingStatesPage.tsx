@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import {
   ChatThinkingBlock,
   CHAT_THINKING_SAMPLE_STEPS,
@@ -76,13 +76,13 @@ export function ThinkingStatesPage() {
   const [animKey, setAnimKey] = useState(0);
 
   return (
-    <main className="demo-wrap">
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
+    <>
+      <SpecPageHeader
+        componentName="Thinking states"
+        specPath="/thinking-states"
+        examplePath="/thinking-states/example"
+      />
+      <main className="demo-wrap">
       <header style={{ marginBottom: 32 }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Thinking states
@@ -99,7 +99,6 @@ export function ThinkingStatesPage() {
         designIntent={THINKING_DESIGN_INTENT}
         dos={THINKING_DOS}
         donts={THINKING_DONTS}
-        exampleHref="/thinking-states/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />
@@ -151,5 +150,6 @@ export function ThinkingStatesPage() {
         </div>
       </div>
     </main>
+    </>
   );
 }

@@ -1,20 +1,17 @@
 /**
  * Artifact tray — in-context demo. Two modes:
  *
- *   1. `side-chat` — 440px side panel sliding in from the right of a mocked
- *      app surface. The tray is **not** always visible: the chat header
- *      exposes a More (⋯) menu with a "Show artifacts" item. Selecting it
- *      eases the tray in from the top, covering the thread until the user
- *      dismisses it via the tray's own close button.
+ *   1. `side-chat` — 440px side panel. The tray is hidden by default; the
+ *      chat header exposes a More (⋯) menu with "Show artifacts". Selecting it
+ *      eases the tray in from the top.
  *
- *   2. `full-screen` — full-width AI workspace. Chat fills the canvas; the
- *      tray is pinned to the right-hand side as a consistent, always-visible
- *      column so users can jump between artifacts without hunting.
+ *   2. `full-screen` — full-width AI workspace. The tray is pinned to the
+ *      right as a consistent column. A toggle button collapses it to an 8px
+ *      sliver (Figma 1376:10803) — click the sliver to expand it back.
  *
- *  Mirrors Figma frames:
- *    side-chat default       → 1076:16368
- *    side-chat tray covering → 1076:18949
- *    full-screen tray pinned → 1076:16797
+ *  Figma references:
+ *    tray open  → 1410:14813
+ *    tray hidden (sliver) → 1376:10803
  */
 
 import { useId, useRef, useState } from "react";
@@ -27,28 +24,50 @@ import {
   ChatToolbarMenuIcon,
 } from "../Chat";
 import { Composer } from "../Composer";
-import { ArtifactTray, type ArtifactTrayItem } from "./ArtifactTray";
-import { IconFile, IconMoreHorizontal, IconReport, IconWorkflow } from "../../icons";
+import {
+  ArtifactTray,
+  ArtifactTrayIconWorkflow,
+  ArtifactTrayIconFile,
+  ArtifactTrayIconReport,
+  type ArtifactTrayItem,
+} from "./ArtifactTray";
+import { IconMoreHorizontal } from "../../icons";
 import "./ArtifactTrayDemo.css";
 
-const TRAY_ITEMS: readonly ArtifactTrayItem[] = [
-  { id: "workflow", title: "Workflow", icon: <IconWorkflow /> },
-  { id: "policy-pdf", title: "New in-office policy.PDF", icon: <IconFile /> },
-  { id: "attendance", title: "Office attendance", icon: <IconReport /> },
+/* ── Artifact colour tokens (from Figma icon badges) ───────────────────── */
+const COLOR_PURPLE = "#7a005d";
+const COLOR_RED = "#bc2c00";
+
+const ARTIFACT_ITEMS: readonly ArtifactTrayItem[] = [
+  {
+    id: "workflow",
+    title: "Workflow",
+    icon: <ArtifactTrayIconWorkflow />,
+    iconBg: COLOR_PURPLE,
+  },
+  {
+    id: "policy-pdf",
+    title: "New in-office policy.PDF",
+    icon: <ArtifactTrayIconFile />,
+    iconBg: COLOR_RED,
+  },
+  {
+    id: "attendance",
+    title: "Office attendance",
+    icon: <ArtifactTrayIconReport />,
+    iconBg: COLOR_PURPLE,
+  },
 ];
 
 export type ArtifactTrayDemoMode = "side-chat" | "full-screen";
 
-export type ArtifactTrayDemoProps = {
-  mode?: ArtifactTrayDemoMode;
-};
-
-export function ArtifactTrayDemo({ mode = "side-chat" }: ArtifactTrayDemoProps) {
-  if (mode === "full-screen") return <FullScreenDemo />;
-  return <SideChatDemo />;
+export function ArtifactTrayDemo() {
+  const [mode, setMode] = useState<ArtifactTrayDemoMode>("side-chat");
+  if (mode === "full-screen") return <FullScreenDemo onCollapse={() => setMode("side-chat")} />;
+  return <SideChatDemo onExpand={() => setMode("full-screen")} />;
 }
 
-function SideChatDemo() {
+function SideChatDemo({ onExpand }: { onExpand: () => void }) {
   const uid = useId();
   const moreBtnId = `${uid}-more-btn`;
   const moreMenuId = `${uid}-more-menu`;
@@ -82,9 +101,6 @@ function SideChatDemo() {
       </div>
       <div className="artifact-tray-demo__chat-wrap">
         <div className="artifact-tray-demo__chat">
-          {/* Toolbar — mirrors the Chat panel component (Figma 1076:16368).
-              Hamburger + title on the left; More (with Show artifacts menu),
-              Add comment, Expand, and Close on the right. */}
           <div
             role="toolbar"
             aria-label="Chat actions"
@@ -137,7 +153,7 @@ function SideChatDemo() {
               <button type="button" className="chat__toolbar-btn" aria-label="Add comment">
                 <ChatToolbarAddCommentIcon />
               </button>
-              <button type="button" className="chat__toolbar-btn" aria-label="Expand chat">
+              <button type="button" className="chat__toolbar-btn" aria-label="Expand to full screen" onClick={onExpand}>
                 <ChatToolbarExpandPebbleIcon />
               </button>
               <button type="button" className="chat__toolbar-btn" aria-label="Close chat">
@@ -170,11 +186,6 @@ function SideChatDemo() {
                   awe-inspiring creatures that continue to captivate scientists and nature
                   enthusiasts alike.
                 </p>
-                <p>
-                  Blue whales, the largest animals to have ever existed on Earth, are
-                  awe-inspiring creatures that continue to captivate scientists and nature
-                  enthusiasts alike.
-                </p>
                 <ul className="artifact-tray-demo__bubble-list">
                   <li>Here&rsquo;s an item as it would appear in a bulleted list</li>
                   <li>Another item from a list</li>
@@ -191,8 +202,7 @@ function SideChatDemo() {
                   awe-inspiring creatures that continue to captivate scientists and nature
                   enthusiasts alike. These magnificent mammals command attention not only due
                   to their immense size but also because of their critical role in the marine
-                  ecosystem. This essay explores the biological characteristics, ecological
-                  significance, and conservation challenges of blue whales.
+                  ecosystem.
                 </p>
                 <ul className="artifact-tray-demo__bubble-list">
                   <li>Here&rsquo;s an item as it would appear in a bulleted list</li>
@@ -215,7 +225,7 @@ function SideChatDemo() {
               aria-hidden={!trayOpen}
             >
               <ArtifactTray
-                items={TRAY_ITEMS}
+                items={ARTIFACT_ITEMS}
                 onClose={() => {
                   setTrayOpen(false);
                   moreBtnRef.current?.focus();
@@ -239,24 +249,24 @@ function SideChatDemo() {
   );
 }
 
-function FullScreenDemo() {
+function FullScreenDemo({ onCollapse }: { onCollapse: () => void }) {
+  const [trayVisible, setTrayVisible] = useState(true);
+
   return (
     <div
       className="artifact-tray-demo artifact-tray-demo--fullscreen"
       role="region"
       aria-label="Artifact tray in full-screen AI workspace"
     >
-      {/* Header spans the full width — across both chat and tray columns */}
       <ChatToolbar
         className="artifact-tray-demo__fs-header"
         title="Rippling AI"
         onMenuClick={() => {}}
         onAddCommentClick={() => {}}
         onExpandClick={() => {}}
-        onCloseClick={() => {}}
+        onCloseClick={onCollapse}
       />
 
-      {/* Body: centered chat column + pinned tray rail */}
       <div className="artifact-tray-demo__fs-body">
         <section className="artifact-tray-demo__fs-chat" aria-label="Rippling AI chat">
           <div className="artifact-tray-demo__fs-thread">
@@ -283,11 +293,6 @@ function FullScreenDemo() {
                 awe-inspiring creatures that continue to captivate scientists and nature
                 enthusiasts alike.
               </p>
-              <p>
-                Blue whales, the largest animals to have ever existed on Earth, are
-                awe-inspiring creatures that continue to captivate scientists and nature
-                enthusiasts alike.
-              </p>
               <ul className="artifact-tray-demo__bubble-list">
                 <li>Here&rsquo;s an item as it would appear in a bulleted list</li>
                 <li>Another item from a list</li>
@@ -302,10 +307,7 @@ function FullScreenDemo() {
               <p>
                 Blue whales, the largest animals to have ever existed on Earth, are
                 awe-inspiring creatures that continue to captivate scientists and nature
-                enthusiasts alike. These magnificent mammals command attention not only due
-                to their immense size but also because of their critical role in the marine
-                ecosystem. This essay explores the biological characteristics, ecological
-                significance, and conservation challenges of blue whales.
+                enthusiasts alike.
               </p>
               <ul className="artifact-tray-demo__bubble-list">
                 <li>Here&rsquo;s an item as it would appear in a bulleted list</li>
@@ -330,8 +332,28 @@ function FullScreenDemo() {
             />
           </div>
         </section>
-        <aside className="artifact-tray-demo__fs-tray-rail" aria-label="Artifact tray">
-          <ArtifactTray items={TRAY_ITEMS} className="artifact-tray-demo__tray" />
+
+        {/*
+         * Tray rail — two states driven by `data-tray-visible`:
+         *   true  → full tray always shown.
+         *   false → 8px sliver; CSS :hover instantly slides the tray out
+         *           without any React re-render. Moving the mouse away
+         *           collapses it back to the sliver.
+         * Both the sliver and the tray card are always in the DOM so the
+         * CSS transition has nothing to interpolate between renders.
+         */}
+        <aside
+          className="artifact-tray-demo__fs-tray-rail"
+          data-tray-visible={trayVisible}
+          aria-label="Artifact tray"
+        >
+          <div className="artifact-tray-demo__fs-tray-sliver" aria-hidden />
+          <ArtifactTray
+            items={ARTIFACT_ITEMS}
+            onClose={() => setTrayVisible(false)}
+            ariaLabel="Artifacts in this conversation"
+            className="artifact-tray-demo__tray"
+          />
         </aside>
       </div>
     </div>

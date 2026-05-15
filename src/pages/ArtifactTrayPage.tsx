@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import {
   ArtifactTray,
-  ArtifactTrayDemo,
-  type ArtifactTrayDemoMode,
+  ArtifactTrayIconFile,
+  ArtifactTrayIconReport,
+  ArtifactTrayIconWorkflow,
   type ArtifactTrayItem,
 } from "../components/ArtifactTray";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
 import { IconCopy } from "../components/Composer/icons";
 import ARTIFACT_TRAY_EXAMPLE_SOURCE from "../examples/ArtifactTrayExample.tsx?raw";
-import { IconFile, IconReport, IconWorkflow } from "../icons";
 import { copyText } from "../utils/copyText";
 import "../App.css";
 import "./ArtifactTrayPage.css";
@@ -41,24 +41,23 @@ const ARTIFACT_TRAY_DONTS = [
 ];
 
 const DEMO_ITEMS: readonly ArtifactTrayItem[] = [
-  { id: "workflow", title: "Workflow", icon: <IconWorkflow /> },
-  { id: "policy-pdf", title: "New in-office policy.PDF", icon: <IconFile /> },
-  { id: "attendance", title: "Office attendance", icon: <IconReport /> },
+  { id: "workflow", title: "Workflow", icon: <ArtifactTrayIconWorkflow />, iconBg: "#7a005d" },
+  { id: "policy-pdf", title: "New in-office policy.PDF", icon: <ArtifactTrayIconFile />, iconBg: "#bc2c00" },
+  { id: "attendance", title: "Office attendance", icon: <ArtifactTrayIconReport />, iconBg: "#7a005d" },
 ];
 
 export function ArtifactTrayPage() {
   const [state, setState] = useState<"default" | "hover">("default");
-  const [contextMode, setContextMode] = useState<ArtifactTrayDemoMode>("side-chat");
   const [copyAck, setCopyAck] = useState(false);
 
   return (
-    <main className="demo-wrap">
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
+    <>
+      <SpecPageHeader
+        componentName="Artifact tray"
+        specPath="/artifact-tray"
+        examplePath="/artifact-tray/example"
+      />
+      <main className="demo-wrap">
       <header style={{ marginBottom: 32 }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Artifact tray
@@ -96,7 +95,6 @@ export function ArtifactTrayPage() {
         designIntent={ARTIFACT_TRAY_DESIGN_INTENT}
         dos={ARTIFACT_TRAY_DOS}
         donts={ARTIFACT_TRAY_DONTS}
-        exampleHref="/artifact-tray/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />
@@ -152,53 +150,13 @@ export function ArtifactTrayPage() {
         </div>
 
         <p className="demo-meta" aria-live="polite">
-          Card <strong>260×170</strong> · 1px stroke <strong>#000 @ 10%</strong> · Row hover bg{" "}
-          <strong>#000 @ 10%</strong> · State{" "}
+          Card <strong>318px</strong> · 1px stroke <strong>#000 @ 20%</strong> · bg{" "}
+          <strong>#f9f7f6</strong> · Row hover bg <strong>#000 @ 8%</strong> · State{" "}
           <strong>{state === "default" ? "Default" : "Hover"}</strong>
         </p>
       </div>
 
       <hr className="page-section__divider" aria-hidden="true" />
-
-      <section
-        className="in-context-stage"
-        aria-labelledby="artifact-tray-context-heading"
-      >
-        <div className="in-context-stage__head">
-          <div className="in-context-stage__copy">
-            <h2 id="artifact-tray-context-heading" className="in-context-stage__title">
-              In context
-            </h2>
-            <p className="in-context-stage__lede">
-              The tray is accessible by user initiation in side chat and sits in a consistent place
-              on full screen. Toggle between modes to compare placement.
-            </p>
-          </div>
-          <div
-            className="demo-segments"
-            role="group"
-            aria-label="Artifact tray mode"
-          >
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={contextMode === "side-chat"}
-              onClick={() => setContextMode("side-chat")}
-            >
-              Side chat
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={contextMode === "full-screen"}
-              onClick={() => setContextMode("full-screen")}
-            >
-              Full screen
-            </button>
-          </div>
-        </div>
-        <ArtifactTrayDemo mode={contextMode} />
-      </section>
 
       <section
         className="demo-code-section"
@@ -243,5 +201,6 @@ export function ArtifactTrayPage() {
         <DemoHighlightedCode code={ARTIFACT_TRAY_EXAMPLE_SOURCE} language="tsx" />
       </section>
     </main>
+    </>
   );
 }

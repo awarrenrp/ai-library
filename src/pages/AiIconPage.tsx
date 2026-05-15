@@ -1,15 +1,14 @@
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import "../App.css";
 
 export function AiIconPage() {
   return (
-    <main className="demo-wrap">
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
+    <>
+      <SpecPageHeader
+        componentName="AI icon"
+        specPath="/ai-icon"
+      />
+      <main className="demo-wrap">
       <header style={{ marginBottom: 32 }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · AI icon
@@ -20,5 +19,6 @@ export function AiIconPage() {
         </p>
       </header>
     </main>
+    </>
   );
 }
