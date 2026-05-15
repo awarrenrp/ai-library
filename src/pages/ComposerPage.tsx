@@ -218,6 +218,7 @@ export function ComposerPage() {
         designIntent={COMPOSER_DESIGN_INTENT}
         dos={COMPOSER_DOS}
         donts={COMPOSER_DONTS}
+        exampleHref="/composer/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />

@@ -39,6 +39,7 @@
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  border-top: 1px solid rgb(0 0 0 / 10%);
 }
 
 .report-artifact-table {

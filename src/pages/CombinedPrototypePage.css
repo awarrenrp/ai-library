@@ -1,0 +1,209 @@
+/* Combined prototype shell */
+
+.cp {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--color-surface, #f9f7f6);
+}
+
+/* ── Top bar ─────────────────────────────────────────────────── */
+
+.cp-topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 20px;
+  background: #1a1a1a;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.cp-topbar__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.1s ease;
+}
+
+.cp-topbar__back:hover {
+  color: #ffffff;
+}
+
+.cp-topbar__divider {
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.18);
+  flex-shrink: 0;
+}
+
+.cp-topbar__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.cp-topbar__current {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+}
+
+/* ── Body ────────────────────────────────────────────────────── */
+
+.cp-body {
+  flex: 1 1 auto;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ── Nav rail ────────────────────────────────────────────────── */
+
+.cp-nav {
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  overflow-y: auto;
+  padding: 12px 0 24px;
+}
+
+.cp-nav__section {
+  padding-top: 8px;
+}
+
+.cp-nav__section + .cp-nav__section {
+  margin-top: 4px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.cp-nav__heading {
+  margin: 0;
+  padding: 8px 14px 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #aaa;
+  user-select: none;
+}
+
+.cp-nav__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 7px 14px;
+  background: none;
+  border: none;
+  border-left: 2px solid transparent;
+  font-size: 13px;
+  font-weight: 500;
+  color: #3d3a36;
+  text-align: left;
+  cursor: pointer;
+  line-height: 1.4;
+  transition: background 0.1s ease;
+}
+
+.cp-nav__item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.cp-nav__item[aria-current="page"] {
+  border-left-color: var(--color-primary, #7a005d);
+  background: color-mix(in srgb, var(--color-primary, #7a005d) 7%, transparent);
+  color: var(--color-primary, #7a005d);
+  font-weight: 600;
+}
+
+.cp-nav__wip {
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* ── Content area ────────────────────────────────────────────── */
+
+.cp-content {
+  flex: 1 1 auto;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Controls bar ────────────────────────────────────────────── */
+
+.cp-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 11px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+/* ── Demo stage (isolated component view) ────────────────────── */
+
+.cp-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  padding: 40px 24px;
+  background: var(--color-surface, #f9f7f6);
+}
+
+.cp-stage--prompts {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 32px 24px 0;
+  flex: 0 0 auto;
+}
+
+/* ── Editing panel ───────────────────────────────────────────── */
+
+.cp-editing-bleed {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* ── Landing page button ─────────────────────────────────────── */
+
+.landing-prototype-btn {
+  position: absolute;
+  top: 56px;
+  right: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  background: #1a1a1a;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  white-space: nowrap;
+  transition: background 0.12s ease;
+}
+
+.landing-prototype-btn:hover {
+  background: #333;
+}
+
+.landing-prototype-btn svg {
+  flex-shrink: 0;
+}

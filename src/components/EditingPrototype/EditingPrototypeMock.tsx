@@ -3,7 +3,7 @@
  * Mirrors Figma Edit mode 802:14409; top nav 802:14410 · AI-components.
  */
 import { useEffect, useRef, useState } from "react";
-import { ChatComposerHat, ChatToolbar } from "../Chat/Chat";
+import { ChatComposerHat, ChatThinkingBlock, ChatToolbar } from "../Chat/Chat";
 import "../Chat/Chat.css";
 import { Composer } from "../Composer";
 import { RipplingArtifactShell, SimpleBarChartDemo } from "../RipplingArtifact";
@@ -327,6 +327,7 @@ export function EditingPrototypeMock({
   const [chipDismissed, setChipDismissed] = useState(false);
   // Chat history overlay.
   const [chatHistoryOpen, setChatHistoryOpen] = useState(false);
+  const [thinkingComplete, setThinkingComplete] = useState(false);
   // Notification bell dropdown.
   const [notifOpen, setNotifOpen] = useState(false);
   const notifAnchorRef = useRef<HTMLDivElement>(null);
@@ -620,6 +621,12 @@ export function EditingPrototypeMock({
             ) : null}
 
             <div className="editing-prototype__ai-thread">
+              {variant === "animated" && thinkingComplete ? (
+                <ChatThinkingBlock
+                  defaultCollapsed
+                  className="editing-prototype__thinking-block"
+                />
+              ) : null}
               {contentType === "forms" ? (
                 <>
                   <blockquote className="editing-prototype__user-bubble">
@@ -682,6 +689,7 @@ export function EditingPrototypeMock({
                   ]
                     .filter(Boolean)
                     .join(" ")}
+                  onCycleComplete={() => setThinkingComplete(true)}
                 />
               ) : null}
               <Composer
@@ -693,9 +701,12 @@ export function EditingPrototypeMock({
                 ariaComposerLabel="Editing assistant"
                 ariaMessageLabel="Message to Rippling AI"
                 placeholder="Describe the change…"
+                creditsWarning
               />
               <p className="editing-prototype__ai-disclaimer">
-                Rippling AI results may be inaccurate. Review before acting.
+                <span className="editing-prototype__ai-disclaimer-lock" aria-hidden>🔒</span>
+                Rippling doesn&rsquo;t use your data to train our models.<br />
+                AI may be inaccurate, review your responses.
               </p>
             </div>
           </div>

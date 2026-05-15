@@ -78,6 +78,39 @@ const ROWS: TaskRow[] = [
     employees: "23 employees",
     action: "Update expiration",
   },
+  {
+    name: "Sam Okafor",
+    subtitle: "Finance",
+    initials: "SO",
+    hue: 42,
+    task: "Direct deposit",
+    taskSub: "Payroll setup",
+    status: "in-progress",
+    employees: "7 employees",
+    action: "Resend invite",
+  },
+  {
+    name: "Priya Nair",
+    subtitle: "Marketing",
+    initials: "PN",
+    hue: 195,
+    task: "Benefits enrollment",
+    taskSub: "New hire onboarding",
+    status: "complete",
+    employees: "11 employees",
+    action: "View details",
+  },
+  {
+    name: "Tom Deluca",
+    subtitle: "Engineering",
+    initials: "TD",
+    hue: 260,
+    task: "Equipment request",
+    taskSub: "IT onboarding",
+    status: "not-started",
+    employees: "5 employees",
+    action: "Resend invite",
+  },
 ];
 
 const STATUS_LABELS: Record<TaskRow["status"], string> = {
@@ -101,14 +134,6 @@ export function ReportArtifactDemo({ embed = "artifact-shell" }: ReportArtifactD
         .filter(Boolean)
         .join(" ")}
     >
-      {/* Source info — Figma "Text section" 1331:34125 */}
-      <div className="report-artifact-source">
-        <p className="report-artifact-source__label">Source info</p>
-        <p className="report-artifact-source__body">
-          Here&rsquo;s some info about the report if you want to give additional context to viewers. Sometimes that might be source info, or explaining exactly what the users see here.
-        </p>
-      </div>
-
       {/* Table */}
       <div className="report-artifact-table-wrap">
         <table className="report-artifact-table">

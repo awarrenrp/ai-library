@@ -71,6 +71,7 @@ export function StrongTypePage() {
         designIntent={STRONG_TYPE_DESIGN_INTENT}
         dos={STRONG_TYPE_DOS}
         donts={STRONG_TYPE_DONTS}
+        exampleHref="/strong-type/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />

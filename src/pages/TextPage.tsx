@@ -58,6 +58,7 @@ export function TextPage() {
         designIntent={TEXT_DESIGN_INTENT}
         dos={TEXT_DOS}
         donts={TEXT_DONTS}
+        exampleHref="/text/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />

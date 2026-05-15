@@ -147,7 +147,6 @@
   border: none;
   border-radius: 8px;
   position: relative;
-}
   background: transparent;
   color: #716f6c;
   cursor: default;
@@ -852,6 +851,10 @@ button.editing-prototype__chart-panel {
   min-height: 0;
 }
 
+.editing-prototype__thinking-block {
+  margin: 0;
+}
+
 .editing-prototype__user-bubble {
   margin: 0;
   align-self: flex-end;
@@ -943,10 +946,19 @@ button.editing-prototype__chart-panel {
 }
 
 .editing-prototype__ai-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
   margin: 8px 0 0;
   font-size: 11px;
-  line-height: 1.35;
+  line-height: 1.45;
   color: var(--editing-prototype-muted);
+}
+
+.editing-prototype__ai-disclaimer-lock {
+  flex-shrink: 0;
+  font-size: 11px;
+  line-height: 1.45;
 }
 
 @media (max-width: 1100px) {

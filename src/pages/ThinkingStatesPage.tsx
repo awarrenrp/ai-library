@@ -101,6 +101,7 @@ export function ThinkingStatesPage() {
         designIntent={THINKING_DESIGN_INTENT}
         dos={THINKING_DOS}
         donts={THINKING_DONTS}
+        exampleHref="/thinking-states/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />

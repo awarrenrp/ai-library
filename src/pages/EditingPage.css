@@ -93,3 +93,122 @@
 .editing-page__example-inner[data-content="forms"] .editing-prototype__body {
   min-height: 800px;
 }
+
+/* Password gate overlay */
+.editing-gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 40%);
+  backdrop-filter: blur(2px);
+}
+
+.editing-gate-dialog {
+  width: 320px;
+  padding: 28px 24px 24px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 8px 32px rgb(0 0 0 / 20%);
+}
+
+.editing-gate-title {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 22px;
+  color: #000000;
+}
+
+.editing-gate-desc {
+  margin: 0 0 20px;
+  font-size: 13px;
+  font-weight: var(--font-weight-body);
+  line-height: 18px;
+  color: #716f6c;
+}
+
+.editing-gate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.editing-gate-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  border: 1px solid rgb(0 0 0 / 22%);
+  border-radius: 6px;
+  background: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  color: #000000;
+  outline: none;
+  letter-spacing: 0.2em;
+}
+
+.editing-gate-input:focus {
+  border-color: #7a005d;
+  box-shadow: 0 0 0 2px rgb(122 0 93 / 15%);
+}
+
+.editing-gate-input--error {
+  border-color: #bc2c00;
+  box-shadow: 0 0 0 2px rgb(188 44 0 / 12%);
+}
+
+.editing-gate-error {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: #bc2c00;
+}
+
+.editing-gate-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.editing-gate-btn {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 18px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.editing-gate-btn--cancel {
+  border: 1px solid rgb(0 0 0 / 20%);
+  background: #ffffff;
+  color: #000000;
+}
+
+.editing-gate-btn--cancel:hover {
+  background: rgb(0 0 0 / 4%);
+}
+
+.editing-gate-btn--submit {
+  border: 1px solid transparent;
+  background: #7a005d;
+  color: #ffffff;
+}
+
+.editing-gate-btn--submit:hover {
+  background: #66004d;
+}
+
+.editing-gate-btn:focus-visible {
+  outline: 2px solid var(--artifact-outline-active, #5aa5e7);
+  outline-offset: 2px;
+}

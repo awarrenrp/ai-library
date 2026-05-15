@@ -73,6 +73,7 @@ export function ExternalArtifactsPage() {
       <ComponentIntentPanel
         when={EXTERNAL_ARTIFACT_WHEN}
         designIntent={EXTERNAL_ARTIFACT_DESIGN_INTENT}
+        exampleHref="/external-artifacts/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />

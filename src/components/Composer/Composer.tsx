@@ -22,7 +22,7 @@ import {
   IconChevronRight,
   IconComposerChipClose,
   IconComposerChipLead,
-  IconMic,
+  IconCreditsTag,
   IconPlus,
 } from "./icons";
 
@@ -149,6 +149,8 @@ export type ComposerProps = {
    * `surfaceState="edit"` on the `alternate` variant.
    */
   onDismissEditContext?: () => void;
+  /** When true, shows the credits-warning tag icon with a tooltip in the composer footer. */
+  creditsWarning?: boolean;
 };
 
 export function Composer({
@@ -170,6 +172,7 @@ export function Composer({
   sendIcon,
   controls = "speed",
   onDismissEditContext,
+  creditsWarning = false,
 }: ComposerProps) {
   const autoId = useId();
   const modeMenuId = useId();
@@ -454,9 +457,12 @@ export function Composer({
 
           <div className="composer-spacer" aria-hidden />
 
-          <button type="button" className="composer-icon-btn composer-voice" aria-label="Voice input">
-            <IconMic />
-          </button>
+          {creditsWarning && (
+            <button type="button" className="composer-icon-btn composer-credits" aria-label="You're out of credits for the month">
+              <IconCreditsTag />
+              <span className="composer-credits__tooltip" aria-hidden>You&rsquo;re out of credits for the month</span>
+            </button>
+          )}
 
           <button
             type="button"

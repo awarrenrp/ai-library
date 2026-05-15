@@ -23,7 +23,7 @@ import {
   ChatToolbar,
   ChatToolbarAddCommentIcon,
   ChatToolbarCloseIcon,
-  ChatToolbarExpandIcon,
+  ChatToolbarExpandPebbleIcon,
   ChatToolbarMenuIcon,
 } from "../Chat";
 import { Composer } from "../Composer";
@@ -138,7 +138,7 @@ function SideChatDemo() {
                 <ChatToolbarAddCommentIcon />
               </button>
               <button type="button" className="chat__toolbar-btn" aria-label="Expand chat">
-                <ChatToolbarExpandIcon />
+                <ChatToolbarExpandPebbleIcon />
               </button>
               <button type="button" className="chat__toolbar-btn" aria-label="Close chat">
                 <ChatToolbarCloseIcon />

@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
-import { EditingPrototypeMock } from "../components/EditingPrototype";
 import "../App.css";
 import "./EditingPage.css";
 import { FigmaLink } from "../components/FigmaLink";
@@ -23,10 +21,6 @@ const EDITING_DESIGN_INTENT = [
 ];
 
 export function EditingPage() {
-  const [protoVariant, setProtoVariant] = useState<"default" | "animated">("default");
-  const [contentType, setContentType] = useState<"dashboards" | "forms">("dashboards");
-  const [resetKey, setResetKey] = useState(0);
-
   return (
     <main className="demo-wrap">
       <nav style={{ marginBottom: 24 }}>
@@ -59,69 +53,7 @@ export function EditingPage() {
         </p>
       </header>
 
-      <ComponentIntentPanel when={EDITING_WHEN} designIntent={EDITING_DESIGN_INTENT} />
-
-      <hr className="page-section__divider" aria-hidden="true" />
-
-      <p className="editing-page__desc-text" style={{ marginBottom: 0 }}>
-        Static prototype — mock Rippling Analytics page with dashboard editing chrome and Rippling AI.
-        Compose from system pieces (<code>ChatToolbar</code>, <code>Composer</code> in edit surface mode,{" "}
-        <code>RipplingArtifactShell</code>, <code>SimpleBarChartDemo</code>).
-      </p>
-
-      <div className="editing-page__example-bleed" aria-label="Editing prototype — full-width preview">
-        <div className="editing-page__example-inner" data-content={contentType}>
-          <div className="editing-page__example-header">
-            <div className="editing-page__control-group">
-              <p className="editing-page__control-label">Editing style</p>
-              <div className="demo-segments" role="group" aria-label="Editing prototype variant">
-                {(["default", "animated"] as const).map((v) => (
-                  <button
-                    key={v}
-                    type="button"
-                    className="demo-segment"
-                    aria-pressed={protoVariant === v}
-                    onClick={() => setProtoVariant(v)}
-                  >
-                    {v === "default" ? "Default" : "Animated hat"}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="editing-page__control-group">
-              <p className="editing-page__control-label">Content type</p>
-              <div className="demo-segments" role="group" aria-label="Prototype content">
-                {(["dashboards", "forms"] as const).map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    className="demo-segment"
-                    aria-pressed={contentType === c}
-                    onClick={() => setContentType(c)}
-                  >
-                    {c === "dashboards" ? "Dashboards" : "Forms"}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button
-              type="button"
-              className="editing-page__reset-btn"
-              aria-label="Reset prototype to initial state"
-              onClick={() => setResetKey((k) => k + 1)}
-            >
-              Reset
-            </button>
-          </div>
-          <EditingPrototypeMock
-            key={`${protoVariant}-${contentType}-${resetKey}`}
-            variant={protoVariant}
-            contentType={contentType}
-          />
-        </div>
-      </div>
+      <ComponentIntentPanel when={EDITING_WHEN} designIntent={EDITING_DESIGN_INTENT} exampleHref="/editing/example" />
 
       <hr className="page-section__divider" aria-hidden="true" />
       <h2 className="page-section__title">Specs</h2>

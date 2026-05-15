@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { IconChat, IconGoogleDrive, IconRipplingLogo } from "../icons";
 import "./LandingPage.css";
+import "./CombinedPrototypePage.css";
 
 /**
  * Single landing row. `icon` is optional. When the icon communicates state
@@ -47,6 +48,15 @@ function LandingCard({
 export function LandingPage() {
   return (
     <main className="landing">
+      <Link to="/prototype" className="landing-prototype-btn">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+          <rect x="1" y="1" width="5" height="5" rx="1" fill="currentColor" opacity=".6" />
+          <rect x="8" y="1" width="5" height="5" rx="1" fill="currentColor" />
+          <rect x="1" y="8" width="5" height="5" rx="1" fill="currentColor" opacity=".6" />
+          <rect x="8" y="8" width="5" height="5" rx="1" fill="currentColor" opacity=".6" />
+        </svg>
+        Combined prototype
+      </Link>
       <header className="landing-header">
         <p className="landing-eyebrow">Rippling | In partnership with Pebble</p>
         <h1 className="landing-title">AI components</h1>
@@ -145,6 +155,13 @@ export function LandingPage() {
             to="/text"
             title="Text"
             description="Typography and formatting for AI-generated prose—type scale, markdown rendering, and streaming behaviour."
+            icon="🚧"
+            iconLabel="Work in progress"
+          />
+          <LandingCard
+            to="/ai-icon"
+            title="AI icon"
+            description="Spec in progress."
             icon="🚧"
             iconLabel="Work in progress"
           />

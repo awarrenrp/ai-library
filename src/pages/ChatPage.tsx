@@ -185,7 +185,7 @@ export function ChatPage() {
         </p>
       </header>
 
-      <ComponentIntentPanel when={CHAT_WHEN} designIntent={CHAT_DESIGN_INTENT} />
+      <ComponentIntentPanel when={CHAT_WHEN} designIntent={CHAT_DESIGN_INTENT} exampleHref="/chat/example" />
 
       <hr className="page-section__divider" aria-hidden="true" />
       <h2 className="page-section__title">Specs</h2>

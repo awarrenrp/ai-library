@@ -182,6 +182,7 @@ export function DisambiguationPage() {
         designIntent={DISAMBIGUATION_DESIGN_INTENT}
         dos={DISAMBIGUATION_DOS}
         donts={DISAMBIGUATION_DONTS}
+        exampleHref="/disambiguation/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />

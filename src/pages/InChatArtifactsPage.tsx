@@ -60,6 +60,7 @@ export function InChatArtifactsPage() {
           "Provide an entry point to the full artifact in product.",
           "Keep widgets compact so the conversation stays the primary read.",
         ]}
+        exampleHref="/in-chat-artifacts/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />

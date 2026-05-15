@@ -809,7 +809,7 @@ export function ChatToolbarCollapsePebbleIcon() {
 /* Internal aliases — keep the in-file usages stable. */
 const IconHamburger = ChatToolbarMenuIcon;
 const IconAddComment = ChatToolbarAddCommentIcon;
-const IconExpand = ChatToolbarExpandIcon;
+const IconExpand = ChatToolbarExpandPebbleIcon;
 const IconClose = ChatToolbarCloseIcon;
 
 export type ChatToolbarProps = {

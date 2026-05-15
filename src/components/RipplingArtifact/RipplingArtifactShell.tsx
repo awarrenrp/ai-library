@@ -35,18 +35,15 @@ export type RipplingArtifactShellProps = {
    */
   actions?: ReactNode;
   /**
-   * Optional handlers for the hover More menu. The five rows always render in
-   * two sections — pass handlers to wire them to product flows. Section 1
-   * groups produce/modify actions (Download, Duplicate, Edit); section 2
-   * groups anchor/inspect actions (Pin, View SQL).
+   * Optional handlers for the hover More menu. Three rows always render in
+   * one section — pass handlers to wire them to product flows: Download,
+   * Duplicate, Edit.
    *
    * Visual + interaction parity with Figma `AI-components / Dropdown` 848:9499.
    */
   onDownload?: () => void;
   onDuplicate?: () => void;
   onEdit?: () => void;
-  onPin?: () => void;
-  onViewSql?: () => void;
   /**
    * When set, adds an “Add to dashboard” row (with plus icon) after Edit in the
    * More menu — Pebble Icons · Plus, 4881:292.
@@ -147,12 +144,12 @@ function IconExpand() {
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
         fill="currentColor"
-        d="M17.8332 11.3332H16.8332V7.87384L7.87384 16.8332H11.3332V17.8332H6.1665V12.6665H7.1665V16.1258L16.1258 7.1665H12.6665V6.1665H17.8332V11.3332Z"
+        transform="translate(3.25 3.25)"
+        d="M17.5 7.75H16V2.561L2.561 16H7.75V17.5H0V9.75H1.5V14.939L14.939 1.5H9.75V0H17.5V7.75Z"
       />
     </svg>
   );
 }
-
 /** Lucide thumbs-up (outline), scaled to 20×20 */
 function IconThumbsUp() {
   return (
@@ -295,8 +292,6 @@ export function RipplingArtifactShell({
   onDownload,
   onDuplicate,
   onEdit,
-  onPin,
-  onViewSql,
   onAddToDashboard,
   moreMenuSlot,
   editing = false,
@@ -341,11 +336,6 @@ export function RipplingArtifactShell({
           } satisfies MenuRow,
         ]
       : []),
-  ];
-
-  const secondaryRows: MenuRow[] = [
-    { id: "pin", label: "Pin", icon: <IconRowPin />, onClick: onPin },
-    { id: "view-sql", label: "View SQL", icon: <IconRowViewSql />, onClick: onViewSql },
   ];
 
   const withActions = variant === "with-actions" && !editing;
@@ -417,23 +407,6 @@ export function RipplingArtifactShell({
                   >
                     <div className="rippling-artifact-more-menu__group" role="group">
                       {primaryRows.map((row) => (
-                        <button
-                          key={row.id}
-                          type="button"
-                          role="menuitem"
-                          className="rippling-artifact-more-menu__item"
-                          onClick={() => runAction(row.onClick)}
-                        >
-                          <span className="rippling-artifact-more-menu__item-icon" aria-hidden>
-                            {row.icon}
-                          </span>
-                          {row.label}
-                        </button>
-                      ))}
-                    </div>
-                    <hr className="rippling-artifact-more-menu__separator" role="separator" />
-                    <div className="rippling-artifact-more-menu__group" role="group">
-                      {secondaryRows.map((row) => (
                         <button
                           key={row.id}
                           type="button"

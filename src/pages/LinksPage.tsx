@@ -73,6 +73,7 @@ export function LinksPage() {
         designIntent={LINKS_DESIGN_INTENT}
         dos={LINKS_DOS}
         donts={LINKS_DONTS}
+        exampleHref="/links/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />

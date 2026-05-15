@@ -6,8 +6,36 @@
   margin: 0 0 36px;
 }
 
-.component-intent-reference > .page-section__title--lead {
+.component-intent-reference__heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin: 0 0 16px;
+}
+
+.component-intent-reference__heading-row .page-section__title--lead {
+  margin: 0;
+}
+
+.component-intent-reference__example-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: #7a005d;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #ffffff;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.1s ease;
+}
+
+.component-intent-reference__example-btn:hover {
+  background: #66004d;
 }
 
 /*

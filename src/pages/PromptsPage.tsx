@@ -52,7 +52,7 @@ export function PromptsPage() {
         </p>
       </header>
 
-      <ComponentIntentPanel when={PROMPTS_WHEN} designIntent={PROMPTS_DESIGN_INTENT} />
+      <ComponentIntentPanel when={PROMPTS_WHEN} designIntent={PROMPTS_DESIGN_INTENT} exampleHref="/prompts/example" />
 
       <hr className="page-section__divider" aria-hidden="true" />
       <h2 className="page-section__title">Specs</h2>

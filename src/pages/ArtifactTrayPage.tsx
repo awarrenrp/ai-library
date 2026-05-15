@@ -96,6 +96,7 @@ export function ArtifactTrayPage() {
         designIntent={ARTIFACT_TRAY_DESIGN_INTENT}
         dos={ARTIFACT_TRAY_DOS}
         donts={ARTIFACT_TRAY_DONTS}
+        exampleHref="/artifact-tray/example"
       />
 
       <hr className="page-section__divider" aria-hidden="true" />
