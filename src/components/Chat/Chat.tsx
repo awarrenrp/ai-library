@@ -293,6 +293,11 @@ export type ChatProps = {
    * want. The toolbar is hidden entirely when there's no `title` and no handlers.
    */
   toolbar?: ChatToolbarProps | false;
+  /**
+   * Body text scale. "default" = 14px / 20px (Figma 613:5946).
+   * "large" = 16px / 24px (Figma 821:1278). Defaults to "default".
+   */
+  textSize?: "default" | "large";
 };
 
 export function ChatSampleThread({
@@ -804,7 +809,7 @@ export function ChatToolbarCollapsePebbleIcon() {
 /* Internal aliases — keep the in-file usages stable. */
 const IconHamburger = ChatToolbarMenuIcon;
 const IconAddComment = ChatToolbarAddCommentIcon;
-const IconExpand = ChatToolbarExpandIcon;
+const IconExpand = ChatToolbarExpandPebbleIcon;
 const IconClose = ChatToolbarCloseIcon;
 
 export type ChatToolbarProps = {
@@ -913,6 +918,7 @@ export function Chat({
   ariaThreadLabel = "Messages",
   ariaComposerLabel = "Message composer",
   toolbar,
+  textSize,
 }: ChatProps) {
   const layoutClass = `chat--${variant}`;
   const [thinkingReplayKey, setThinkingReplayKey] = useState(0);
@@ -973,6 +979,7 @@ export function Chat({
       data-chat-variant={variant}
       data-chat-panel={panelVersion}
       data-chat-has-toolbar={toolbarVisible || undefined}
+      data-text-size={textSize === "large" ? "large" : undefined}
     >
       {toolbarVisible && resolvedToolbar ? <ChatToolbar {...resolvedToolbar} /> : null}
       {panelVersion === "animated" && thinkingAnimComplete ? (

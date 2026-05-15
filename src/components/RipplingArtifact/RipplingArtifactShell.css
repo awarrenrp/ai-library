@@ -10,15 +10,15 @@
 .rippling-artifact {
   position: relative;
   width: 100%;
+  min-height: 380px;
   box-sizing: border-box;
   border: 1px solid rgb(0 0 0 / 20%);
   border-radius: 16px;
   background: #ffffff;
-  /* `overflow: visible` lets the hover More menu extend below the card. The body slot
-   * clips edge-to-edge child content (e.g. report tables that use negative margins)
-   * with its own border-radius + overflow:hidden — see `.rippling-artifact-body` below. */
   overflow: visible;
   transition: box-shadow 0.15s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -28,7 +28,8 @@
 }
 
 .rippling-artifact:hover,
-.rippling-artifact:focus-within {
+.rippling-artifact:focus-within,
+.rippling-artifact-wrap[data-hover] .rippling-artifact {
   box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
 }
 
@@ -196,7 +197,8 @@
 
 .rippling-artifact-wrap:hover .rippling-artifact-actions,
 .rippling-artifact-wrap:focus-within .rippling-artifact-actions,
-.rippling-artifact-wrap[data-more-menu-open] .rippling-artifact-actions {
+.rippling-artifact-wrap[data-more-menu-open] .rippling-artifact-actions,
+.rippling-artifact-wrap[data-hover] .rippling-artifact-actions {
   opacity: 1;
   pointer-events: auto;
 }
@@ -217,7 +219,8 @@
 }
 
 .rippling-artifact-wrap:hover .rippling-artifact-icon-btn,
-.rippling-artifact-wrap:focus-within .rippling-artifact-icon-btn {
+.rippling-artifact-wrap:focus-within .rippling-artifact-icon-btn,
+.rippling-artifact-wrap[data-hover] .rippling-artifact-icon-btn {
   color: #716f6c;
 }
 
@@ -241,21 +244,22 @@
 }
 
 .rippling-artifact-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   padding: 12px 16px 16px;
   box-sizing: border-box;
-  /* Pair with the article's rounded corners — clips child content that extends to
-   * the bottom edge (e.g. report tables with negative margins). Border-radius is
-   * 15px to nest cleanly inside the 1px border + 16px outer radius. */
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   overflow: hidden;
 }
 
-/* In the `with-actions` variant the action bar owns the card's bottom edge,
- * so the body's bottom rounding drops to 0 and the bar takes over. */
+/* In the `with-actions` variant the action bar overlays the card's bottom
+ * edge as an absolutely-positioned layer, so the body keeps its full rounding.
+ * min-height ensures the card is tall enough for the overlay to make sense. */
 .rippling-artifact-wrap[data-variant="with-actions"] .rippling-artifact-body {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
 /*
@@ -289,32 +293,23 @@
 }
 
 /*
- * Action bar — only present when `variant === "with-actions"`. Pinned to the
- * bottom of the card, hidden at rest, revealed on hover or keyboard focus so
- * the artifact reads as a clean preview until the user engages. The bar
- * carries the bottom rounding so it matches the card silhouette.
- *
- * Collapse/expand animates `max-height`, `opacity`, and `padding` together so
- * the body content doesn't jump when the bar enters; the bar's own
- * `overflow: hidden` clips the inner content during the transition.
+ * Action bar — only present when `variant === "with-actions"`. Overlays the
+ * bottom of the card as an absolute layer so the card height never changes.
+ * Hidden at rest, revealed on hover or keyboard focus.
  */
 .rippling-artifact-action-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   box-sizing: border-box;
-  width: 100%;
-  max-height: 0;
-  padding: 0 12px;
-  background: rgb(0 0 0 / 4%);
-  border-top: 1px solid transparent;
+  padding: 8px 12px;
+  background: rgb(243 241 238 / 70%);
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   opacity: 0;
   pointer-events: none;
-  overflow: hidden;
-  transition:
-    max-height 0.18s ease,
-    opacity 0.15s ease,
-    padding 0.15s ease,
-    border-top-color 0.15s ease;
+  transition: opacity 0.15s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -324,10 +319,8 @@
 }
 
 .rippling-artifact-wrap:hover .rippling-artifact-action-bar,
-.rippling-artifact-wrap:focus-within .rippling-artifact-action-bar {
-  max-height: 56px;
-  padding: 8px 12px;
-  border-top-color: rgb(0 0 0 / 10%);
+.rippling-artifact-wrap:focus-within .rippling-artifact-action-bar,
+.rippling-artifact-wrap[data-hover] .rippling-artifact-action-bar {
   opacity: 1;
   pointer-events: auto;
 }
@@ -344,27 +337,22 @@
 }
 
 /*
- * Row below card — thumbs + timestamp (out of flow so hover doesn’t shift page content)
+ * Row below card — thumbs + timestamp. Always in-flow so its reserved height
+ * prevents hover content from overlapping chat messages below. Opacity fades
+ * in on hover/focus — no layout shift because the space is always there.
  */
 .rippling-artifact-foot {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(100% + 8px);
-  z-index: 2;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   padding: 0 4px;
+  margin-top: 8px;
   min-height: 32px;
   opacity: 0;
-  visibility: hidden;
   pointer-events: none;
-  transition:
-    opacity 0.15s ease,
-    visibility 0.15s ease;
+  transition: opacity 0.15s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -374,9 +362,9 @@
 }
 
 .rippling-artifact-wrap:hover .rippling-artifact-foot,
-.rippling-artifact-wrap:focus-within .rippling-artifact-foot {
+.rippling-artifact-wrap:focus-within .rippling-artifact-foot,
+.rippling-artifact-wrap[data-hover] .rippling-artifact-foot {
   opacity: 1;
-  visibility: visible;
   pointer-events: auto;
 }
 

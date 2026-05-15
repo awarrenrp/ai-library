@@ -13,6 +13,15 @@
   background: #ffffff;
   box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
   overflow: hidden;
+  /* Body text scale — default (Figma 613:5946). Toggled to large via data-text-size="large". */
+  --chat-body-font-size: 14px;
+  --chat-body-line-height: 20px;
+}
+
+/* Large text variant (Figma 821:1278): body text 16px / 24px. */
+.chat[data-text-size="large"] {
+  --chat-body-font-size: 16px;
+  --chat-body-line-height: 24px;
 }
 
 /*
@@ -204,9 +213,9 @@
 
 .chat__block-text--ai {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--chat-body-font-size);
   font-weight: var(--font-weight-body);
-  line-height: 20px;
+  line-height: var(--chat-body-line-height);
   color: #000000;
 }
 
@@ -221,10 +230,74 @@
 
 .chat__block-text--self {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--chat-body-font-size);
   font-weight: var(--font-weight-body);
-  line-height: 20px;
+  line-height: var(--chat-body-line-height);
   color: #000000;
+}
+
+/*
+ * Rich AI response — structured content with headings, paragraphs, and lists.
+ * Figma: default (613:5946) and large (821:1278).
+ * Font sizes are driven by --chat-body-font-size / --chat-body-line-height on .chat.
+ */
+
+/* Vertical stack of content sections, 16px apart (matches Figma Frame 4 gap). */
+.chat__response {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Heading + body pair, 6px apart (matches Figma section gap). */
+.chat__response-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* H1 — "Title of section": 22px / 26px / weight 535 — identical in both variants. */
+.chat__response-h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 535;
+  line-height: 26px;
+  letter-spacing: 0;
+  color: #000000;
+}
+
+/* H2 — "2nd level header" / section labels: 18px / 22px / weight 535, muted. */
+.chat__response-h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 535;
+  line-height: 22px;
+  letter-spacing: 0;
+  color: #716f6c;
+}
+
+/* Body paragraph — size driven by --chat-body-font-size / --chat-body-line-height. */
+.chat__response-body {
+  margin: 0;
+  font-size: var(--chat-body-font-size);
+  font-weight: var(--font-weight-body);
+  line-height: var(--chat-body-line-height);
+  color: #000000;
+}
+
+/* Bulleted list — inherits the same body text scale. */
+.chat__response-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: var(--chat-body-font-size);
+  font-weight: var(--font-weight-body);
+  line-height: var(--chat-body-line-height);
+  color: #000000;
+}
+
+.chat__response-list li + li {
+  margin-top: 0;
 }
 
 /* Thinking block — Figma 66:117 (State=Complete - Expanded): vertical stack, 4px gap, 14px muted #716f6c */

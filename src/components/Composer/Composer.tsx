@@ -20,8 +20,9 @@ import {
   IconArrowUp,
   IconChevronDown,
   IconChevronRight,
+  IconComposerChipClose,
   IconComposerChipLead,
-  IconMic,
+  IconCreditsTag,
   IconPlus,
 } from "./icons";
 
@@ -142,6 +143,14 @@ export type ComposerProps = {
    * field), so this prop only affects `version="standard"`.
    */
   controls?: "speed" | "intent";
+  /**
+   * Called when the user clicks the × inside the edit context chip.
+   * When provided, the chip renders a dismiss button. Only used when
+   * `surfaceState="edit"` on the `alternate` variant.
+   */
+  onDismissEditContext?: () => void;
+  /** When true, shows the credits-warning tag icon with a tooltip in the composer footer. */
+  creditsWarning?: boolean;
 };
 
 export function Composer({
@@ -162,6 +171,8 @@ export function Composer({
   editContextLabel,
   sendIcon,
   controls = "speed",
+  onDismissEditContext,
+  creditsWarning = false,
 }: ComposerProps) {
   const autoId = useId();
   const modeMenuId = useId();
@@ -264,6 +275,16 @@ export function Composer({
                 <IconComposerChipLead />
               </span>
               <span className="composer-edit-chip__label">{editContextLabel ?? "Editing"}</span>
+              {onDismissEditContext ? (
+                <button
+                  type="button"
+                  className="composer-edit-chip__dismiss"
+                  aria-label="Dismiss edit context"
+                  onClick={onDismissEditContext}
+                >
+                  <IconComposerChipClose />
+                </button>
+              ) : null}
             </span>
           ) : null}
         </div>
@@ -436,9 +457,12 @@ export function Composer({
 
           <div className="composer-spacer" aria-hidden />
 
-          <button type="button" className="composer-icon-btn composer-voice" aria-label="Voice input">
-            <IconMic />
-          </button>
+          {creditsWarning && (
+            <button type="button" className="composer-icon-btn composer-credits" aria-label="You're out of credits for the month">
+              <IconCreditsTag />
+              <span className="composer-credits__tooltip" aria-hidden>You&rsquo;re out of credits for the month</span>
+            </button>
+          )}
 
           <button
             type="button"

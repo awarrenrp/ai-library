@@ -2,6 +2,14 @@
   margin-bottom: 36px;
 }
 
+.rna-shell-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
 .rna-page-kicker {
   margin: 0 0 8px;
   font-size: 12px;
@@ -15,6 +23,15 @@
   font-size: 18px;
   font-weight: var(--font-weight-body);
   line-height: 1.55;
+  color: #716f6c;
+}
+
+.rna-page-sublede {
+  margin: 16px 0 0;
+  max-width: 640px;
+  font-size: 15px;
+  font-weight: var(--font-weight-body);
+  line-height: 1.6;
   color: #716f6c;
 }
 
@@ -45,16 +62,57 @@
 }
 
 .rna-example-title {
-  margin: 0 0 8px;
+  margin: 0 0 12px;
   font-size: 18px;
   font-weight: var(--font-weight-heading);
   letter-spacing: -0.02em;
   color: #000000;
 }
 
-.rna-example-lede {
+.rna-example-tabs {
+  display: flex;
+  gap: 0;
   margin-bottom: 16px;
-  font-weight: var(--font-weight-body);
+  border-bottom: 1px solid rgb(0 0 0 / 10%);
+}
+
+.rna-example-tab {
+  position: relative;
+  padding: 6px 14px;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 20px;
+  color: #716f6c;
+  cursor: pointer;
+  transition: color 0.12s ease;
+}
+
+.rna-example-tab:hover {
+  color: #000000;
+}
+
+.rna-example-tab[aria-selected="true"] {
+  color: #000000;
+}
+
+.rna-example-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #000000;
+  border-radius: 2px 2px 0 0;
+}
+
+.rna-example-tab:focus-visible {
+  outline: 2px solid var(--artifact-outline-active);
+  outline-offset: -2px;
+  border-radius: 4px;
 }
 
 /*
@@ -104,7 +162,8 @@
 }
 
 .rna-slot-placeholder {
-  margin: 0;
+  flex: 1;
+  margin: -12px -16px -16px;
   padding: 32px 20px;
   font-size: 14px;
   font-weight: var(--font-weight-body);
@@ -113,7 +172,11 @@
   color: var(--color-primary, #7a005d);
   background: color-mix(in srgb, var(--color-primary-variant, #f0d0f5) 50%, transparent);
   border: 1px dashed rgb(122 0 93 / 35%);
-  border-radius: 8px;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
 /* Compact for the More menu slot — same swatch, less vertical space. */
@@ -161,16 +224,17 @@
 }
 
 .rna-action-btn--primary {
-  background: #000000;
-  color: #ffffff;
+  background: #ffffff;
+  border-color: rgb(0 0 0 / 20%);
+  color: #000000;
 }
 
 .rna-action-btn--primary:hover {
-  background: #1a1a1a;
+  background: rgb(0 0 0 / 4%);
 }
 
 .rna-action-btn--primary:active {
-  background: #2e2e2e;
+  background: rgb(0 0 0 / 8%);
 }
 
 /*

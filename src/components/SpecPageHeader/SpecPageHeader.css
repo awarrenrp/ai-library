@@ -1,0 +1,126 @@
+/*
+ * SpecPageHeader — sticky full-width top bar on all component spec and
+ * prototype pages.
+ *
+ * Left:  "AI components / {Component name}" breadcrumb
+ * Right: "Definition" | "Prototype" tabs + optional extra controls
+ */
+
+.spec-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 32px;
+  height: 48px;
+  background: #ffffff;
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* —— Breadcrumb ————————————————————————————————————————————— */
+
+.spec-page-header__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.spec-page-header__breadcrumb-link {
+  font-size: 13px;
+  font-weight: 400;
+  color: #9e9b97;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.spec-page-header__breadcrumb-link:hover {
+  color: #3d3a36;
+}
+
+.spec-page-header__breadcrumb-sep {
+  font-size: 13px;
+  color: #c8c5c0;
+  flex-shrink: 0;
+}
+
+.spec-page-header__breadcrumb-current {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1814;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* —— Right side ————————————————————————————————————————————— */
+
+.spec-page-header__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* —— Tabs ——————————————————————————————————————————————————— */
+
+.spec-page-header__tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgb(0 0 0 / 5%);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.spec-page-header__tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  color: #716f6c;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.1s ease, background 0.1s ease;
+}
+
+.spec-page-header__tab:hover:not([data-active="true"]) {
+  color: #1a1814;
+  background: rgb(0 0 0 / 4%);
+}
+
+.spec-page-header__tab[data-active="true"] {
+  background: #ffffff;
+  color: #1a1814;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 10%), 0 0 0 1px rgb(0 0 0 / 6%);
+}
+
+/* —— Extra controls (mode toggles etc.) ————————————————————— */
+
+.spec-page-header__actions {
+  display: flex;
+  align-items: center;
+}
+
+/* —— Responsive ————————————————————————————————————————————— */
+
+@media (max-width: 600px) {
+  .spec-page-header {
+    padding: 0 16px;
+    gap: 8px;
+  }
+
+  .spec-page-header__breadcrumb-link,
+  .spec-page-header__breadcrumb-sep {
+    display: none;
+  }
+}

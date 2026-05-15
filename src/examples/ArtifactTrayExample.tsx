@@ -6,13 +6,28 @@
  * copying into Rippling product code.
  */
 import { useState } from "react";
-import { ArtifactTray, type ArtifactTrayItem } from "../components/ArtifactTray";
-import { IconFile, IconReport, IconWorkflow } from "../icons";
+import {
+  ArtifactTray,
+  ArtifactTrayIconFile,
+  ArtifactTrayIconReport,
+  ArtifactTrayIconWorkflow,
+  type ArtifactTrayItem,
+} from "../components/ArtifactTray";
 
 const TRAY_ITEMS: readonly ArtifactTrayItem[] = [
-  { id: "workflow", title: "Workflow", icon: <IconWorkflow /> },
-  { id: "policy-pdf", title: "New in-office policy.PDF", icon: <IconFile /> },
-  { id: "attendance", title: "Office attendance", icon: <IconReport /> },
+  { id: "workflow", title: "Workflow", icon: <ArtifactTrayIconWorkflow />, iconBg: "#7a005d" },
+  {
+    id: "policy-pdf",
+    title: "New in-office policy.PDF",
+    icon: <ArtifactTrayIconFile />,
+    iconBg: "#bc2c00",
+  },
+  {
+    id: "attendance",
+    title: "Office attendance",
+    icon: <ArtifactTrayIconReport />,
+    iconBg: "#7a005d",
+  },
 ];
 
 export function ArtifactTrayExample() {

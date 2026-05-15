@@ -17,14 +17,6 @@ export type WorkflowArtifactDemoProps = {
 export function WorkflowArtifactDemo({ selectedBlock }: WorkflowArtifactDemoProps = {}) {
   return (
     <div className="workflow-artifact-demo">
-      <div className="workflow-artifact-demo-source">
-        <p className="workflow-artifact-demo-source-label">Source info</p>
-        <p className="workflow-artifact-demo-source-desc">
-          Here&apos;s some info about the report if you want to give some additional context to the viewers. Sometimes
-          that might be longer than one line.
-        </p>
-      </div>
-
       <div className="workflow-artifact-demo-detail">
         <div className="workflow-artifact-demo-header">
           <p className="workflow-artifact-demo-eyebrow">When it will run</p>

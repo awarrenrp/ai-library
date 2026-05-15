@@ -43,6 +43,20 @@ export function IconMic(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** Loader / spinner — Pebble Icons Library node 4881:394. */
+export function IconCreditsTag(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden {...props}>
+      <g transform="translate(1.75 1.75)" fill="currentColor">
+        <path
+          fillRule="nonzero"
+          d="M10.25 0C15.911 0 20.5 4.589 20.5 10.25S15.911 20.5 10.25 20.5C4.589 20.5 0 15.911 0 10.25H1.5C1.5 15.082 5.418 19 10.25 19S19 15.082 19 10.25 15.082 1.5 10.25 1.5V0Z"
+        />
+      </g>
+    </svg>
+  );
+}
+
 /** Bars — Chip · Regular · AI-components · 865:10482 (leading visual). */
 export function IconComposerChipLead(props: SVGProps<SVGSVGElement>) {
   return (
@@ -232,6 +246,18 @@ export function IconSettings(props: SVGProps<SVGSVGElement>) {
         strokeWidth="1.25"
         strokeLinecap="round"
         strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Small X — dismiss button inside the edit context chip (Composer surfaceState="edit"). */
+export function IconComposerChipClose(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden {...props}>
+      <path
+        fill="currentColor"
+        d="M5 4.293 8.646.646l.708.708L5.707 5l3.647 3.646-.708.708L5 5.707 1.354 9.354l-.708-.708L4.293 5 .646 1.354l.708-.708L5 4.293Z"
       />
     </svg>
   );

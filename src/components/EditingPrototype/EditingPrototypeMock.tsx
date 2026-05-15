@@ -3,11 +3,12 @@
  * Mirrors Figma Edit mode 802:14409; top nav 802:14410 · AI-components.
  */
 import { useEffect, useRef, useState } from "react";
-import { ChatComposerHat, ChatToolbar } from "../Chat/Chat";
+import { ChatComposerHat, ChatThinkingBlock, ChatToolbar } from "../Chat/Chat";
 import "../Chat/Chat.css";
 import { Composer } from "../Composer";
 import { RipplingArtifactShell, SimpleBarChartDemo } from "../RipplingArtifact";
 import { InChatLinkWidget } from "../InChatWidget/InChatWidgets";
+import { useDismissOnOutsidePress } from "../../hooks/useDismissOnOutsidePress";
 import "./EditingPrototypeMock.css";
 import { FigmaLink } from "../FigmaLink";
 
@@ -24,7 +25,7 @@ const CHAT_FORM_ARTIFACT_TITLE = "New medical plan";
 const DEFAULT_EDIT_CONTEXT = "Payroll mix by department";
 
 /** Default context label for the forms mode. */
-const FORMS_EDIT_CONTEXT = "Benefits enrollment form";
+const FORMS_EDIT_CONTEXT = "New medical plan";
 
 const DASHBOARD_VISUALS = [
   { id: "headcount", title: "Open headcount by department" },
@@ -68,6 +69,159 @@ type EditFocus =
   | { kind: "none" }
   | { kind: "dashboard"; vizId: (typeof DASHBOARD_VISUALS)[number]["id"] }
   | { kind: "chat" };
+
+/* ─── Chat history panel ─────────────────────────────────────────── */
+
+type ChatHistoryItem = {
+  id: string;
+  text: string;
+  active?: boolean;
+  running?: boolean;
+  unread?: boolean;
+};
+
+type ChatHistorySection = {
+  id: string;
+  label: string;
+  items: ChatHistoryItem[];
+};
+
+const CHAT_HISTORY: readonly ChatHistorySection[] = [
+  {
+    id: "running",
+    label: "Running",
+    items: [
+      { id: "r1", text: "What's the progress on the Vega initiative?", running: true },
+      { id: "r2", text: "How often has Rivera processed the bi-weekly payments?", unread: true },
+    ],
+  },
+  {
+    id: "yesterday",
+    label: "Yesterday",
+    items: [
+      { id: "y1", text: "Who is @parker conrad?" },
+      { id: "y2", text: "How often has Rivera processed the bi-weekly payments?" },
+      { id: "y3", text: "When did sarah get the updated onboarding documents be ready?" },
+    ],
+  },
+  {
+    id: "2days",
+    label: "2 days ago",
+    items: [
+      { id: "d1", text: "What's the status of the annual report?" },
+      { id: "d2", text: "Can you tell me how many times Patel has run payroll this year?", active: true },
+      { id: "d3", text: "When did sarah get the updated onboarding documents be ready?" },
+      { id: "d4", text: "Who works in legal?" },
+      { id: "d5", text: "What's @como's PR count this week?" },
+    ],
+  },
+  {
+    id: "lastweek",
+    label: "Last Week",
+    items: [
+      { id: "lw1", text: "How many designers are there?" },
+      { id: "lw2", text: "What is our PTO policy?" },
+    ],
+  },
+  {
+    id: "lastmonth",
+    label: "Last Month",
+    items: [
+      { id: "lm1", text: "What is the company org chart?" },
+      { id: "lm2", text: "How do I submit and track expenses?" },
+      { id: "lm3", text: "What are the upcoming company holidays?" },
+      { id: "lm4", text: "How do I change my direct deposit info?" },
+      { id: "lm5", text: "Where can I find the employee handbook?" },
+      { id: "lm6", text: "How do I enroll in benefits?" },
+      { id: "lm7", text: "What is the policy on remote work?" },
+      { id: "lm8", text: "How do I request a leave of absence?" },
+    ],
+  },
+] as const;
+
+function IconHistoryClose() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden focusable="false">
+      <path
+        fill="currentColor"
+        d="M8 7.06 12.53 2.53l.94.94L8.94 8l4.53 4.53-.94.94L8 8.94l-4.53 4.53-.94-.94L7.06 8 2.53 3.47l.94-.94L8 7.06Z"
+      />
+    </svg>
+  );
+}
+
+function IconHistorySpinner() {
+  return (
+    <svg className="editing-prototype__chat-history-spinner" viewBox="0 0 16 16" fill="none" aria-hidden focusable="false">
+      <circle cx="8" cy="8" r="5.5" stroke="currentColor" strokeWidth="1.5" strokeDasharray="25 10" />
+    </svg>
+  );
+}
+
+function IconHistoryArchive() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden focusable="false">
+      <path
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinejoin="round"
+        d="M2 4.5h12v2H2v-2Zm1 2v6h10v-6H3Zm2.5 2.5h5"
+      />
+    </svg>
+  );
+}
+
+function ChatHistoryPanel({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="editing-prototype__chat-history" role="dialog" aria-modal="true" aria-label="Chat history">
+      <div className="editing-prototype__chat-history-header">
+        <h2 className="editing-prototype__chat-history-title">Chats</h2>
+        <button
+          type="button"
+          className="editing-prototype__chat-history-close"
+          aria-label="Close chat history"
+          onClick={onClose}
+        >
+          <IconHistoryClose />
+        </button>
+      </div>
+
+      <div className="editing-prototype__chat-history-scroll">
+        {CHAT_HISTORY.map((section, idx) => (
+          <div key={section.id}>
+            <p className="editing-prototype__chat-history-section-label">{section.label}</p>
+            {section.items.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className={[
+                  "editing-prototype__chat-history-item",
+                  item.active ? "editing-prototype__chat-history-item--active" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+              >
+                <span className="editing-prototype__chat-history-item-text">{item.text}</span>
+                {item.running ? <IconHistorySpinner /> : null}
+                {item.unread ? <span className="editing-prototype__chat-history-unread" aria-label="Unread" /> : null}
+              </button>
+            ))}
+            {/* Hairline separator after the Running section */}
+            {idx === 0 ? <div className="editing-prototype__chat-history-divider" aria-hidden /> : null}
+          </div>
+        ))}
+      </div>
+
+      <div className="editing-prototype__chat-history-footer">
+        <button type="button" className="editing-prototype__chat-history-delete-btn">
+          <IconHistoryArchive />
+          Delete all chats
+          <span className="editing-prototype__chat-history-badge">1</span>
+        </button>
+      </div>
+    </div>
+  );
+}
 
 function ProtoGhostIcon({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -167,6 +321,26 @@ export function EditingPrototypeMock({
     {},
   );
   const [editFocus, setEditFocus] = useState<EditFocus>({ kind: "none" });
+  // Forms: left panel only opens once the user clicks the artifact in chat.
+  const [formOpen, setFormOpen] = useState(false);
+  // Default editing style only: chip can be dismissed.
+  const [chipDismissed, setChipDismissed] = useState(false);
+  // Chat history overlay.
+  const [chatHistoryOpen, setChatHistoryOpen] = useState(false);
+  const [thinkingComplete, setThinkingComplete] = useState(false);
+  // Notification bell dropdown.
+  const [notifOpen, setNotifOpen] = useState(false);
+  const notifAnchorRef = useRef<HTMLDivElement>(null);
+  const notifBtnRef = useRef<HTMLButtonElement>(null);
+
+  useDismissOnOutsidePress(
+    notifOpen,
+    (reason) => {
+      setNotifOpen(false);
+      if (reason === "escape") notifBtnRef.current?.focus();
+    },
+    (n) => notifAnchorRef.current?.contains(n) ?? false,
+  );
 
   const selectedVizId = editFocus.kind === "dashboard" ? editFocus.vizId : null;
 
@@ -178,6 +352,23 @@ export function EditingPrototypeMock({
         : editFocus.kind === "chat"
           ? CHAT_ARTIFACT_TITLE
           : DEFAULT_EDIT_CONTEXT;
+
+  // Default editing style: chip shows only when there's an active focus and hasn't been dismissed.
+  const showEditChip =
+    variant !== "animated" &&
+    !chipDismissed &&
+    (contentType === "forms" ? formOpen : true);
+
+  // Animated hat: same context condition as the chip, minus the dismissal state
+  // (the hat has no dismiss affordance). For forms, hide the context label until
+  // the user has opened an artifact so the hat's idle state matches the chip.
+  const hatContextLabel =
+    (contentType === "forms" ? formOpen : true) ? editContextLabel : undefined;
+
+  function handleSetEditFocus(focus: EditFocus) {
+    setEditFocus(focus);
+    setChipDismissed(false);
+  }
 
   useEffect(() => {
     if (editFocus.kind !== "dashboard") return;
@@ -209,9 +400,34 @@ export function EditingPrototypeMock({
             <ProtoGhostIcon label="Comments">
               <IconProtoComment />
             </ProtoGhostIcon>
-            <ProtoGhostIcon label="Notifications">
-              <IconProtoBell />
-            </ProtoGhostIcon>
+            <div className="editing-prototype__notif-anchor" ref={notifAnchorRef}>
+              <button
+                ref={notifBtnRef}
+                type="button"
+                className="editing-prototype__ghost-icon editing-prototype__ghost-icon--notif"
+                aria-label="Notifications"
+                aria-haspopup="true"
+                aria-expanded={notifOpen}
+                onClick={() => setNotifOpen((o) => !o)}
+              >
+                <IconProtoBell />
+                <span className="editing-prototype__notif-badge" aria-hidden />
+              </button>
+              {notifOpen && (
+                <div className="editing-prototype__notif-dropdown" role="dialog" aria-label="Notifications">
+                  <div className="editing-prototype__notif-header">
+                    <span className="editing-prototype__notif-header-title">Notifications</span>
+                  </div>
+                  <div className="editing-prototype__notif-item">
+                    <span className="editing-prototype__notif-dot" aria-hidden />
+                    <div className="editing-prototype__notif-body">
+                      <p className="editing-prototype__notif-msg">You&rsquo;re out of credits for the month</p>
+                      <p className="editing-prototype__notif-sub">Upgrade your plan to continue using Rippling AI</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
             <ProtoGhostIcon label="Directory">
               <IconProtoUser />
             </ProtoGhostIcon>
@@ -243,10 +459,15 @@ export function EditingPrototypeMock({
               </span>
               <div className="editing-prototype__page-title-stack">
                 <p className="editing-prototype__breadcrumb">
-                  People analytics<span className="editing-prototype__bc-sep">›</span>Dashboards
+                  {contentType === "forms"
+                    ? <>Benefits Admin<span className="editing-prototype__bc-sep">›</span>Plan configuration</>
+                    : <>People analytics<span className="editing-prototype__bc-sep">›</span>Dashboards</>
+                  }
                 </p>
                 <div className="editing-prototype__title-row">
-                  <h2 className="editing-prototype__page-heading">Payroll mix by department</h2>
+                  <h2 className="editing-prototype__page-heading">
+                    {contentType === "forms" ? "New medical plan" : "Payroll mix by department"}
+                  </h2>
                   <span className="editing-prototype__editing-pill">
                     <span className="editing-prototype__editing-dot" aria-hidden />
                     Editing
@@ -277,16 +498,20 @@ export function EditingPrototypeMock({
 
           <div className="editing-prototype__canvas">
             {contentType === "forms" ? (
-              <div className="editing-prototype__main-canvas">
-                <div className="editing-prototype__form-header">
-                  <p className="editing-prototype__dash-caption">Benefits Admin · Plan configuration</p>
+              formOpen ? (
+                <div className="editing-prototype__main-canvas editing-prototype__main-canvas--slide-in">
+                  <div className="editing-prototype__form-header">
+                    <p className="editing-prototype__dash-caption">Benefits Admin · Plan configuration</p>
+                  </div>
+                  <div className="editing-prototype__form-body">
+                    {FORM_FIELDS.map((f) => (
+                      <FormField key={f.id} label={f.label} value={f.value} type={f.type} />
+                    ))}
+                  </div>
                 </div>
-                <div className="editing-prototype__form-body">
-                  {FORM_FIELDS.map((f) => (
-                    <FormField key={f.id} label={f.label} value={f.value} type={f.type} />
-                  ))}
-                </div>
-              </div>
+              ) : (
+                <div className="editing-prototype__canvas-empty" aria-label="Select an artifact to begin editing" />
+              )
             ) : (
               <div className="editing-prototype__main-canvas">
                 <div className="editing-prototype__dash-meta">
@@ -337,7 +562,7 @@ export function EditingPrototypeMock({
                           (viz.id === "headcount" ? " editing-prototype__chart-panel--tall" : "") +
                           (selected ? " editing-prototype__chart-panel--selected" : "")
                         }
-                        onClick={() => setEditFocus({ kind: "dashboard", vizId: viz.id })}
+                        onClick={() => handleSetEditFocus({ kind: "dashboard", vizId: viz.id })}
                         ref={(el) => {
                           vizButtonRefs.current[viz.id] = el;
                         }}
@@ -348,11 +573,11 @@ export function EditingPrototypeMock({
                           if (e.key === "ArrowDown" || e.key === "ArrowRight") {
                             e.preventDefault();
                             const next = Math.min(from + 1, DASHBOARD_VISUALS.length - 1);
-                            setEditFocus({ kind: "dashboard", vizId: DASHBOARD_VISUALS[next].id });
+                            handleSetEditFocus({ kind: "dashboard", vizId: DASHBOARD_VISUALS[next].id });
                           } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
                             e.preventDefault();
                             const prev = Math.max(from - 1, 0);
-                            setEditFocus({ kind: "dashboard", vizId: DASHBOARD_VISUALS[prev].id });
+                            handleSetEditFocus({ kind: "dashboard", vizId: DASHBOARD_VISUALS[prev].id });
                           }
                         }}
                       >
@@ -385,12 +610,23 @@ export function EditingPrototypeMock({
             <ChatToolbar
               className="editing-prototype__ai-toolbar"
               title="Rippling AI"
+              onMenuClick={() => setChatHistoryOpen(true)}
               onAddCommentClick={() => {}}
               onExpandClick={() => {}}
               onCloseClick={() => {}}
             />
 
+            {chatHistoryOpen ? (
+              <ChatHistoryPanel onClose={() => setChatHistoryOpen(false)} />
+            ) : null}
+
             <div className="editing-prototype__ai-thread">
+              {variant === "animated" && thinkingComplete ? (
+                <ChatThinkingBlock
+                  defaultCollapsed
+                  className="editing-prototype__thinking-block"
+                />
+              ) : null}
               {contentType === "forms" ? (
                 <>
                   <blockquote className="editing-prototype__user-bubble">
@@ -405,7 +641,11 @@ export function EditingPrototypeMock({
                       previewCaption="Benefits Admin"
                       previewIcon={<IconMedicalPlan />}
                       previewBody={null}
-                      selected
+                      selected={formOpen}
+                      onOpen={() => {
+                        setFormOpen(true);
+                        setChipDismissed(false);
+                      }}
                     />
                   </div>
                 </>
@@ -422,7 +662,7 @@ export function EditingPrototypeMock({
                     onClick={(e) => {
                       const el = e.target as HTMLElement;
                       if (el.closest("button, a, [role='menu'], [role='menuitem'], input, textarea")) return;
-                      setEditFocus({ kind: "chat" });
+                      handleSetEditFocus({ kind: "chat" });
                     }}
                   >
                     <RipplingArtifactShell
@@ -441,7 +681,7 @@ export function EditingPrototypeMock({
             <div className="editing-prototype__ai-composer-wrap">
               {variant === "animated" ? (
                 <ChatComposerHat
-                  contextLabel={editContextLabel}
+                  contextLabel={hatContextLabel}
                   autoStart
                   className={[
                     "editing-prototype__ai-hat",
@@ -449,19 +689,24 @@ export function EditingPrototypeMock({
                   ]
                     .filter(Boolean)
                     .join(" ")}
+                  onCycleComplete={() => setThinkingComplete(true)}
                 />
               ) : null}
               <Composer
                 width="fill"
                 version="alternate"
-                surfaceState={variant === "animated" ? undefined : "edit"}
-                editContextLabel={variant === "animated" ? undefined : editContextLabel}
+                surfaceState={showEditChip ? "edit" : "default"}
+                editContextLabel={showEditChip ? editContextLabel : undefined}
+                onDismissEditContext={variant !== "animated" ? () => setChipDismissed(true) : undefined}
                 ariaComposerLabel="Editing assistant"
                 ariaMessageLabel="Message to Rippling AI"
                 placeholder="Describe the change…"
+                creditsWarning
               />
               <p className="editing-prototype__ai-disclaimer">
-                Rippling AI results may be inaccurate. Review before acting.
+                <span className="editing-prototype__ai-disclaimer-lock" aria-hidden>🔒</span>
+                Rippling doesn&rsquo;t use your data to train our models.<br />
+                AI may be inaccurate, review your responses.
               </p>
             </div>
           </div>

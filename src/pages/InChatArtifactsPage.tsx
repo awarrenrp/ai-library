@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import {
   ArtifactHoverPageSettings,
   type ArtifactHoverVariant,
@@ -8,8 +8,6 @@ import { IconCopy } from "../components/Composer/icons";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
 import {
-  InChatWidgetDemo,
-  type InChatWidgetDemoMode,
   InChatWidgets,
 } from "../components/InChatWidget";
 import IN_CHAT_WIDGET_EXAMPLE_SOURCE from "../examples/InChatWidgetExample.tsx?raw";
@@ -24,18 +22,17 @@ const FIGMA_SECTION =
 export function InChatArtifactsPage() {
   const [hoverVariant, setHoverVariant] = useState<ArtifactHoverVariant>("shadow");
   const [copyAck, setCopyAck] = useState(false);
-  const [contextMode, setContextMode] = useState<InChatWidgetDemoMode>("side-chat");
   const [widgetSelected, setWidgetSelected] = useState(false);
 
   return (
-    <main className="demo-wrap" data-artifact-hover-style={hoverVariant}>
+    <>
+      <SpecPageHeader
+        componentName="In-chat artifacts"
+        specPath="/in-chat-artifacts"
+        examplePath="/in-chat-artifacts/example"
+      />
+      <main className="demo-wrap" data-artifact-hover-style={hoverVariant}>
       <ArtifactHoverPageSettings variant={hoverVariant} onVariantChange={setHoverVariant} />
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
       <header style={{ marginBottom: 28 }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Artifacts
@@ -65,15 +62,6 @@ export function InChatArtifactsPage() {
       <hr className="page-section__divider" aria-hidden="true" />
       <h2 className="page-section__title">Specs</h2>
 
-      <nav className="links-spec-toc" aria-label="On this page">
-        <p className="links-spec-toc-label">On this page</p>
-        <ul className="links-spec-toc-list">
-          <li>
-            <a href="#ic-artifacts-widgets">Widget previews</a>
-          </li>
-        </ul>
-      </nav>
-
       <section className="links-spec-section" id="ic-artifacts-widgets" aria-labelledby="ic-artifacts-widgets-heading">
         <h2
           id="ic-artifacts-widgets-heading"
@@ -87,80 +75,37 @@ export function InChatArtifactsPage() {
         >
           Widget previews
         </h2>
-        <div style={{ display: "flex", alignItems: "baseline", gap: 16, margin: "0 0 24px", flexWrap: "wrap" }}>
-          <p
-            style={{
-              margin: 0,
-              maxWidth: 560,
-              fontSize: 15,
-              lineHeight: 1.55,
-              color: "#716f6c",
-              flex: "1 1 auto",
-            }}
+        <p
+          style={{
+            margin: "0 0 16px",
+            maxWidth: 640,
+            fontSize: 15,
+            lineHeight: 1.55,
+            color: "#716f6c",
+          }}
+        >
+          Standalone rows for each widget category—the Table pattern is the grid only (no title/Open strip like the link
+          widgets). The side-chat example below embeds the same table.
+        </p>
+        <div className="demo-segments" role="group" aria-label="Widget state" style={{ marginBottom: 20 }}>
+          <button
+            type="button"
+            className="demo-segment"
+            aria-pressed={!widgetSelected}
+            onClick={() => setWidgetSelected(false)}
           >
-            Standalone rows for each widget category—the Table pattern is the grid only (no title/Open strip like the link
-            widgets). The side-chat example below embeds the same table.
-          </p>
-          <div className="demo-segments" role="group" aria-label="Widget state">
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={!widgetSelected}
-              onClick={() => setWidgetSelected(false)}
-            >
-              Default
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={widgetSelected}
-              onClick={() => setWidgetSelected(true)}
-            >
-              Selected
-            </button>
-          </div>
+            Default
+          </button>
+          <button
+            type="button"
+            className="demo-segment"
+            aria-pressed={widgetSelected}
+            onClick={() => setWidgetSelected(true)}
+          >
+            Selected
+          </button>
         </div>
         <InChatWidgets selected={widgetSelected} />
-      </section>
-
-      <hr className="page-section__divider" aria-hidden="true" />
-
-      <section
-        className="in-context-stage"
-        id="ic-artifacts-context"
-        aria-labelledby="ic-artifacts-context-heading"
-      >
-        <div className="in-context-stage__head">
-          <div className="in-context-stage__copy">
-            <h2 id="ic-artifacts-context-heading" className="in-context-stage__title">
-              In context
-            </h2>
-            <p className="in-context-stage__lede">
-              Every widget category embedded inside an assistant conversation — table, Rippling
-              link, document, and dashboard — rendered as a side panel or a full-screen workspace.
-              Toggle to compare placements.
-            </p>
-          </div>
-          <div className="demo-segments" role="group" aria-label="In-chat widget surface mode">
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={contextMode === "side-chat"}
-              onClick={() => setContextMode("side-chat")}
-            >
-              Side chat
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={contextMode === "full-screen"}
-              onClick={() => setContextMode("full-screen")}
-            >
-              Full screen
-            </button>
-          </div>
-        </div>
-        <InChatWidgetDemo mode={contextMode} />
       </section>
 
       <section
@@ -199,5 +144,6 @@ export function InChatArtifactsPage() {
         <DemoHighlightedCode code={IN_CHAT_WIDGET_EXAMPLE_SOURCE} language="tsx" />
       </section>
     </main>
+    </>
   );
 }

@@ -35,18 +35,15 @@ export type RipplingArtifactShellProps = {
    */
   actions?: ReactNode;
   /**
-   * Optional handlers for the hover More menu. The five rows always render in
-   * two sections — pass handlers to wire them to product flows. Section 1
-   * groups produce/modify actions (Download, Duplicate, Edit); section 2
-   * groups anchor/inspect actions (Pin, View SQL).
+   * Optional handlers for the hover More menu. Three rows always render in
+   * one section — pass handlers to wire them to product flows: Download,
+   * Duplicate, Edit.
    *
    * Visual + interaction parity with Figma `AI-components / Dropdown` 848:9499.
    */
   onDownload?: () => void;
   onDuplicate?: () => void;
   onEdit?: () => void;
-  onPin?: () => void;
-  onViewSql?: () => void;
   /**
    * When set, adds an “Add to dashboard” row (with plus icon) after Edit in the
    * More menu — Pebble Icons · Plus, 4881:292.
@@ -83,6 +80,13 @@ export type RipplingArtifactShellProps = {
    * artifacts that aren't yet in full edit mode.
    */
   selected?: boolean;
+  /**
+   * When true, forces the hover visual state — shows the action bar,
+   * foot row, and header icon cluster as if the pointer were over the card.
+   * Useful for demos and design-spec pages that need to snapshot the hover
+   * appearance without relying on an actual pointer hover.
+   */
+  hover?: boolean;
 };
 
 /** Pencil/edit glyph used in the "Editing" pill — Figma 757:10345 `Left icon`. */
@@ -140,12 +144,12 @@ function IconExpand() {
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
         fill="currentColor"
-        d="M17.8332 11.3332H16.8332V7.87384L7.87384 16.8332H11.3332V17.8332H6.1665V12.6665H7.1665V16.1258L16.1258 7.1665H12.6665V6.1665H17.8332V11.3332Z"
+        transform="translate(3.25 3.25)"
+        d="M17.5 7.75H16V2.561L2.561 16H7.75V17.5H0V9.75H1.5V14.939L14.939 1.5H9.75V0H17.5V7.75Z"
       />
     </svg>
   );
 }
-
 /** Lucide thumbs-up (outline), scaled to 20×20 */
 function IconThumbsUp() {
   return (
@@ -227,17 +231,6 @@ function IconRowEdit() {
   );
 }
 
-function IconRowPin() {
-  return (
-    <svg width="16" height="16" viewBox="0 2 16 16" fill="none" aria-hidden focusable="false">
-      <path
-        d="M8.00002 2.98047L10.2887 7.5998L15.4107 8.34114L11.704 11.9405L12.5787 17.0198L8.00002 14.6218L3.42136 17.0198L4.29602 11.9405L0.589355 8.34114L5.71136 7.5998L8.00002 2.98047ZM8.00002 5.23314L6.37469 8.51447L2.74469 9.0398L5.37136 11.5905L4.75069 15.1945L8.00069 13.4925L11.2507 15.1945L10.63 11.5905L13.2567 9.0398L9.62669 8.51447L8.00069 5.23314H8.00002Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
-
 /** Pebble Plus — 16×16 for menu row · Pebble Icons Library 4881:292 (stroke). */
 function IconRowPlus() {
   return (
@@ -247,25 +240,6 @@ function IconRowPlus() {
         stroke="currentColor"
         strokeWidth="1.25"
         strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function IconRowViewSql() {
-  return (
-    <svg width="16" height="16" viewBox="0 2 16 16" fill="none" aria-hidden focusable="false">
-      <path
-        d="M8 11.3332C8.73667 11.3332 9.33333 10.7365 9.33333 9.99984C9.33333 9.26317 8.73667 8.6665 8 8.6665C7.26333 8.6665 6.66667 9.26317 6.66667 9.99984C6.66667 10.7358 7.26333 11.3332 8 11.3332Z"
-        fill="currentColor"
-      />
-      <path
-        d="M4.49064 9.9585C4.49064 8.02583 6.05797 6.4585 7.99064 6.4585C9.92331 6.4585 11.4906 8.02583 11.4906 9.9585C11.4906 11.8912 9.92331 13.4585 7.99064 13.4585C6.05797 13.4585 4.49064 11.8912 4.49064 9.9585ZM7.99064 7.4585C6.60997 7.4585 5.49064 8.57783 5.49064 9.9585C5.49064 11.3392 6.60997 12.4585 7.99064 12.4585C9.37131 12.4585 10.4906 11.3392 10.4906 9.9585C10.4906 8.57783 9.37131 7.4585 7.99064 7.4585Z"
-        fill="currentColor"
-      />
-      <path
-        d="M0.104004 9.99982L4.34667 5.75715C6.36467 3.73915 9.636 3.73915 11.6533 5.75715L15.896 9.99982L11.6533 14.2425C9.63534 16.2605 6.364 16.2605 4.34667 14.2425L0.104004 9.99982ZM1.518 9.99982L5.05334 13.5352C6.68067 15.1625 9.31867 15.1625 10.946 13.5352L14.4813 9.99982L10.946 6.46449C9.31867 4.83715 6.68067 4.83715 5.05334 6.46449L1.518 9.99982Z"
-        fill="currentColor"
       />
     </svg>
   );
@@ -288,14 +262,13 @@ export function RipplingArtifactShell({
   onDownload,
   onDuplicate,
   onEdit,
-  onPin,
-  onViewSql,
   onAddToDashboard,
   moreMenuSlot,
   editing = false,
   onCancelEdit,
   onSaveEdit,
   selected = false,
+  hover = false,
 }: RipplingArtifactShellProps) {
   const moreMenuId = useId();
   const moreBtnId = useId();
@@ -335,11 +308,6 @@ export function RipplingArtifactShell({
       : []),
   ];
 
-  const secondaryRows: MenuRow[] = [
-    { id: "pin", label: "Pin", icon: <IconRowPin />, onClick: onPin },
-    { id: "view-sql", label: "View SQL", icon: <IconRowViewSql />, onClick: onViewSql },
-  ];
-
   const withActions = variant === "with-actions" && !editing;
   const withActionStrip = variant === "action-bar" && !editing;
 
@@ -350,6 +318,7 @@ export function RipplingArtifactShell({
       data-variant={variant}
       data-editing={editing || undefined}
       data-selected={selected || undefined}
+      data-hover={hover || undefined}
     >
       <article className="rippling-artifact">
         <header className="rippling-artifact-header">
@@ -408,23 +377,6 @@ export function RipplingArtifactShell({
                   >
                     <div className="rippling-artifact-more-menu__group" role="group">
                       {primaryRows.map((row) => (
-                        <button
-                          key={row.id}
-                          type="button"
-                          role="menuitem"
-                          className="rippling-artifact-more-menu__item"
-                          onClick={() => runAction(row.onClick)}
-                        >
-                          <span className="rippling-artifact-more-menu__item-icon" aria-hidden>
-                            {row.icon}
-                          </span>
-                          {row.label}
-                        </button>
-                      ))}
-                    </div>
-                    <hr className="rippling-artifact-more-menu__separator" role="separator" />
-                    <div className="rippling-artifact-more-menu__group" role="group">
-                      {secondaryRows.map((row) => (
                         <button
                           key={row.id}
                           type="button"

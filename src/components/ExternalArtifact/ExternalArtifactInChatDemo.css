@@ -159,6 +159,7 @@
 .ea-ic-demo__artifact-embed {
   max-width: 100%;
   box-sizing: border-box;
+  margin: 16px 0;
 }
 
 .ea-ic-demo__artifact-embed .external-file-artifact-scroll {

@@ -1,18 +1,16 @@
 import { useId, useRef, useState, type ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { IconSettings } from "../components/Composer/icons";
 import {
   CHART_VARIANT_OPTIONS,
   ReportArtifactDemo,
   RipplingArtifactShell,
-  RipplingNativeArtifactInChatDemo,
   type RipplingArtifactShellVariant,
   SimpleBarChartDemo,
   WorkflowArtifactDemo,
   type ChartDemoVariant,
 } from "../components/RipplingArtifact";
-import type { RipplingNativeArtifactInChatDemoMode } from "../components/RipplingArtifact";
 import "../App.css";
 import { useDismissOnOutsidePress } from "../hooks/useDismissOnOutsidePress";
 import "./RipplingNativeArtifactsPage.css";
@@ -24,6 +22,9 @@ const SHELL_VARIANT_LABELS: Record<RipplingArtifactShellVariant, string> = {
   "action-bar": "Action bar",
   "with-actions": "With actions",
 };
+
+type ArtifactState = "default" | "hover" | "selected";
+type ArtifactType = "default" | "with-actions";
 
 /** Open arrow — used for the demo "Open" action in the with-actions bar. */
 function IconActionOpen() {
@@ -98,8 +99,9 @@ function DemoActionBarContent(): ReactNode {
 export function RipplingNativeArtifactsPage() {
   const [chartVariant, setChartVariant] = useState<ChartDemoVariant>("bar");
   const [shellVariant, setShellVariant] = useState<RipplingArtifactShellVariant>("default");
-  const [contextMode, setContextMode] = useState<RipplingNativeArtifactInChatDemoMode>("side-chat");
-  const [artifactSelected, setArtifactSelected] = useState(false);
+  const [artifactState, setArtifactState] = useState<ArtifactState>("default");
+  const [artifactType, setArtifactType] = useState<ArtifactType>("default");
+  const [reportsTab, setReportsTab] = useState<"chart" | "report">("chart");
 
   const pageMenuId = useId();
   const settingsBtnId = `rna-page-settings-btn-${pageMenuId}`;
@@ -112,12 +114,25 @@ export function RipplingNativeArtifactsPage() {
     (n) => settingsRef.current?.contains(n) ?? false,
   );
 
-  const demoActions = shellVariant === "with-actions" ? <DemoArtifactActions />
+  const demoActions = (shellVariant === "with-actions" || artifactType === "with-actions") ? <DemoArtifactActions />
     : shellVariant === "action-bar" ? <DemoActionBarContent />
     : undefined;
 
+  const effectiveVariant: RipplingArtifactShellVariant =
+    artifactType === "with-actions" ? "with-actions"
+    : shellVariant;
+
+  const artifactHover = artifactState === "hover";
+  const artifactSelected = artifactState === "selected";
+
   return (
-    <main className="demo-wrap rna-page">
+    <>
+      <SpecPageHeader
+        componentName="Rippling native artifacts"
+        specPath="/rippling-native-artifacts"
+        examplePath="/rippling-native-artifacts/example"
+      />
+      <main className="demo-wrap rna-page">
       <div className="composer-page-settings" ref={settingsRef}>
         <button
           id={settingsBtnId}
@@ -162,18 +177,18 @@ export function RipplingNativeArtifactsPage() {
         ) : null}
       </div>
 
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
       <header className="rna-page-intro">
         <p className="rna-page-kicker">Rippling | In partnership with Pebble · AI-components · Artifacts</p>
         <h1 className="page-doc-title">Rippling-native artifacts</h1>
         <p className="rna-page-lede">
-          Surfaces built with Rippling UI patterns—employee cards, policy snippets, workflows, and actions that feel
-          native to the shell rather than generic chat blocks.
+          A Rippling-native output of the chat, and include content such as reports, workflows, job requisitions, and
+          other object records. The artifact shell is provided by the AI team, and will come with a set of interactive
+          elements. Actions and some menu items are customizable.
+        </p>
+        <p className="rna-page-sublede">
+          <strong>Artifact content</strong><br />
+          Rippling-native artifacts aren&apos;t a form of collecting information from the user to inform the output,
+          but rather the output of the discussion.
         </p>
       </header>
 
@@ -203,45 +218,78 @@ export function RipplingNativeArtifactsPage() {
         <h3 id="rna-shell-heading" className="rna-section-title">
           Shell
         </h3>
-        <div style={{ display: "flex", alignItems: "baseline", gap: 16, margin: "0 0 16px", flexWrap: "wrap" }}>
-          <p className="rna-section-lede" style={{ margin: 0, flex: "1 1 auto" }}>
-            Container, header (artifact title + hover actions), body slot, and an optional hover
-            action bar pinned to the bottom edge. Use the gear (upper right) to switch between{" "}
-            <strong>Default</strong> and <strong>With actions</strong>. Hover the artifact to reveal
-            the bar plus the existing <strong>…</strong> menu.
-          </p>
-          <div className="demo-segments" role="group" aria-label="Artifact state">
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={!artifactSelected}
-              onClick={() => setArtifactSelected(false)}
-            >
-              Default
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={artifactSelected}
-              onClick={() => setArtifactSelected(true)}
-            >
-              Selected
-            </button>
+        <p className="rna-section-lede">
+          Container, header (artifact title + hover actions), body slot, and an optional hover
+          action bar pinned to the bottom edge. Use the gear (upper right) to switch between{" "}
+          <strong>Default</strong> and <strong>With actions</strong>. Hover the artifact to reveal
+          the bar plus the existing <strong>…</strong> menu.
+        </p>
+        <div className="rna-shell-controls">
+          <div className="demo-group">
+            <p className="demo-label" id="rna-state-label">State</p>
+            <div className="demo-segments" role="group" aria-labelledby="rna-state-label">
+              <button
+                type="button"
+                className="demo-segment"
+                aria-pressed={artifactState === "default"}
+                onClick={() => setArtifactState("default")}
+              >
+                Default
+              </button>
+              <button
+                type="button"
+                className="demo-segment"
+                aria-pressed={artifactState === "hover"}
+                onClick={() => setArtifactState("hover")}
+              >
+                Hover
+              </button>
+              <button
+                type="button"
+                className="demo-segment"
+                aria-pressed={artifactState === "selected"}
+                onClick={() => setArtifactState("selected")}
+              >
+                Selected
+              </button>
+            </div>
+          </div>
+          <div className="demo-group">
+            <p className="demo-label" id="rna-type-label">Type</p>
+            <div className="demo-segments" role="group" aria-labelledby="rna-type-label">
+              <button
+                type="button"
+                className="demo-segment"
+                aria-pressed={artifactType === "default"}
+                onClick={() => setArtifactType("default")}
+              >
+                Default
+              </button>
+              <button
+                type="button"
+                className="demo-segment"
+                aria-pressed={artifactType === "with-actions"}
+                onClick={() => setArtifactType("with-actions")}
+              >
+                With actions
+              </button>
+            </div>
           </div>
         </div>
         <div className="rna-showcase">
           <RipplingArtifactShell
             title="Artifact title"
-            variant={shellVariant}
+            variant={effectiveVariant}
             actions={demoActions}
             selected={artifactSelected}
+            hover={artifactHover}
             moreMenuSlot={
               <p className="rna-slot-placeholder rna-slot-placeholder--menu">
-                Custom slot — any JSX, styled like the body slot.
+                Custom slot for record specific actions, such as Pin, View SQL
               </p>
             }
           >
-            <p className="rna-slot-placeholder">Body slot — drop charts, tables, or actions here.</p>
+            <p className="rna-slot-placeholder">Content slot — drop charts, tables, workflows, or other object record here.</p>
           </RipplingArtifactShell>
         </div>
       </section>
@@ -256,61 +304,71 @@ export function RipplingNativeArtifactsPage() {
 
         <div className="rna-example">
           <h3 id="rna-chart-example" className="rna-example-title">
-            Chart
+            Reports
           </h3>
-          <p className="rna-section-lede rna-example-lede">
-            Visualization variants — bars, trend, share, and a single-value KPI. Defaults follow the dashboard
-            data-viz skill ({" "}
-            <code className="rna-skill-code">skills/dashboard-data-viz/</code>): zero baseline on bars, no
-            point markers on lines, accent-on-grey for donut slices, and unit-symbol-on-the-number for KPIs.
-          </p>
-          <div className="demo-preview-surface demo-preview-surface--stack" role="region" aria-label="Chart interactive preview">
-          <div className="demo-toolbar rna-chart-toolbar" aria-label="Chart type">
-            <div className="demo-group">
-              <p className="demo-label" id="rna-chart-type-label">
-                Chart type
+          <div className="rna-example-tabs" role="tablist" aria-label="Reports type">
+            <button
+              role="tab"
+              type="button"
+              className="rna-example-tab"
+              aria-selected={reportsTab === "chart"}
+              onClick={() => setReportsTab("chart")}
+            >
+              Chart
+            </button>
+            <button
+              role="tab"
+              type="button"
+              className="rna-example-tab"
+              aria-selected={reportsTab === "report"}
+              onClick={() => setReportsTab("report")}
+            >
+              Report
+            </button>
+          </div>
+
+          {reportsTab === "chart" && (
+            <div className="demo-preview-surface demo-preview-surface--stack" role="tabpanel" aria-label="Chart preview">
+              <div className="demo-toolbar rna-chart-toolbar" aria-label="Chart type">
+                <div className="demo-group">
+                  <p className="demo-label" id="rna-chart-type-label">
+                    Chart type
+                  </p>
+                  <div className="demo-segments" role="group" aria-labelledby="rna-chart-type-label">
+                    {CHART_VARIANT_OPTIONS.map(({ id, label }) => (
+                      <button
+                        key={id}
+                        type="button"
+                        className="demo-segment"
+                        aria-pressed={chartVariant === id}
+                        onClick={() => setChartVariant(id)}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="rna-showcase">
+                <RipplingArtifactShell title="Artifact title" variant={effectiveVariant} actions={demoActions} selected={artifactSelected} hover={artifactHover}>
+                  <SimpleBarChartDemo variant={chartVariant} />
+                </RipplingArtifactShell>
+              </div>
+              <p className="demo-meta rna-chart-meta" aria-live="polite">
+                Showing <strong>{CHART_VARIANT_OPTIONS.find((o) => o.id === chartVariant)?.label}</strong>
               </p>
-              <div className="demo-segments" role="group" aria-labelledby="rna-chart-type-label">
-                {CHART_VARIANT_OPTIONS.map(({ id, label }) => (
-                  <button
-                    key={id}
-                    type="button"
-                    className="demo-segment"
-                    aria-pressed={chartVariant === id}
-                    onClick={() => setChartVariant(id)}
-                  >
-                    {label}
-                  </button>
-                ))}
+            </div>
+          )}
+
+          {reportsTab === "report" && (
+            <div className="demo-preview-surface" role="tabpanel" aria-label="Report preview">
+              <div className="rna-showcase">
+                <RipplingArtifactShell title="Report title" variant={effectiveVariant} actions={demoActions} selected={artifactSelected} hover={artifactHover}>
+                  <ReportArtifactDemo />
+                </RipplingArtifactShell>
               </div>
             </div>
-          </div>
-          <div className="rna-showcase">
-            <RipplingArtifactShell title="Artifact title" variant={shellVariant} actions={demoActions} selected={artifactSelected}>
-              <SimpleBarChartDemo variant={chartVariant} />
-            </RipplingArtifactShell>
-          </div>
-          <p className="demo-meta rna-chart-meta" aria-live="polite">
-            Showing <strong>{CHART_VARIANT_OPTIONS.find((o) => o.id === chartVariant)?.label}</strong>
-          </p>
-          </div>
-        </div>
-
-        <div className="rna-example">
-          <h3 id="rna-report-example" className="rna-example-title">
-            Report
-          </h3>
-          <p className="rna-section-lede rna-example-lede">
-            Report preview — surface column headers and grid cells aligned with production report cards (AI-components Figma
-            250:9964).
-          </p>
-          <div className="demo-preview-surface" role="region" aria-label="Report preview">
-            <div className="rna-showcase">
-              <RipplingArtifactShell title="Report title" variant={shellVariant} actions={demoActions} selected={artifactSelected}>
-                <ReportArtifactDemo />
-              </RipplingArtifactShell>
-            </div>
-          </div>
+          )}
         </div>
 
         <div className="rna-example">
@@ -320,7 +378,7 @@ export function RipplingNativeArtifactsPage() {
           <p className="rna-section-lede rna-example-lede">Workflow preview.</p>
           <div className="demo-preview-surface" role="region" aria-label="Workflow preview">
             <div className="rna-showcase">
-              <RipplingArtifactShell title="Workflow" variant={shellVariant} actions={demoActions} selected={artifactSelected}>
+              <RipplingArtifactShell title="Workflow" variant={effectiveVariant} actions={demoActions} selected={artifactSelected} hover={artifactHover}>
                 <WorkflowArtifactDemo />
               </RipplingArtifactShell>
             </div>
@@ -328,40 +386,7 @@ export function RipplingNativeArtifactsPage() {
         </div>
       </section>
 
-      <hr className="page-section__divider" aria-hidden="true" />
-
-      <section
-        className="in-context-stage"
-        id="rna-in-context"
-        aria-labelledby="rna-in-context-heading"
-      >
-        <div className="in-context-stage__head">
-          <div className="in-context-stage__copy">
-            <h2 id="rna-in-context-heading" className="in-context-stage__title">
-              In context
-            </h2>
-            <p className="in-context-stage__lede">
-              Rippling-native artifacts land inline in the thread — preview them in a side panel
-              or see how they sit in a full-screen workspace.
-            </p>
-          </div>
-          <div className="demo-segments" role="group" aria-label="Context view mode">
-            {(["side-chat", "full-screen"] as const).map((m) => (
-              <button
-                key={m}
-                type="button"
-                className="demo-segment"
-                aria-pressed={contextMode === m}
-                onClick={() => setContextMode(m)}
-              >
-                {m === "side-chat" ? "Side chat" : "Full screen"}
-              </button>
-            ))}
-          </div>
-        </div>
-        <RipplingNativeArtifactInChatDemo mode={contextMode} />
-      </section>
-
     </main>
+    </>
   );
 }

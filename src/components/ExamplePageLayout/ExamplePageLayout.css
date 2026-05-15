@@ -1,0 +1,30 @@
+.example-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface, #f9f8f6);
+}
+
+/* Toolbar — sits below the sticky header, holds mode toggles and other controls */
+.example-page__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 32px;
+  background: #ffffff;
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
+  flex-wrap: wrap;
+}
+
+.example-page__content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* in-context-stage used as the full page content — no top gap needed */
+.example-page__content .in-context-stage {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}

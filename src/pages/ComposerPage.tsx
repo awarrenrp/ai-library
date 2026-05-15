@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import {
   Composer,
   COMPOSER_VERSION_LABELS,
@@ -10,8 +10,6 @@ import type { ComposerVersion, ComposerWidth } from "../components/Composer";
 import { IconCopy, IconSettings } from "../components/Composer/icons";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
-import { ChatExampleDemo } from "../components/Chat";
-import type { ChatExampleDemoMode } from "../components/Chat";
 import { useDismissOnOutsidePress } from "../hooks/useDismissOnOutsidePress";
 import "../App.css";
 
@@ -126,7 +124,6 @@ export function ComposerPage() {
   const [text, setText] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [copyAck, setCopyAck] = useState(false);
-  const [contextMode, setContextMode] = useState<ChatExampleDemoMode>("side-chat");
   const settingsRef = useRef<HTMLDivElement>(null);
 
   function applyVariant(next: "default" | "filled" | "edit") {
@@ -150,7 +147,13 @@ export function ComposerPage() {
   );
 
   return (
-    <main className="demo-wrap">
+    <>
+      <SpecPageHeader
+        componentName="Composer"
+        specPath="/composer"
+        examplePath="/composer/example"
+      />
+      <main className="demo-wrap">
       <div className="composer-page-settings" ref={settingsRef}>
         <button
           id={settingsBtnId}
@@ -194,12 +197,6 @@ export function ComposerPage() {
           </div>
         )}
       </div>
-
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
 
       <header style={{ marginBottom: 32 }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
@@ -348,39 +345,7 @@ export function ComposerPage() {
         <DemoHighlightedCode code={COMPOSER_MESSAGE_INPUT_EXAMPLE_SOURCE} language="tsx" />
       </section>
 
-      <hr className="page-section__divider" aria-hidden="true" />
-
-      <section
-        className="in-context-stage"
-        id="composer-in-context"
-        aria-labelledby="composer-in-context-heading"
-      >
-        <div className="in-context-stage__head">
-          <div className="in-context-stage__copy">
-            <h2 id="composer-in-context-heading" className="in-context-stage__title">
-              In context
-            </h2>
-            <p className="in-context-stage__lede">
-              The composer lives at the bottom of every AI thread. Toggle to compare
-              how it reads in a side panel versus a full-screen workspace.
-            </p>
-          </div>
-          <div className="demo-segments" role="group" aria-label="Context view mode">
-            {(["side-chat", "full-screen"] as const).map((m) => (
-              <button
-                key={m}
-                type="button"
-                className="demo-segment"
-                aria-pressed={contextMode === m}
-                onClick={() => setContextMode(m)}
-              >
-                {m === "side-chat" ? "Side chat" : "Full screen"}
-              </button>
-            ))}
-          </div>
-        </div>
-        <ChatExampleDemo mode={contextMode} />
-      </section>
     </main>
+    </>
   );
 }

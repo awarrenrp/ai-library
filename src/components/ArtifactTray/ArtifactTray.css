@@ -1,7 +1,8 @@
 /*
- * Artifact tray — Figma 1076:18510. Two states defined: `default` and `hover`.
- * Card padding values come from Figma children offsets (title at 16,16; list at
- * 16,50; close at 216,12 inside a 260×170 card), implemented here with flex.
+ * Artifact tray — Figma 1410:14813.
+ * Card: 318px · bg #f9f7f6 · border 20% black · radius 16px · padding 16px.
+ * Single "Artifacts" section: heading + list of items with coloured icon badges.
+ * Close button (pin icon) sits below the list.
  */
 
 .artifact-tray {
@@ -10,14 +11,13 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 260px;
-  padding: 16px 12px 16px 16px;
-  border: 1px solid rgb(0 0 0 / 10%);
+  width: 318px;
+  padding: 16px;
+  border: 1px solid rgb(0 0 0 / 20%);
   border-radius: 16px;
-  background: #ffffff;
-  /* Default · subtle baseline elevation (Figma: y:1 blur:1 #000 @ 5%). */
-  box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
-  transition: box-shadow 0.15s ease;
+  background: #f9f7f6;
+  /* Figma: y:4 blur:6 spread:-1 black@15% */
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 15%);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -26,36 +26,115 @@
   }
 }
 
-/* Card-level hover — real `:hover` plus an opt-in `data-state="hover"` for static specs. */
-.artifact-tray:hover,
-.artifact-tray:focus-within,
 .artifact-tray[data-state="hover"] {
-  box-shadow: var(--shadow-md, 0 4px 6px -1px rgb(0 0 0 / 15%));
+  box-shadow: 0 8px 16px -2px rgb(0 0 0 / 22%);
 }
+
+/* —— Header: title + pin button in the top-right corner ————————————————— */
 
 .artifact-tray__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
   min-height: 32px;
 }
 
-.artifact-tray__title {
+/* —— Section title ————————————————————————————————————————— */
+
+.artifact-tray__section-title {
   margin: 0;
+  font-family: "Basel Grotesk", system-ui, sans-serif;
   font-size: 16px;
-  font-weight: var(--font-weight-emphasis);
+  font-weight: 535; /* Medium */
   line-height: 24px;
   letter-spacing: 0;
   color: #000000;
 }
 
-/* Close button — 32×32 ghost, square hover affordance to match other artifact icon buttons. */
-.artifact-tray__close {
+/* —— List ——————————————————————————————————————————————————— */
+
+.artifact-tray__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* —— Row ——————————————————————————————————————————————————— */
+
+.artifact-tray__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 2px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  text-align: left;
+  font-family: "Basel Grotesk", system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 430; /* Regular */
+  line-height: 20px;
+  letter-spacing: 0;
+  color: #000000;
+  cursor: pointer;
+}
+
+.artifact-tray__item:hover,
+.artifact-tray__item:focus-visible,
+.artifact-tray__item[data-hovered] {
+  background: rgb(0 0 0 / 8%);
+}
+
+.artifact-tray__item:active {
+  background: rgb(0 0 0 / 16%);
+}
+
+.artifact-tray__item:focus-visible {
+  outline: 2px solid var(--color-focus-input, #5aa5e7);
+  outline-offset: 2px;
+}
+
+/* —— Icon badge ————————————————————————————————————————————— */
+
+/* 24×24 coloured container (bg set via inline style), 4px radius, white icon */
+.artifact-tray__item-badge {
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  color: #ffffff;
+}
+
+.artifact-tray__item-badge svg {
+  display: block;
+}
+
+/* —— Item title ————————————————————————————————————————————— */
+
+.artifact-tray__item-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+/* —— Close / collapse button (pin icon) — top-right of header ——————————— */
+
+.artifact-tray__close-btn {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 32px;
   height: 32px;
   padding: 0;
@@ -66,94 +145,20 @@
   cursor: pointer;
 }
 
-.artifact-tray__close:hover {
-  background: var(--artifact-overlay-hover, rgb(0 0 0 / 10%));
+.artifact-tray__close-btn:hover {
+  background: rgb(0 0 0 / 8%);
 }
 
-.artifact-tray__close:active {
-  background: var(--artifact-overlay-pressed, rgb(0 0 0 / 20%));
+.artifact-tray__close-btn:active {
+  background: rgb(0 0 0 / 16%);
 }
 
-.artifact-tray__close:focus-visible {
+.artifact-tray__close-btn:focus-visible {
   outline: 2px solid var(--color-focus-input, #5aa5e7);
   outline-offset: 2px;
 }
 
-.artifact-tray__close-icon {
+.artifact-tray__close-btn-icon {
   width: 20px;
   height: 20px;
-}
-
-/* List — 4px gap between rows (Figma vertical Auto Layout, itemSpacing 4). */
-.artifact-tray__list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/*
- * Row — 4px padding, 8px icon/title gap, 8px radius.
- * Color (#716f6c) matches the body-text muted token used across artifacts.
- */
-.artifact-tray__item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  margin: 0;
-  padding: 4px;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  text-align: left;
-  font-family: inherit;
-  font-size: 16px;
-  font-weight: var(--font-weight-emphasis);
-  line-height: 24px;
-  color: #716f6c;
-  cursor: pointer;
-}
-
-.artifact-tray__item:hover,
-.artifact-tray__item:focus-visible,
-.artifact-tray__item[data-hovered] {
-  background: var(--artifact-overlay-hover, rgb(0 0 0 / 10%));
-  color: #000000;
-}
-
-.artifact-tray__item:active {
-  background: var(--artifact-overlay-pressed, rgb(0 0 0 / 20%));
-  color: #000000;
-}
-
-.artifact-tray__item:focus-visible {
-  outline: 2px solid var(--color-focus-input, #5aa5e7);
-  outline-offset: 2px;
-}
-
-.artifact-tray__item-icon {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  color: currentColor;
-}
-
-.artifact-tray__item-icon svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.artifact-tray__item-title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-  flex: 1;
 }

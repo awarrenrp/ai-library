@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import {
-  ChatExampleDemo,
   ChatThinkingBlock,
   CHAT_THINKING_SAMPLE_STEPS,
 } from "../components/Chat";
-import type { ChatExampleDemoMode, ChatPanelVersion } from "../components/Chat";
+import type { ChatPanelVersion } from "../components/Chat";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import "../App.css";
 import "./ThinkingStatesPage.css";
@@ -73,18 +72,17 @@ function AnimatedThinkingPreview({ variant, animKey }: { variant: "default" | "n
 }
 
 export function ThinkingStatesPage() {
-  const [exampleMode, setExampleMode] = useState<ChatExampleDemoMode>("side-chat");
   const [blockVariant, setBlockVariant] = useState<ChatPanelVersion>("default");
   const [animKey, setAnimKey] = useState(0);
 
   return (
-    <main className="demo-wrap">
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
+    <>
+      <SpecPageHeader
+        componentName="Thinking states"
+        specPath="/thinking-states"
+        examplePath="/thinking-states/example"
+      />
+      <main className="demo-wrap">
       <header style={{ marginBottom: 32 }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Thinking states
@@ -151,51 +149,7 @@ export function ThinkingStatesPage() {
           )}
         </div>
       </div>
-
-      <hr className="page-section__divider" aria-hidden="true" />
-
-      {/* ── Animated hat — in context ── */}
-      <section
-        className="in-context-stage"
-        id="thinking-example-in-context"
-        aria-labelledby="thinking-example-heading"
-      >
-        <div className="in-context-stage__head">
-          <div className="in-context-stage__copy">
-            <h2 id="thinking-example-heading" className="in-context-stage__title">
-              Animated hat — in context
-            </h2>
-            <p className="in-context-stage__lede">
-              Send a message to drive the composer hat through its full cycle (idle → thinking →
-              shimmer → cycling → done → idle). Pin any phase below to inspect each animation
-              state on its own without waiting for the cycle.
-            </p>
-          </div>
-          <div className="demo-segments" role="group" aria-label="Thinking example surface mode">
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={exampleMode === "side-chat"}
-              onClick={() => setExampleMode("side-chat")}
-            >
-              Side chat
-            </button>
-            <button
-              type="button"
-              className="demo-segment"
-              aria-pressed={exampleMode === "full-screen"}
-              onClick={() => setExampleMode("full-screen")}
-            >
-              Full screen
-            </button>
-          </div>
-        </div>
-        <ChatExampleDemo
-          key={exampleMode}
-          mode={exampleMode}
-          panelVersion="animated"
-        />
-      </section>
     </main>
+    </>
   );
 }

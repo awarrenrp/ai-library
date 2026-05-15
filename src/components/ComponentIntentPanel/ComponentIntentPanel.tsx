@@ -74,9 +74,11 @@ export function ComponentIntentPanel({
 
   return (
     <section className="component-intent-reference" aria-labelledby={usageHeadingId}>
-      <h2 id={usageHeadingId} className="page-section__title page-section__title--lead">
-        Usage
-      </h2>
+      <div className="component-intent-reference__heading-row">
+        <h2 id={usageHeadingId} className="page-section__title page-section__title--lead">
+          Usage
+        </h2>
+      </div>
 
       <div
         className={["component-intent-panel", className].filter(Boolean).join(" ")}

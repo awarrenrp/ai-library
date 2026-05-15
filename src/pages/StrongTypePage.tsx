@@ -1,12 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { DemoHighlightedCode } from "../components/DemoHighlightedCode";
 import { IconCopy } from "../components/Composer/icons";
-import { StrongTypeComposerExample } from "../examples/StrongTypeExample";
-import { StrongTypeInChatDemo } from "../components/StrongType";
-import type { StrongTypeInChatDemoMode } from "../components/StrongType";
-import STRONG_TYPE_EXAMPLE_SOURCE from "../examples/StrongTypeExample.tsx?raw";
+import { StrongTypeComposerExample } from "../examples/StrongTypeExample";import STRONG_TYPE_EXAMPLE_SOURCE from "../examples/StrongTypeExample.tsx?raw";
 import { copyText } from "../utils/copyText";
 import "../App.css";
 import "./StrongTypePage.css";
@@ -45,16 +42,15 @@ const STRONG_TYPE_DONTS = [
 
 export function StrongTypePage() {
   const [copyAck, setCopyAck] = useState(false);
-  const [contextMode, setContextMode] = useState<StrongTypeInChatDemoMode>("side-chat");
 
   return (
-    <main className="demo-wrap">
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
+    <>
+      <SpecPageHeader
+        componentName="Strong type"
+        specPath="/strong-type"
+        examplePath="/strong-type/example"
+      />
+      <main className="demo-wrap">
       <header style={{ marginBottom: 32 }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Strong type
@@ -164,39 +160,7 @@ export function StrongTypePage() {
         <DemoHighlightedCode code={STRONG_TYPE_EXAMPLE_SOURCE} language="tsx" />
       </section>
 
-      <hr className="page-section__divider" aria-hidden="true" />
-
-      <section
-        className="in-context-stage"
-        id="strong-type-in-context"
-        aria-labelledby="strong-type-in-context-heading"
-      >
-        <div className="in-context-stage__head">
-          <div className="in-context-stage__copy">
-            <h2 id="strong-type-in-context-heading" className="in-context-stage__title">
-              In context
-            </h2>
-            <p className="in-context-stage__lede">
-              The slash-command and mention menus open from the composer at the bottom of the
-              thread. Try typing <code>/</code> or <code>@</code> in the input below.
-            </p>
-          </div>
-          <div className="demo-segments" role="group" aria-label="Context view mode">
-            {(["side-chat", "full-screen"] as const).map((m) => (
-              <button
-                key={m}
-                type="button"
-                className="demo-segment"
-                aria-pressed={contextMode === m}
-                onClick={() => setContextMode(m)}
-              >
-                {m === "side-chat" ? "Side chat" : "Full screen"}
-              </button>
-            ))}
-          </div>
-        </div>
-        <StrongTypeInChatDemo mode={contextMode} />
-      </section>
     </main>
+    </>
   );
 }

@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
 import { Prompt } from "../components/Prompt";
-import { PromptsInChatDemo } from "../components/Prompt";
 import type { PromptSurface } from "../components/Prompt";
-import type { PromptsInChatDemoMode } from "../components/Prompt";
 import "../App.css";
 
 const PROMPTS_WHEN = [
@@ -25,18 +23,17 @@ const SAMPLE_DESCRIPTION =
 export function PromptsPage() {
   const [surface, setSurface] = useState<PromptSurface>("outline");
   const [subtextOn, setSubtextOn] = useState(true);
-  const [contextMode, setContextMode] = useState<PromptsInChatDemoMode>("side-chat");
 
   const subtext = subtextOn ? "Product designer" : undefined;
 
   return (
-    <main className="demo-wrap">
-      <nav style={{ marginBottom: 24 }}>
-        <Link to="/" style={{ fontSize: 14, color: "#716f6c", textDecoration: "none" }}>
-          ← AI components
-        </Link>
-      </nav>
-
+    <>
+      <SpecPageHeader
+        componentName="Prompts"
+        specPath="/prompts"
+        examplePath="/prompts/example"
+      />
+      <main className="demo-wrap">
       <header style={{ marginBottom: 32 }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, letterSpacing: "0.06em", color: "#716f6c" }}>
           Rippling | In partnership with Pebble · AI-components · Prompts
@@ -130,39 +127,7 @@ export function PromptsPage() {
       </p>
       </div>
 
-      <hr className="page-section__divider" aria-hidden="true" />
-
-      <section
-        className="in-context-stage"
-        id="prompts-in-context"
-        aria-labelledby="prompts-in-context-heading"
-      >
-        <div className="in-context-stage__head">
-          <div className="in-context-stage__copy">
-            <h2 id="prompts-in-context-heading" className="in-context-stage__title">
-              In context
-            </h2>
-            <p className="in-context-stage__lede">
-              Prompts surface in the empty thread before the user types. Toggle to compare
-              how the tiles read in a side panel versus full screen.
-            </p>
-          </div>
-          <div className="demo-segments" role="group" aria-label="Context view mode">
-            {(["side-chat", "full-screen"] as const).map((m) => (
-              <button
-                key={m}
-                type="button"
-                className="demo-segment"
-                aria-pressed={contextMode === m}
-                onClick={() => setContextMode(m)}
-              >
-                {m === "side-chat" ? "Side chat" : "Full screen"}
-              </button>
-            ))}
-          </div>
-        </div>
-        <PromptsInChatDemo mode={contextMode} surface={surface} subtextOn={subtextOn} />
-      </section>
     </main>
+    </>
   );
 }

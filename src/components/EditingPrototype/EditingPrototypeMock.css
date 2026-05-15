@@ -146,6 +146,7 @@
   margin: 0;
   border: none;
   border-radius: 8px;
+  position: relative;
   background: transparent;
   color: #716f6c;
   cursor: default;
@@ -201,6 +202,90 @@
   border: none;
   background: var(--color-primary, #7a005d);
   color: #ffffff;
+}
+
+/* Notification bell — badged button + dropdown */
+.editing-prototype__notif-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.editing-prototype__notif-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: #e84040;
+  border: 1.5px solid #05142e;
+  pointer-events: none;
+}
+
+.editing-prototype__notif-dropdown {
+  position: absolute;
+  z-index: 100;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 280px;
+  background: #ffffff;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 14%);
+  overflow: hidden;
+}
+
+.editing-prototype__notif-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px 8px;
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
+}
+
+.editing-prototype__notif-header-title {
+  font-size: 13px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 18px;
+  color: #000000;
+}
+
+.editing-prototype__notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+}
+
+.editing-prototype__notif-dot {
+  flex-shrink: 0;
+  margin-top: 5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: #1d4ac8;
+}
+
+.editing-prototype__notif-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.editing-prototype__notif-msg {
+  margin: 0;
+  font-size: 13px;
+  font-weight: var(--font-weight-emphasis);
+  line-height: 18px;
+  color: #000000;
+}
+
+.editing-prototype__notif-sub {
+  margin: 0;
+  font-size: 12px;
+  font-weight: var(--font-weight-body);
+  line-height: 16px;
+  color: #716f6c;
 }
 
 .editing-prototype__profile-divider {
@@ -353,6 +438,23 @@
   min-height: 0;
 }
 
+/* Empty canvas placeholder when no artifact has been opened (forms initial state). */
+.editing-prototype__canvas-empty {
+  flex: 1 1 auto;
+  background: var(--editing-prototype-panel);
+}
+
+@keyframes editing-prototype-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .editing-prototype__main-canvas {
   flex: 1 1 auto;
   min-width: 0;
@@ -362,6 +464,10 @@
   gap: 14px;
   overflow: auto;
   background: var(--editing-prototype-panel);
+}
+
+.editing-prototype__main-canvas--slide-in {
+  animation: editing-prototype-slide-in-right 0.28s ease-out both;
 }
 
 .editing-prototype__dash-caption {
@@ -520,6 +626,210 @@ button.editing-prototype__chart-panel {
   min-height: 0;
   padding: 6px 12px 12px;
   gap: 0;
+  /* Chat history panel is absolutely positioned inside here */
+  position: relative;
+  overflow: hidden;
+}
+
+/*
+ * Chat history panel — overlay that slides in over the AI panel when the
+ * hamburger menu is tapped. Matches Figma node 7238:11947.
+ */
+
+@keyframes editing-prototype-history-slide-in {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.editing-prototype__chat-history {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  background: #f9f7f6;
+  animation: editing-prototype-history-slide-in 0.2s ease-out both;
+}
+
+/* Header row: "Chats" title + close button */
+.editing-prototype__chat-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  padding: 14px 12px 12px;
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
+}
+
+.editing-prototype__chat-history-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 535;
+  line-height: 22px;
+  letter-spacing: 0;
+  color: #000000;
+}
+
+.editing-prototype__chat-history-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #000000;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.editing-prototype__chat-history-close:hover {
+  background: rgb(0 0 0 / 6%);
+}
+
+.editing-prototype__chat-history-close:focus-visible {
+  outline: 2px solid var(--color-focus-input, #5aa5e7);
+  outline-offset: 1px;
+}
+
+/* Scrollable list area */
+.editing-prototype__chat-history-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+/* Section heading e.g. "Running", "Yesterday" */
+.editing-prototype__chat-history-section-label {
+  margin: 0;
+  padding: 10px 12px 4px;
+  font-size: 12px;
+  font-weight: 535;
+  line-height: 16px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #716f6c;
+}
+
+/* Hairline between Running section and the rest */
+.editing-prototype__chat-history-divider {
+  height: 1px;
+  background: rgb(0 0 0 / 8%);
+  margin: 6px 12px;
+}
+
+/* Individual chat item button */
+.editing-prototype__chat-history-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 430;
+  line-height: 20px;
+  color: #000000;
+  cursor: pointer;
+  box-sizing: border-box;
+  border-radius: 8px;
+  transition: background 0.1s ease;
+}
+
+.editing-prototype__chat-history-item:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+/* Selected / active item — warm beige fill, inset margins */
+.editing-prototype__chat-history-item--active {
+  background: #f2f1ee;
+  margin: 0 4px;
+  width: calc(100% - 8px);
+  padding: 6px 8px;
+}
+
+.editing-prototype__chat-history-item--active:hover {
+  background: #ede9e3;
+}
+
+.editing-prototype__chat-history-item-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Blue unread dot (Figma Ellipse 8px, #1e4aa9) */
+.editing-prototype__chat-history-unread {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1e4aa9;
+}
+
+/* Spinner for "Running" chats */
+@keyframes editing-prototype-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.editing-prototype__chat-history-spinner {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  color: #716f6c;
+  animation: editing-prototype-spin 1.1s linear infinite;
+}
+
+/* Footer with "Delete all chats" */
+.editing-prototype__chat-history-footer {
+  flex-shrink: 0;
+  padding: 8px 12px 10px;
+  border-top: 1px solid rgb(0 0 0 / 8%);
+}
+
+.editing-prototype__chat-history-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid rgb(0 0 0 / 12%);
+  border-radius: 6px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 535;
+  line-height: 20px;
+  color: #000000;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.editing-prototype__chat-history-delete-btn:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+/* Badge on "Delete all chats" */
+.editing-prototype__chat-history-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 9999px;
+  background: #1e4aa9;
+  font-size: 11px;
+  font-weight: 535;
+  line-height: 1;
+  color: #ffffff;
 }
 
 .editing-prototype__ai-toolbar {
@@ -539,6 +849,10 @@ button.editing-prototype__chart-panel {
   gap: 12px;
   padding: 12px 0 14px;
   min-height: 0;
+}
+
+.editing-prototype__thinking-block {
+  margin: 0;
 }
 
 .editing-prototype__user-bubble {
@@ -606,36 +920,45 @@ button.editing-prototype__chart-panel {
   margin-bottom: -2px;
 }
 
-/* Blue tint when a dashboard element or chat artifact is selected */
+/* Blue tint when a dashboard element or chat artifact is selected — matches the edit chip */
 .editing-prototype__ai-hat--selected.chat__hat {
-  background: #dce8fc;
+  background: rgb(185 219 243 / 50%);
 }
 
 .editing-prototype__ai-hat--selected .chat__hat-icon,
 .editing-prototype__ai-hat--selected .chat__hat-label,
 .editing-prototype__ai-hat--selected .chat__hat-label--cycling {
-  color: #1a3776;
+  color: #05142e;
 }
 
 .editing-prototype__ai-hat--selected .chat__hat-shimmer {
   background: linear-gradient(
     90deg,
-    rgb(26 55 118 / 12%),
-    rgb(26 55 118 / 28%),
-    rgb(26 55 118 / 12%)
+    rgb(5 20 46 / 8%),
+    rgb(5 20 46 / 18%),
+    rgb(5 20 46 / 8%)
   );
   background-size: 220% 100%;
 }
 
 .editing-prototype__ai-hat--selected .chat__hat-close {
-  color: #1a3776;
+  color: #05142e;
 }
 
 .editing-prototype__ai-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
   margin: 8px 0 0;
   font-size: 11px;
-  line-height: 1.35;
+  line-height: 1.45;
   color: var(--editing-prototype-muted);
+}
+
+.editing-prototype__ai-disclaimer-lock {
+  flex-shrink: 0;
+  font-size: 11px;
+  line-height: 1.45;
 }
 
 @media (max-width: 1100px) {
