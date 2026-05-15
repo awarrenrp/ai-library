@@ -345,12 +345,7 @@ function ThinkingStatesPanel() {
 }
 
 function ArtifactTrayPanel() {
-  return (
-    <>
-      <ControlsBar />
-      <ArtifactTrayDemo />
-    </>
-  );
+  return <ArtifactTrayDemo />;
 }
 
 function EditingPanel() {
