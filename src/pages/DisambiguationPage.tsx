@@ -1,7 +1,7 @@
 import { useId, useRef, useState } from "react";
 import { SpecPageHeader } from "../components/SpecPageHeader/SpecPageHeader";
 import { ComponentIntentPanel } from "../components/ComponentIntentPanel";
-import { Disambiguation, DisambiguationInChatDemo } from "../components/Disambiguation";
+import { Disambiguation } from "../components/Disambiguation";
 import type {
   DisambiguationInputType,
   DisambiguationOption,
